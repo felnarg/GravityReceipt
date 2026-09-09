@@ -107,8 +107,8 @@ namespace GravityReceipt.UI
             var gravity = p1 != null && p1.Gravity != null ? p1.Gravity : FindAnyObjectByType<GravityManager>();
             var room1 = p1 != null ? RoomRegistry.FindRoom(p1.transform.position) : null;
             var room2 = p2 != null ? RoomRegistry.FindRoom(p2.transform.position) : null;
-            var roomName = room1 != null && room1.RoomId.Length > 0 ? room1.RoomId : "—";
-            var room2Name = room2 != null && room2.RoomId.Length > 0 ? room2.RoomId : null;
+            var roomName = FormatRoom(room1);
+            var room2Name = room2 != null ? FormatRoom(room2) : null;
 
             var dominant = gravity != null && gravity.Dominant != null
                 ? $"{gravity.Dominant.name} (${gravity.Dominant.Price})"
