@@ -68,6 +68,7 @@ namespace GravityReceipt.World
             CreateRoomVolume(root.transform, "OpenOffice", OffC, OffS, offG, inherit: false);
             CreateRoomVolume(root.transform, "Executive", ExeC, ExeS, exeG, inherit: false);
 
+            CreateValuable("Valuable_Taza_15", new Vector3(-2.2f, 0.4f, 1.1f), new Vector3(0.28f, 0.22f, 0.28f), 15, hubG, new Color(0.75f, 0.45f, 0.28f), PrimitiveType.Cylinder);
             CreateValuable("Valuable_Archivador_40", new Vector3(-3.6f, 1.0f, 8.5f), new Vector3(0.8f, 1.6f, 0.5f), 40, arcG, new Color(0.55f, 0.38f, 0.22f), PrimitiveType.Cube);
             CreateValuable("Valuable_CajaFuerte_80", new Vector3(3.4f, 0.75f, 12.2f), new Vector3(1.1f, 1.1f, 1.1f), 80, arcG, new Color(0.9f, 0.72f, 0.18f), PrimitiveType.Cube);
             CreateValuable("Valuable_Monitor_120", new Vector3(4.5f, 0.55f, 32f), new Vector3(1.4f, 0.85f, 0.12f), 120, offG, new Color(0.15f, 0.45f, 0.95f), PrimitiveType.Cube);
@@ -80,6 +81,9 @@ namespace GravityReceipt.World
 
             var pkg = CreatePackage(new Vector3(0f, 0.45f, 0.6f), hubG);
             AttachPriceTag(pkg.transform, 0, 0.45f, "PAQUETE");
+            CreateProp(root.transform, "Prop_CajaGris", new Vector3(2.4f, 0.4f, -1.4f), new Vector3(0.7f, 0.7f, 0.7f), new Color(0.42f, 0.44f, 0.46f), hubG);
+            CreateProp(root.transform, "Prop_Silla", new Vector3(-3.4f, 0.45f, -1.2f), new Vector3(0.45f, 0.85f, 0.45f), new Color(0.32f, 0.3f, 0.28f), hubG);
+            CreateProp(root.transform, "Prop_Mesa", new Vector3(3.2f, 0.35f, 1.6f), new Vector3(1.4f, 0.12f, 0.8f), new Color(0.38f, 0.28f, 0.2f), hubG);
 
             var matchGo = new GameObject("MatchDirector");
             matchGo.transform.SetParent(root.transform, false);
@@ -101,7 +105,7 @@ namespace GravityReceipt.World
             CreateSign(root.transform, "TutorialSign", new Vector3(0f, 1.65f, 3.72f), new Vector3(6.4f, 1.5f, 0.12f),
                 "LA GRAVEDAD SIGUE LO MÁS CARO", new Vector3(0f, 1.65f, 3.55f), Quaternion.Euler(0f, 180f, 0f), new Color(0.08f, 0.1f, 0.12f), new Color(1f, 0.92f, 0.35f));
             CreateSign(root.transform, "Sign_HintPared", new Vector3(-4.72f, 1.7f, 0f), new Vector3(0.1f, 1.1f, 3.6f),
-                "CAJA DORADA A UNA PARED = FLIP", new Vector3(-4.45f, 1.7f, 0f), Quaternion.Euler(0f, 90f, 0f), new Color(0.12f, 0.1f, 0.04f), new Color(1f, 0.85f, 0.35f));
+                "SIN $ NO TIRA · CAJA $80 SÍ", new Vector3(-4.45f, 1.7f, 0f), Quaternion.Euler(0f, 90f, 0f), new Color(0.12f, 0.1f, 0.04f), new Color(1f, 0.85f, 0.35f));
             CreateSign(root.transform, "Sign_Pasillo", new Vector3(0f, 2.3f, 16.15f), new Vector3(3.2f, 0.55f, 0.1f),
                 "CUIDADO: VACÍO", new Vector3(0f, 2.3f, 16.0f), Quaternion.Euler(0f, 180f, 0f), new Color(0.18f, 0.06f, 0.06f), new Color(1f, 0.5f, 0.45f));
             CreateSign(root.transform, "Sign_Socket", new Vector3(6.72f, 2.35f, 10f), new Vector3(0.1f, 0.55f, 2.6f),
@@ -294,6 +298,29 @@ namespace GravityReceipt.World
             var follow = host.AddComponent<FollowBillboard>();
             follow.Configure(target, Vector3.up * (height * 0.5f + 0.28f));
             WorldLabel.Create(host.transform, "Text", text ?? ("$" + price), Vector3.zero, new Color(1f, 0.92f, 0.3f), 0.1f);
+        }
+
+        private static GameObject CreateProp(Transform parent, string name, Vector3 position, Vector3 scale, Color color, GravityManager gravity)
+        {
+            var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            go.name = name;
+            go.transform.SetParent(parent, false);
+            go.transform.position = position;
+            go.transform.localScale = scale;
+            SetColor(go, color);
+
+            var rb = go.AddComponent<Rigidbody>();
+            rb.mass = 4f;
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
+            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            rb.useGravity = false;
+            rb.sleepThreshold = 0.12f;
+
+            go.AddComponent<Grabbable>();
+            var body = go.AddComponent<GravityBody>();
+            body.SetManager(gravity);
+            go.AddComponent<SpawnHome>();
+            return go;
         }
 
         private static GameObject CreatePackage(Vector3 position, GravityManager gravity)

@@ -1,5 +1,6 @@
 using GravityReceipt.Gravity;
 using GravityReceipt.Player;
+using GravityReceipt.World;
 using UnityEngine;
 
 namespace GravityReceipt.Mission
@@ -50,6 +51,21 @@ namespace GravityReceipt.Mission
                     item.ResetToHome();
                 }
             }
+
+            var homes = FindObjectsByType<SpawnHome>(FindObjectsSortMode.None);
+            foreach (var home in homes)
+            {
+                if (home == null)
+                {
+                    continue;
+                }
+
+                var p = home.transform.position;
+                if (p.y < killY || p.magnitude > maxDistanceFromOrigin)
+                {
+                    home.ReturnHome();
+                }
+            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -77,6 +93,13 @@ namespace GravityReceipt.Mission
             if (valuable != null)
             {
                 valuable.ResetToHome();
+                return;
+            }
+
+            var home = other.GetComponentInParent<SpawnHome>();
+            if (home != null)
+            {
+                home.ReturnHome();
                 return;
             }
 

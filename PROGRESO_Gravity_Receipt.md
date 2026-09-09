@@ -328,7 +328,7 @@ Eje +Z (metros aprox.): Hub z=-4..4 → Archive 4..16 → Pasillo 16..27 → Off
 
 | Sala | Valuables (MVP) | Estado blockout |
 |------|-----------------|-----------------|
-| Hub | — | [x] | Tutorial + spawn + paquete |
+| Hub | Taza $15 (tutorial) | [x] | Tutorial + spawn + paquete + props sin $ |
 | A Archive | Caja fuerte $80, Archivador $40 | [x] | Enchufar este |
 | Pasillo | Ninguno (g hereda) | [x] | Catwalk + vacío |
 | B Open Office | Monitor $120, Planta $60, Cafetera $90 | [x] | Entregar |
@@ -414,6 +414,11 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Valuables: monitor plano, plantas/trofeo cápsula, cafetera cilindro; masa escala con `$`.
 - Paquete no recibe dents de jugadores (caminar/empujar).
 - HUD toast 2.4 s al completar Enchufar/Entregar/Sellar.
+
+### 2026-09-09 — Overnight bloque 4 (regla en el Hub)
+- Taza $15 en Hub para el primer flip local.
+- Props grises (caja/silla/mesa) **sin** `$`: se pueden agarrar pero no tiran de g.
+- `SpawnHome` los devuelve si caen al vacío.
 
 ---
 

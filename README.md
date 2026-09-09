@@ -34,7 +34,7 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 
 ### Qué probar (loop corto)
 
-1. Cartel del Hub: **LA GRAVEDAD SIGUE LO MÁS CARO**.
+1. Cartel del Hub: **LA GRAVEDAD SIGUE LO MÁS CARO**. Cubos grises **no** tienen `$` (no tiran de g). Taza `$15` sí.
 2. Agarra el paquete **naranja**. En Archive, llévalo a la zona verde **ENCHUFA EL PAQUETE** (pared este).
 3. Caja fuerte **dorada $80**: llévala cerca de una **pared** y suéltala. Tras ~1 s la gravedad de Archive tira hacia esa pared.
 4. Cruza el pasillo (vacío a los lados; bordillos rojos). Si caes, respawneas en el último checkpoint.
