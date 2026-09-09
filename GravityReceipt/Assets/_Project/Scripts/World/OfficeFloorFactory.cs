@@ -131,6 +131,18 @@ namespace GravityReceipt.World
             return root;
         }
 
+        private static void AddPointLight(Transform parent, Vector3 pos, Color color, float intensity)
+        {
+            var go = new GameObject("PointLight");
+            go.transform.SetParent(parent, false);
+            go.transform.position = pos;
+            var light = go.AddComponent<Light>();
+            light.type = LightType.Point;
+            light.range = 16f;
+            light.intensity = intensity;
+            light.color = color;
+        }
+
         private static GravityManager CreateGravity(Transform parent, string name, Vector3 center)
         {
             var go = new GameObject(name);
