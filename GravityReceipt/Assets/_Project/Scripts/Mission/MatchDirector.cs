@@ -58,6 +58,7 @@ namespace GravityReceipt.Mission
             _phase = MatchPhase.Playing;
             _remaining = matchSeconds;
             Physics.gravity = Vector3.zero;
+            Time.timeScale = 1f;
             GravityReceipt.Gravity.GravityManager.ResetFlipScreenshotFlag();
         }
 
@@ -127,6 +128,7 @@ namespace GravityReceipt.Mission
 
         public void Rematch()
         {
+            Time.timeScale = 1f;
             var scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
         }
@@ -140,6 +142,7 @@ namespace GravityReceipt.Mission
 
             _phase = phase;
             _endReason = reason;
+            Time.timeScale = 0.22f;
             MatchEnded?.Invoke(phase, reason);
         }
     }
