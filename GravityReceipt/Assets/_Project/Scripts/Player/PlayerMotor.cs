@@ -252,6 +252,11 @@ namespace GravityReceipt.Player
             var input = new Vector3(axes.x, 0f, axes.y);
             input = Vector3.ClampMagnitude(input, 1f);
             var speed = moveSpeed * (_role != null ? _role.MoveMultiplier : 1f);
+            if (_interactor == null)
+            {
+                _interactor = GetComponent<PlayerInteractor>();
+            }
+
             if (_interactor != null && _interactor.HeldValuable != null && _interactor.HeldValuable.Price >= 80)
             {
                 speed *= 0.88f;
