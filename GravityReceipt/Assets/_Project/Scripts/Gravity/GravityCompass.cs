@@ -1,3 +1,4 @@
+using GravityReceipt.Interaction;
 using GravityReceipt.Player;
 using UnityEngine;
 
@@ -21,6 +22,11 @@ namespace GravityReceipt.Gravity
         {
             if (_motor == null)
             {
+                _motor = GetComponent<PlayerMotor>();
+            }
+
+            if (_motor == null)
+            {
                 return;
             }
 
@@ -36,13 +42,21 @@ namespace GravityReceipt.Gravity
             }
 
             EnsureArrow();
-            var dir = g.IsTelegraphing ? g.PendingDirection : g.CurrentDirection;
+            var inter = GetComponent<PlayerInteractor>();
+            var holdingDom = inter != null
+                             && inter.HeldValuable != null
+                             && g.Dominant == inter.HeldValuable;
+            var dir = g.ShowFlipBanner
+                ? g.BannerDirection
+                : holdingDom
+                    ? g.PreviewDirection
+                    : g.CurrentDirection;
             if (dir.sqrMagnitude < 0.01f)
             {
                 dir = Vector3.down;
             }
 
-            var unusual = g.IsAnchored || g.IsTelegraphing || Vector3.Dot(dir, Vector3.down) < 0.92f;
+            var unusual = g.IsAnchored || g.ShowFlipBanner || holdingDom || Vector3.Dot(dir, Vector3.down) < 0.92f;
             _arrow.gameObject.SetActive(unusual);
             if (!unusual)
             {
@@ -60,9 +74,13 @@ namespace GravityReceipt.Gravity
                 {
                     color = new Color(0.35f, 0.85f, 1f);
                 }
-                else if (g.IsTelegraphing)
+                else if (g.ShowFlipBanner)
                 {
                     color = Color.Lerp(new Color(1f, 0.9f, 0.2f), new Color(1f, 0.35f, 0.1f), g.TelegraphNormalized);
+                }
+                else if (holdingDom)
+                {
+                    color = new Color(1f, 0.82f, 0.2f);
                 }
                 else
                 {
@@ -92,6 +110,7 @@ namespace GravityReceipt.Gravity
             _renderer = go.GetComponent<Renderer>();
             if (_renderer != null)
             {
+                _renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
                 if (shader != null)
                 {

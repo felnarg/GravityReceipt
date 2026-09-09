@@ -15,56 +15,80 @@ namespace GravityReceipt.Mission
         [SerializeField] private float maxDistanceFromOrigin = 80f;
         [SerializeField] private float killY = -4f;
 
+        private MissionPackage _pkg;
+        private float _scanAt;
+        private PlayerMotor[] _players;
+        private ValuableItem[] _valuables;
+        private SpawnHome[] _homes;
+
         private void Update()
         {
-            var players = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
-            foreach (var motor in players)
+            if (Time.unscaledTime >= _scanAt)
             {
-                if (motor == null)
-                {
-                    continue;
-                }
+                _scanAt = Time.unscaledTime + 0.12f;
+                _players = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
+                _valuables = FindObjectsByType<ValuableItem>(FindObjectsSortMode.None);
+                _homes = FindObjectsByType<SpawnHome>(FindObjectsSortMode.None);
+                _pkg = FindAnyObjectByType<MissionPackage>();
+            }
 
-                var p = motor.transform.position;
-                if (IsLost(p))
+            var players = _players;
+            if (players != null)
+            {
+                foreach (var motor in players)
                 {
-                    RespawnPlayer(motor);
+                    if (motor == null)
+                    {
+                        continue;
+                    }
+
+                    var p = motor.transform.position;
+                    if (IsLost(p))
+                    {
+                        RespawnPlayer(motor);
+                    }
                 }
             }
 
-            var pkg = FindAnyObjectByType<MissionPackage>();
+            var pkg = _pkg;
             if (pkg != null && IsLost(pkg.transform.position))
             {
                 pkg.Respawn();
             }
 
-            var valuables = FindObjectsByType<ValuableItem>(FindObjectsSortMode.None);
-            foreach (var item in valuables)
+            var valuables = _valuables;
+            if (valuables != null)
             {
-                if (item == null)
+                foreach (var item in valuables)
                 {
-                    continue;
-                }
+                    if (item == null)
+                    {
+                        continue;
+                    }
 
-                var p = item.transform.position;
-                if (IsLost(p))
-                {
-                    item.ResetToHome();
+                    var p = item.transform.position;
+                    if (IsLost(p))
+                    {
+                        item.ResetToHome();
+                    }
                 }
             }
 
-            var homes = FindObjectsByType<SpawnHome>(FindObjectsSortMode.None);
-            foreach (var home in homes)
+            var homes = _homes;
+            if (homes != null)
             {
-                if (home == null)
+                foreach (var home in homes)
                 {
-                    continue;
-                }
+                    if (home == null)
+                    {
+                        continue;
+                    }
 
-                var p = home.transform.position;
-                if (IsLost(p))
-                {
-                    home.ReturnHome();
+                    var p = home.transform.position;
+                    if (IsLost(p))
+                    {
+                        home.ReturnHome();
+                    }
                 }
             }
         }
@@ -141,6 +165,10 @@ namespace GravityReceipt.Mission
                 ? checkpoints.GetPlayerSpawn(slot)
                 : new Vector3(0f, 1f, 0f);
             motor.Warp(point);
+            if (MatchDirector.Instance != null)
+            {
+                MatchDirector.Instance.NotifyPlayerRespawned();
+            }
         }
     }
 }

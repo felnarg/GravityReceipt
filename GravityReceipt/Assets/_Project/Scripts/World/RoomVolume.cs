@@ -16,6 +16,25 @@ namespace GravityReceipt.World
         public GravityManager Gravity => gravityManager;
         public bool HasOwnGravity => !inheritGravity && gravityManager != null;
         public Vector3 Center => transform.position;
+        public Vector3 WorldExtents
+        {
+            get
+            {
+                if (_box == null)
+                {
+                    _box = GetComponent<BoxCollider>();
+                }
+
+                if (_box == null)
+                {
+                    return Vector3.one * 4f;
+                }
+
+                var s = _box.size;
+                var lossy = transform.lossyScale;
+                return new Vector3(s.x * lossy.x * 0.5f, s.y * lossy.y * 0.5f, s.z * lossy.z * 0.5f);
+            }
+        }
 
         public void Configure(string id, GravityManager manager, bool inherit)
         {

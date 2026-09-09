@@ -27,6 +27,7 @@ namespace GravityReceipt.Player
         private CharacterController _controller;
         private LocalPlayerInput _input;
         private PlayerRole _role;
+        private PlayerInteractor _interactor;
         private Vector3 _velocity;
         private float _pitch;
         private Vector3 _lastGravityDir = Vector3.down;
@@ -41,6 +42,9 @@ namespace GravityReceipt.Player
         private Vector3 _camBaseLocal;
         private float _jumpBuffer;
         private float _coyote;
+        private float _camRoll;
+        private float _stepAcc;
+        private float _landDip;
 
         public GravityManager Gravity => gravityManager;
         public bool Grounded { get; private set; }
@@ -78,6 +82,7 @@ namespace GravityReceipt.Player
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<LocalPlayerInput>();
             _role = GetComponent<PlayerRole>();
+            _interactor = GetComponent<PlayerInteractor>();
             _ownsCursor = _input != null && _input.UsesMouseLook;
             CacheCamera();
 
@@ -165,6 +170,16 @@ namespace GravityReceipt.Player
             }
 
             Look();
+            if (_role == null)
+            {
+                _role = GetComponent<PlayerRole>();
+            }
+
+            if (_interactor == null)
+            {
+                _interactor = GetComponent<PlayerInteractor>();
+            }
+
             ApplyFlipFeel();
             Move();
         }
@@ -178,20 +193,40 @@ namespace GravityReceipt.Player
 
             _fovPunch = Mathf.MoveTowards(_fovPunch, 0f, Time.deltaTime * 38f);
             _shake = Mathf.MoveTowards(_shake, 0f, Time.deltaTime * 1.1f);
+            if (gravityManager != null && gravityManager.IsTelegraphing)
+            {
+                _shake = Mathf.Max(_shake, 0.06f + 0.16f * gravityManager.TelegraphNormalized);
+            }
             var sprintTarget = _role != null && _role.MoveMultiplier > 1.05f ? 7f : 0f;
             _sprintFov = Mathf.MoveTowards(_sprintFov, sprintTarget, Time.deltaTime * 36f);
+            var comfort = MatchDirector.ComfortMode;
+            var feel = comfort ? 0.32f : 1f;
             if (_cam != null)
             {
-                _cam.fieldOfView = _baseFov + _fovPunch + _sprintFov;
+                _cam.fieldOfView = _baseFov + (_fovPunch * feel) + _sprintFov;
             }
 
-            var offset = _shake > 0.01f
+            var shakeAmt = _shake * feel;
+            var offset = shakeAmt > 0.01f
                 ? new Vector3(
-                    (Mathf.PerlinNoise(Time.time * 28f, 0.3f) - 0.5f) * _shake * 0.12f,
-                    (Mathf.PerlinNoise(0.7f, Time.time * 31f) - 0.5f) * _shake * 0.12f,
+                    (Mathf.PerlinNoise(Time.time * 28f, 0.3f) - 0.5f) * shakeAmt * 0.12f,
+                    (Mathf.PerlinNoise(0.7f, Time.time * 31f) - 0.5f) * shakeAmt * 0.12f,
                     0f)
                 : Vector3.zero;
-            cameraPivot.localPosition = _camBaseLocal + offset;
+            _landDip = Mathf.MoveTowards(_landDip, 0f, Time.deltaTime * 0.55f);
+            cameraPivot.localPosition = _camBaseLocal + offset + Vector3.down * (_landDip * (comfort ? 0.4f : 1f));
+
+            var rollTarget = 0f;
+            if (gravityManager != null && gravityManager.IsTelegraphing)
+            {
+                rollTarget = Vector3.Dot(gravityManager.PendingDirection, transform.right)
+                             * -16f
+                             * gravityManager.TelegraphNormalized
+                             * (comfort ? 0.22f : 1f);
+            }
+
+            _camRoll = Mathf.Lerp(_camRoll, rollTarget, 1f - Mathf.Exp(-12f * Time.deltaTime));
+            cameraPivot.localEulerAngles = new Vector3(_pitch, 0f, _camRoll);
         }
 
         private void Look()
@@ -211,10 +246,6 @@ namespace GravityReceipt.Player
             var my = look.y * mouseSensitivity;
             transform.Rotate(0f, mx, 0f, Space.Self);
             _pitch = Mathf.Clamp(_pitch - my, -80f, 80f);
-            if (cameraPivot != null)
-            {
-                cameraPivot.localEulerAngles = new Vector3(_pitch, 0f, 0f);
-            }
         }
 
         private void Move()
@@ -238,19 +269,34 @@ namespace GravityReceipt.Player
             var input = new Vector3(axes.x, 0f, axes.y);
             input = Vector3.ClampMagnitude(input, 1f);
             var speed = moveSpeed * (_role != null ? _role.MoveMultiplier : 1f);
+            if (_interactor == null)
+            {
+                _interactor = GetComponent<PlayerInteractor>();
+            }
+
+            if (_role == null)
+            {
+                _role = GetComponent<PlayerRole>();
+            }
+
+            if (_interactor != null && _interactor.HeldValuable != null && _interactor.HeldValuable.Price >= 80)
+            {
+                speed *= 0.88f;
+            }
             var wish = transform.TransformDirection(input) * speed;
 
             Grounded = IsGrounded(gDir);
             Locomotion = Grounded ? LocomotionPhase.Grounded : LocomotionPhase.Airborne;
+            var airAssist = Vector3.Dot(gDir, Vector3.down) > 0.92f ? 0.12f : 0.18f;
             if (_input != null && _input.JumpPressed())
             {
-                _jumpBuffer = 0.12f;
+                _jumpBuffer = airAssist;
             }
 
             _jumpBuffer = Mathf.Max(0f, _jumpBuffer - Time.deltaTime);
             if (Locomotion == LocomotionPhase.Grounded)
             {
-                _coyote = 0.12f;
+                _coyote = airAssist;
                 if (_airFall > 0.5f && _input != null)
                 {
                     var rec = MatchHighlightRecorder.Instance;
@@ -264,6 +310,9 @@ namespace GravityReceipt.Player
                 {
                     _fovPunch = Mathf.Max(_fovPunch, 8f);
                     _shake = Mathf.Max(_shake, 0.18f);
+                    _landDip = Mathf.Max(_landDip, 0.11f);
+                    MissionSfx.PlayLand();
+                    GravityFlipBurst.Spawn(transform.position, gDir, 6);
                 }
 
                 _airFall = 0f;
@@ -296,9 +345,24 @@ namespace GravityReceipt.Player
                 }
 
                 _velocity += -gDir * jumpSpeed;
+                MissionSfx.PlayJump();
             }
 
             var planar = Vector3.ProjectOnPlane(wish, gDir);
+            if (Locomotion == LocomotionPhase.Grounded && planar.magnitude > 0.45f)
+            {
+                _stepAcc += planar.magnitude * Time.deltaTime;
+                while (_stepAcc >= 1.65f)
+                {
+                    _stepAcc -= 1.65f;
+                    MissionSfx.PlayStep();
+                }
+            }
+            else if (Locomotion != LocomotionPhase.Grounded)
+            {
+                _stepAcc = 0.8f;
+            }
+
             var motion = (planar + _velocity) * Time.deltaTime;
             _controller.Move(motion);
         }
@@ -381,6 +445,9 @@ namespace GravityReceipt.Player
             _sprintFov = 0f;
             _jumpBuffer = 0f;
             _coyote = 0f;
+            _camRoll = 0f;
+            _landDip = 0f;
+            _stepAcc = 0f;
             if (cameraPivot != null)
             {
                 cameraPivot.localEulerAngles = Vector3.zero;
@@ -392,6 +459,29 @@ namespace GravityReceipt.Player
                 _cam.fieldOfView = _baseFov;
             }
 
+            if (_controller != null)
+            {
+                _controller.enabled = true;
+            }
+        }
+
+        public void PunchFeel(float fov = 8f, float shake = 0.18f)
+        {
+            _fovPunch = Mathf.Max(_fovPunch, fov);
+            _shake = Mathf.Max(_shake, shake);
+        }
+
+        /// <summary>Cheat F3: empuja al jugador contra -g si se atascó en geometría.</summary>
+        public void NudgeUnstuck()
+        {
+            var gDir = gravityManager != null ? gravityManager.CurrentDirection : Vector3.down;
+            if (_controller != null)
+            {
+                _controller.enabled = false;
+            }
+
+            transform.position += -gDir * 0.75f;
+            TryUnstuck(gDir);
             if (_controller != null)
             {
                 _controller.enabled = true;

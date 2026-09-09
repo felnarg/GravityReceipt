@@ -23,6 +23,8 @@ namespace GravityReceipt.Mission
         private int _lives;
         private int _destructions;
         private float _spawnGrace = 1.2f;
+        private Vector3 _baseScale;
+        private float _squash;
 
         public int Lives => _lives;
         public int LivesMax => livesPerLife;
@@ -39,6 +41,7 @@ namespace GravityReceipt.Mission
             }
 
             _lives = livesPerLife;
+            _baseScale = transform.localScale;
         }
 
         private void Update()
@@ -46,6 +49,13 @@ namespace GravityReceipt.Mission
             if (_spawnGrace > 0f)
             {
                 _spawnGrace -= Time.deltaTime;
+            }
+
+            if (_squash > 0f)
+            {
+                _squash = Mathf.MoveTowards(_squash, 0f, Time.deltaTime * 2.8f);
+                var k = 1f - 0.18f * _squash;
+                transform.localScale = Vector3.Scale(_baseScale, new Vector3(1f / k, k, 1f / k));
             }
         }
 
@@ -84,9 +94,23 @@ namespace GravityReceipt.Mission
             }
 
             _lives = Mathf.Max(0, _lives - Mathf.Max(1, amount));
+            _squash = 1f;
             RefreshTint();
             MissionSfx.PlayDent();
             MatchDirector.Instance.NotifyPackageDented();
+            var motors = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
+            foreach (var motor in motors)
+            {
+                if (motor == null)
+                {
+                    continue;
+                }
+
+                if ((motor.transform.position - transform.position).sqrMagnitude < 64f)
+                {
+                    motor.PunchFeel(10f, 0.22f);
+                }
+            }
             if (_lives > 0)
             {
                 return;
@@ -104,6 +128,15 @@ namespace GravityReceipt.Mission
 
         public void Respawn()
         {
+            var holders = FindObjectsByType<PlayerInteractor>(FindObjectsSortMode.None);
+            foreach (var inter in holders)
+            {
+                if (inter != null && inter.IsHoldingPackage)
+                {
+                    inter.Drop();
+                }
+            }
+
             var checkpoints = CheckpointSystem.Instance;
             var point = checkpoints != null
                 ? checkpoints.PackageSpawn
@@ -117,7 +150,9 @@ namespace GravityReceipt.Mission
             }
 
             transform.SetPositionAndRotation(point, Quaternion.identity);
+            transform.localScale = _baseScale;
             _lives = livesPerLife;
+            _squash = 0f;
             _spawnGrace = 1.2f;
             RefreshTint();
         }

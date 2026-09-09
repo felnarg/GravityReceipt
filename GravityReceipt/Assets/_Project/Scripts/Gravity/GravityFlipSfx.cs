@@ -1,3 +1,4 @@
+using GravityReceipt.Mission;
 using UnityEngine;
 
 namespace GravityReceipt.Gravity
@@ -26,7 +27,7 @@ namespace GravityReceipt.Gravity
 
             var listener = Object.FindAnyObjectByType<AudioListener>();
             var pos = listener != null ? listener.transform.position : Vector3.zero;
-            AudioSource.PlayClipAtPoint(_clip, pos, 0.65f);
+            AudioSource.PlayClipAtPoint(_clip, pos, MatchDirector.ComfortMode ? 0.28f : 0.65f);
         }
 
         private static void EnsureClip()

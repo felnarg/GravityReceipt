@@ -15,7 +15,7 @@ namespace GravityReceipt.Interaction
             Holding
         }
 
-        [SerializeField] private float reach = 3.4f;
+        [SerializeField] private float reach = 3.8f;
         [SerializeField] private Transform holdPoint;
         [SerializeField] private float grabWindUpSeconds = 0.4f;
         [SerializeField] private LayerMask interactMask = ~0;
@@ -36,6 +36,8 @@ namespace GravityReceipt.Interaction
         public bool IsHolding => _phase == GrabPhase.Holding && _held != null;
         public bool IsWinding => _phase == GrabPhase.Winding;
         public bool IsHoldingPackage => IsHolding && _held.GetComponent<MissionPackage>() != null;
+        public ValuableItem HeldValuable => _heldValuable;
+        public ValuableItem LookValuable { get; private set; }
         public bool HasLookTarget { get; private set; }
         public string LookHint { get; private set; } = "";
 
@@ -73,7 +75,8 @@ namespace GravityReceipt.Interaction
         private void TickHolding()
         {
             HasLookTarget = false;
-            LookHint = _held != null ? "soltar" : "";
+            LookValuable = _heldValuable;
+            LookHint = HoldHint();
             ClearFocus();
             if (_held == null || _input.DropPressed())
             {
@@ -81,10 +84,37 @@ namespace GravityReceipt.Interaction
             }
         }
 
+        private string HoldHint()
+        {
+            if (_held == null)
+            {
+                return "";
+            }
+
+            if (_heldValuable == null)
+            {
+                return "soltar";
+            }
+
+            var g = _heldValuable.Manager;
+            if (g == null || g.Dominant != _heldValuable)
+            {
+                return "soltar";
+            }
+
+            if (g.IsTelegraphing)
+            {
+                return "soltar · ¡FLIP en camino!";
+            }
+
+            return "soltar · acércala a una PARED";
+        }
+
         private void TickIdle()
         {
             HasLookTarget = false;
             LookHint = "";
+            LookValuable = null;
             _windUp = 0f;
             if (!TryGetTarget(out var body, out var valuable, out var grab, out var occupied))
             {
@@ -92,6 +122,7 @@ namespace GravityReceipt.Interaction
                 {
                     HasLookTarget = true;
                     LookHint = $"{FormatHint(body, valuable)}  · ocupado";
+                    LookValuable = valuable;
                 }
 
                 ClearFocus();
@@ -100,6 +131,7 @@ namespace GravityReceipt.Interaction
 
             HasLookTarget = true;
             LookHint = FormatHint(body, valuable);
+            LookValuable = valuable;
             SetFocus(body);
             if (!_input.GrabHeld())
             {
@@ -119,12 +151,14 @@ namespace GravityReceipt.Interaction
                 _windUp = 0f;
                 HasLookTarget = false;
                 LookHint = "";
+                LookValuable = null;
                 ClearFocus();
                 return;
             }
 
             HasLookTarget = true;
             LookHint = FormatHint(body, valuable);
+            LookValuable = valuable;
             SetFocus(body);
             _windUp += Time.deltaTime;
             if (_windUp < grabWindUpSeconds)
@@ -142,7 +176,28 @@ namespace GravityReceipt.Interaction
                 return;
             }
 
-            _held.MovePosition(holdPoint.position);
+            var target = holdPoint.position;
+            var cam = _input != null ? _input.PlayerCamera : null;
+            if (cam != null)
+            {
+                var origin = cam.transform.position;
+                var to = target - origin;
+                var dist = to.magnitude;
+                if (dist > 0.08f)
+                {
+                    var dir = to / dist;
+                    if (Physics.SphereCast(origin, 0.14f, dir, out var hit, dist, ~0, QueryTriggerInteraction.Ignore)
+                        && hit.collider != null
+                        && hit.collider.transform != _held.transform
+                        && !hit.collider.transform.IsChildOf(_held.transform)
+                        && hit.collider.GetComponent<CharacterController>() == null)
+                    {
+                        target = hit.point - dir * 0.28f;
+                    }
+                }
+            }
+
+            _held.MovePosition(target);
             _held.MoveRotation(holdPoint.rotation);
         }
 
@@ -248,6 +303,15 @@ namespace GravityReceipt.Interaction
             _phase = GrabPhase.Holding;
             _windUp = 0f;
             ClearFocus();
+            MissionSfx.PlayGrab();
+            if (_heldValuable != null)
+            {
+                var match = MatchDirector.Instance;
+                if (match != null)
+                {
+                    match.NotifyFirstValuableGrab();
+                }
+            }
         }
 
         public void Drop()
@@ -289,6 +353,7 @@ namespace GravityReceipt.Interaction
             _phase = GrabPhase.Idle;
             _windUp = 0f;
             LookHint = "";
+            LookValuable = null;
             HasLookTarget = false;
         }
 
@@ -302,6 +367,11 @@ namespace GravityReceipt.Interaction
             var col = _held.GetComponent<Collider>();
             var cc = GetComponent<CharacterController>();
             if (col == null || cc == null)
+            {
+                return;
+            }
+
+            if (!ignore && _held.GetComponent<MissionPackage>() != null)
             {
                 return;
             }

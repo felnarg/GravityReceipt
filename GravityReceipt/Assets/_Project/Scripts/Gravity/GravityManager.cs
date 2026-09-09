@@ -28,13 +28,19 @@ namespace GravityReceipt.Gravity
         private bool _isTelegraphing;
         private float _anchorUntil;
         private Coroutine _hitStop;
+        private float _flipBannerUntil;
+        private int _tickBeat;
 
         public Vector3 CurrentGravity => _currentGravityDirection * gravityMagnitude;
         public Vector3 CurrentDirection => _currentGravityDirection;
         public ValuableItem Dominant => _dominant;
         public bool IsTelegraphing => _isTelegraphing && !IsAnchored;
         public bool IsAnchored => Time.time < _anchorUntil;
+        public bool ShowFlipBanner => IsTelegraphing || Time.unscaledTime < _flipBannerUntil;
         public Vector3 PendingDirection => _pendingDirection;
+        public Vector3 BannerDirection => IsTelegraphing ? _pendingDirection : _currentGravityDirection;
+        public Vector3 PreviewDirection =>
+            _dominant == null ? _currentGravityDirection : DirectionTowardValuable(_dominant);
         public float TelegraphNormalized =>
             telegraphSeconds <= 0f ? 0f : 1f - Mathf.Clamp01(_telegraphRemaining / telegraphSeconds);
 
@@ -96,12 +102,18 @@ namespace GravityReceipt.Gravity
             _telegraphRemaining -= Time.deltaTime;
             if (_telegraphRemaining > 0f)
             {
+                var beat = Mathf.FloorToInt(TelegraphNormalized * 4.01f);
+                if (beat != _tickBeat)
+                {
+                    _tickBeat = beat;
+                    MissionSfx.PlayTelegraphTick(TelegraphNormalized);
+                }
+
                 return;
             }
 
             ApplyGravity(_pendingDirection, _dominant);
             _isTelegraphing = false;
-            CaptureFirstFlip();
         }
 
         private void RecalculateDominant(bool immediate, ValuableItem movedHint = null)
@@ -158,8 +170,9 @@ namespace GravityReceipt.Gravity
                 return defaultDown;
             }
 
-            // Bias vertical: objetos en el suelo/techo no deben voltear a una pared por un offset X/Z pequeño.
-            toItem.y *= 1.75f;
+            // Bias vertical: suelo/techo no voltean a una pared por un offset X/Z pequeño.
+            // En las manos el objeto está a altura de pecho: hace falta más bias o el flip dispara en el centro de la sala.
+            toItem.y *= valuable.IsHeld ? 4.4f : 1.75f;
 
             var ax = Mathf.Abs(toItem.x);
             var ay = Mathf.Abs(toItem.y);
@@ -188,10 +201,17 @@ namespace GravityReceipt.Gravity
                 return;
             }
 
+            if (_isTelegraphing && Vector3.Dot(_pendingDirection, direction) > 0.99f)
+            {
+                _dominant = dominant;
+                return;
+            }
+
             _dominant = dominant;
             _pendingDirection = direction;
             _telegraphRemaining = telegraphSeconds;
             _isTelegraphing = true;
+            _tickBeat = -1;
         }
 
         private void ApplyGravity(Vector3 direction, ValuableItem dominant)
@@ -201,15 +221,23 @@ namespace GravityReceipt.Gravity
             _dominant = dominant;
             if (Vector3.Dot(previous, _currentGravityDirection) < 0.99f)
             {
+                _flipBannerUntil = Time.unscaledTime + 0.85f;
                 GravityChanged?.Invoke(CurrentGravity, dominant);
-                if (isActiveAndEnabled)
+                if (isActiveAndEnabled && Time.timeSinceLevelLoad > 1f)
                 {
-                    if (_hitStop != null)
+                    var origin = roomCenter != null ? roomCenter.position : transform.position;
+                    GravityFlipBurst.Spawn(origin, _currentGravityDirection);
+                    if (!MatchDirector.ComfortMode)
                     {
-                        StopCoroutine(_hitStop);
+                        if (_hitStop != null)
+                        {
+                            StopCoroutine(_hitStop);
+                        }
+
+                        _hitStop = StartCoroutine(HitStop());
                     }
 
-                    _hitStop = StartCoroutine(HitStop());
+                    StartCoroutine(CaptureFirstFlipDelayed());
                 }
             }
         }
@@ -227,7 +255,7 @@ namespace GravityReceipt.Gravity
             yield return new WaitForSecondsRealtime(0.08f);
             if (match != null && match.IsPlaying)
             {
-                Time.timeScale = 1f;
+                Time.timeScale = match.IsPaused ? 0f : 1f;
             }
 
             _hitStop = null;
@@ -240,14 +268,15 @@ namespace GravityReceipt.Gravity
 
         private static bool _flipShotTaken;
 
-        private static void CaptureFirstFlip()
+        private IEnumerator CaptureFirstFlipDelayed()
         {
             if (_flipShotTaken)
             {
-                return;
+                yield break;
             }
 
             _flipShotTaken = true;
+            yield return new WaitForSecondsRealtime(0.16f);
             var name = $"GravityReceipt_flip_{System.DateTime.Now:HHmmss}.png";
             ScreenCapture.CaptureScreenshot(name);
             Debug.Log("[GravityReceipt] Primer flip capturado: " + name);

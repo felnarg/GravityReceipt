@@ -32,20 +32,25 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 | Cambiar rol | Tab | Keypad 7 |
 | Rematch | **R** al terminar / **F5** siempre | igual |
 | Screenshot PNG | **F8** | **F8** |
-| Ocultar chrome HUD | **F9** | **F9** |
+| Ocultar chrome HUD | **F9** (también etiquetas 3D) | **F9** |
+| Pausa | **P** | **P** |
+| Comfort (menos mareo) | **F10** | **F10** |
+| Unstuck (cheat) | **F3** | **F3** |
+| Warp checkpoint (cheat) | **F4** | **F4** |
+| Respawn paquete (cheat) | **F7** | **F7** |
 
-Cheat de iteración (no sale en el HUD): **F6** completa el siguiente objetivo y teleporta al checkpoint.
+Cheat de iteración (no sale en el HUD): **F3** desatasca · **F4** teleporta al checkpoint (salta el splash) · **F6** completa el siguiente objetivo y teleporta (salta el splash) · **F7** respawnea el paquete · **F10** comfort (menos shake/FOV).
 
 ### Qué probar (loop corto)
 
-1. Cartel del Hub: **LA GRAVEDAD SIGUE LO MÁS CARO**. Cubos grises **no** tienen `$` (no tiran de g). Taza `$15` sí.
-2. Agarra el paquete **naranja**. En Archive, llévalo a la zona verde **ENCHUFA EL PAQUETE** (pared este).
-3. Caja fuerte **dorada $80**: llévala cerca de una **pared** y suéltala. Tras ~1 s la gravedad de Archive tira hacia esa pared.
+1. Cartel del Hub: **LA GRAVEDAD SIGUE LO MÁS CARO**. Cubos grises **no** tienen `$` (no tiran de g). Taza `$15` sí (orbe dorado encima). La flecha a los pies apunta a la taza mientras estás en el Hub. El paquete lleva un orbe naranja. Tras un flip, un cuadrado cian con **ABAJO** marca la cara que ahora es “abajo”. Si el objetivo queda fuera de cámara, el HUD muestra una flecha (→ TAZA / PAQUETE / ENCHUFAR).
+2. Agarra la taza o el paquete **naranja**. Tras el primer `$`, un toast dice “Llévalo a una PARED”. En Archive, llévalo a la zona verde **ENCHUFA EL PAQUETE** (pared este).
+3. Caja fuerte **dorada $80**: llévala a una **pared** (puedes **mantenerla en las manos**). El prompt dice “acércala a una PARED”; la pared se pinta naranja con **GIRA**; oirás 4 ticks. Tras ~1 s la gravedad de Archive tira hacia esa pared (flash + chispas). El pad cian dice **ABAJO**.
 4. Cruza el pasillo (vacío a los lados; bordillos rojos). Si caes, respawneas en el último checkpoint.
 5. Open Office: deja el paquete en la losa azul **ENTREGAR** (también cuenta si lo llevas en las manos sobre la losa).
 6. Executive: paquete + jugador en la losa dorada. Mantén **E** **o** quédate encima con el paquete agarrado = **SELLAR**.
-7. Timer 10:00. 3 destrucciones del paquete (impactos fuertes) = derrota. **R** recarga la escena.
-8. **Gravedad por sala:** Archive puede estar “de lado” mientras Office sigue normal.
+7. Timer 10:00 (no baja durante el splash de 9 s; **P** también pausa el splash). 3 destrucciones del paquete (impactos fuertes) = derrota. **R** recarga la escena.
+8. **Gravedad por sala:** Archive puede estar “de lado” mientras Office sigue normal. Si llevas un `$` al pasillo, **deja de tirar** de la sala que abandonaste. Tras un flip, Enchufar/Entregar/Sellar cuentan en el nuevo “arriba”.
 
 ### Si algo falla
 - **No hay split / mapa viejo:** menú Setup Office Floor A y guarda la escena.
@@ -53,6 +58,7 @@ Cheat de iteración (no sale en el HUD): **F6** completa el siguiente objetivo y
 - **P2 no aparece:** Setup 2p (no el ítem “1 jugador”).
 - **Caes al vacío andando:** los bordillos son de 0.58 m; hay que saltar o un flip. **F5** si te atascas.
 - **Quieres saltar objetivos:** **F6** (cheat).
+- **Te atascaste en un flip:** **F3** o **P** para mirar.
 
 ## Seguimiento
 Ver [`PROGRESO_Gravity_Receipt.md`](PROGRESO_Gravity_Receipt.md)

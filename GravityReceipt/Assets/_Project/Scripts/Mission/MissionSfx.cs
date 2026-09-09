@@ -10,6 +10,11 @@ namespace GravityReceipt.Mission
         private static AudioClip _objective;
         private static AudioClip _win;
         private static AudioClip _lose;
+        private static AudioClip _land;
+        private static AudioClip _tick;
+        private static AudioClip _step;
+        private static AudioClip _grab;
+        private static AudioClip _jump;
 
         public static void PlayObjective() => Play(_objective ??= MakeClip("ObjectiveDing", 880f, 1320f, 0.22f));
 
@@ -18,10 +23,26 @@ namespace GravityReceipt.Mission
                 ? _win ??= MakeClip("WinFanfare", 523f, 784f, 0.45f)
                 : _lose ??= MakeClip("LoseThud", 110f, 73f, 0.4f));
 
+        public static void PlayLand() => Play(_land ??= MakeClip("LandThud", 140f, 70f, 0.14f), 0.32f);
+
+        public static void PlayStep() => Play(_step ??= MakeClip("Footstep", 90f, 70f, 0.05f), 0.12f);
+
+        public static void PlayGrab() => Play(_grab ??= MakeClip("GrabClick", 420f, 680f, 0.07f), 0.28f);
+
+        public static void PlayJump() => Play(_jump ??= MakeClip("Jump", 280f, 360f, 0.06f), 0.16f);
+
+        public static void PlayTelegraphTick(float intensity)
+        {
+            Play(_tick ??= MakeClip("TelegraphTick", 640f, 640f, 0.055f), 0.16f + 0.28f * Mathf.Clamp01(intensity));
+        }
+
         private static AudioClip _dent;
+        private static AudioClip _ping;
         private static AudioClip[] _emotes;
 
         public static void PlayDent() => Play(_dent ??= MakeClip("PackageDent", 180f, 90f, 0.18f), 0.5f);
+
+        public static void PlayPing() => Play(_ping ??= MakeClip("PingBlip", 1480f, 990f, 0.12f), 0.35f);
 
         public static void PlayEmote(int index)
         {

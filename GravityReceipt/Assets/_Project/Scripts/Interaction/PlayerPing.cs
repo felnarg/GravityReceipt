@@ -1,5 +1,7 @@
+using GravityReceipt.Mission;
 using GravityReceipt.Player;
 using GravityReceipt.UI;
+using GravityReceipt.World;
 using UnityEngine;
 
 namespace GravityReceipt.Interaction
@@ -11,10 +13,12 @@ namespace GravityReceipt.Interaction
     {
         [SerializeField] private float range = 22f;
         [SerializeField] private float lifetime = 2.2f;
+        [SerializeField] private float cooldown = 0.85f;
         [SerializeField] private LayerMask mask = ~0;
 
         private LocalPlayerInput _input;
         private PingMarker _mine;
+        private float _readyAt;
 
         private void Awake()
         {
@@ -23,7 +27,17 @@ namespace GravityReceipt.Interaction
 
         private void Update()
         {
+            if (_input == null)
+            {
+                _input = GetComponent<LocalPlayerInput>();
+            }
+
             if (_input == null || !_input.PingPressed())
+            {
+                return;
+            }
+
+            if (Time.unscaledTime < _readyAt)
             {
                 return;
             }
@@ -33,6 +47,8 @@ namespace GravityReceipt.Interaction
             {
                 return;
             }
+
+            _readyAt = Time.unscaledTime + cooldown;
 
             var ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             var point = ray.origin + ray.direction * 6f;
@@ -60,7 +76,11 @@ namespace GravityReceipt.Interaction
             }
             go.transform.position = point;
             go.transform.localScale = Vector3.one * 0.45f;
-            Object.Destroy(go.GetComponent<Collider>());
+            var pingCol = go.GetComponent<Collider>();
+            if (pingCol != null)
+            {
+                pingCol.enabled = false;
+            }
             var renderer = go.GetComponent<Renderer>();
             var color = _input != null && _input.Slot == LocalPlayerSlot.Two
                 ? new Color(1f, 0.55f, 0.2f)
@@ -74,21 +94,21 @@ namespace GravityReceipt.Interaction
                 }
             }
 
-            var labelGo = new GameObject("PingLabel");
-            labelGo.transform.SetParent(go.transform, false);
-            labelGo.transform.localPosition = new Vector3(0f, 0.8f, 0f);
-            var tm = labelGo.AddComponent<TextMesh>();
-            tm.text = _input != null && _input.Slot == LocalPlayerSlot.Two
-                ? "P2 ¡NO TOQUES ESO!"
-                : "P1 ¡NO TOQUES ESO!";
-            tm.characterSize = 0.08f;
-            tm.fontSize = 42;
-            tm.anchor = TextAnchor.MiddleCenter;
-            tm.alignment = TextAlignment.Center;
-            tm.color = color;
+            var host = new GameObject("PingLabel");
+            host.transform.SetParent(go.transform, false);
+            var follow = host.AddComponent<FollowBillboard>();
+            follow.Configure(host.transform, Vector3.zero);
+            var upFollow = host.AddComponent<GravityUpFollow>();
+            upFollow.Configure(go.transform, 0.85f);
+            WorldLabel.Create(host.transform, "Text",
+                _input != null && _input.Slot == LocalPlayerSlot.Two
+                    ? "P2 ¡NO TOQUES ESO!"
+                    : "P1 ¡NO TOQUES ESO!",
+                Vector3.zero, color, 0.08f);
 
             _mine = go.AddComponent<PingMarker>();
             _mine.Begin(lifetime);
+            MissionSfx.PlayPing();
         }
 
         private void OnDisable()

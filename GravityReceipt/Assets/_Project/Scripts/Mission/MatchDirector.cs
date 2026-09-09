@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using GravityReceipt.Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,6 +17,8 @@ namespace GravityReceipt.Mission
         public event Action<int, string> ObjectiveCompleted;
         public event Action<MatchPhase, string> MatchEnded;
         public event Action PackageDented;
+        public event Action PlayerRespawned;
+        public event Action<string> Hint;
 
         [SerializeField] private float matchSeconds = 600f;
         [SerializeField] private int objectivesToWin = 3;
@@ -24,9 +27,19 @@ namespace GravityReceipt.Mission
         private float _remaining;
         private readonly bool[] _objectives = new bool[3];
         private string _endReason = string.Empty;
+        private bool _paused;
+        private float _splashLeft = 9f;
+        private bool _splashEnded;
+        private bool _ruleNudgeSent;
+        private bool _carryHintSent;
+        private bool _pendingCarryHint;
 
         public MatchPhase Phase => _phase;
         public float RemainingSeconds => Mathf.Max(0f, _remaining);
+        public bool IsPaused => _paused;
+        public bool IsInSplash => _splashLeft > 0f;
+        public float SplashSecondsLeft => Mathf.Max(0f, _splashLeft);
+        public static bool ComfortMode { get; private set; }
         public int ObjectivesDone
         {
             get
@@ -75,12 +88,20 @@ namespace GravityReceipt.Mission
             Instance = this;
             _phase = MatchPhase.Playing;
             _remaining = matchSeconds;
+            _splashLeft = 9f;
+            _paused = false;
+            _splashEnded = false;
+            _ruleNudgeSent = false;
+            _carryHintSent = false;
+            _pendingCarryHint = false;
             Physics.gravity = Vector3.zero;
             Physics.defaultSolverIterations = 10;
             Physics.defaultSolverVelocityIterations = 4;
             Time.timeScale = 1f;
             Application.targetFrameRate = 60;
+            Application.runInBackground = true;
             GravityReceipt.Gravity.GravityManager.ResetFlipScreenshotFlag();
+            GravityReceipt.UI.FollowBillboard.Hidden = false;
         }
 
         private void OnDestroy()
@@ -99,18 +120,83 @@ namespace GravityReceipt.Mission
                 return;
             }
 
+            if (Input.GetKeyDown(KeyCode.F4) && IsPlaying)
+            {
+                SkipSplash();
+                DebugWarpCheckpoint();
+                return;
+            }
+
             if (Input.GetKeyDown(KeyCode.F6) && IsPlaying)
             {
+                SkipSplash();
                 DebugSkipObjective();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.F7) && IsPlaying)
+            {
+                var pkg = FindAnyObjectByType<MissionPackage>();
+                if (pkg != null)
+                {
+                    pkg.Respawn();
+                    Debug.Log("[GravityReceipt] F7 respawn paquete");
+                }
+
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.F3) && IsPlaying)
+            {
+                DebugUnstuckPlayers();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.P) && IsPlaying)
+            {
+                TogglePause();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.F10) && IsPlaying)
+            {
+                ComfortMode = !ComfortMode;
+                PushHint(ComfortMode
+                    ? "Comfort ON · menos shake / FOV / viñeta"
+                    : "Comfort OFF");
+                Debug.Log("[GravityReceipt] Comfort " + (ComfortMode ? "ON" : "OFF"));
                 return;
             }
 
             if (_phase == MatchPhase.Playing)
             {
-                _remaining -= Time.deltaTime;
-                if (_remaining <= 0f)
+                if (_splashLeft > 0f)
                 {
-                    End(MatchPhase.Lost, "Tiempo agotado");
+                    _splashLeft -= Time.deltaTime;
+                }
+                else
+                {
+                    if (!_splashEnded)
+                    {
+                        _splashEnded = true;
+                        MissionSfx.PlayObjective();
+                        FlushCarryHint();
+                    }
+
+                    if (!_ruleNudgeSent && matchSeconds - _remaining >= 8f)
+                    {
+                        _ruleNudgeSent = true;
+                        if (ObjectivesDone == 0 && !AnyRoomTelegraphing() && !AnyRoomFlippedFromDefault())
+                        {
+                            Hint?.Invoke("Agarrá la taza $15 o la caja $80 · a una PARED");
+                        }
+                    }
+
+                    _remaining -= Time.deltaTime;
+                    if (_remaining <= 0f)
+                    {
+                        End(MatchPhase.Lost, "Tiempo agotado");
+                    }
                 }
             }
 
@@ -121,6 +207,49 @@ namespace GravityReceipt.Mission
                     Rematch();
                 }
             }
+        }
+
+        private void SkipSplash()
+        {
+            if (_splashLeft <= 0f)
+            {
+                return;
+            }
+
+            _splashLeft = 0f;
+            if (!_splashEnded)
+            {
+                _splashEnded = true;
+                FlushCarryHint();
+            }
+        }
+
+        private static bool AnyRoomTelegraphing()
+        {
+            var managers = FindObjectsByType<GravityReceipt.Gravity.GravityManager>(FindObjectsSortMode.None);
+            foreach (var g in managers)
+            {
+                if (g != null && g.ShowFlipBanner)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool AnyRoomFlippedFromDefault()
+        {
+            var managers = FindObjectsByType<GravityReceipt.Gravity.GravityManager>(FindObjectsSortMode.None);
+            foreach (var g in managers)
+            {
+                if (g != null && Vector3.Dot(g.CurrentDirection, Vector3.down) < 0.92f)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public bool IsObjectiveComplete(int index)
@@ -168,11 +297,82 @@ namespace GravityReceipt.Mission
             PackageDented?.Invoke();
         }
 
+        public void NotifyPlayerRespawned()
+        {
+            PlayerRespawned?.Invoke();
+        }
+
+        public void PushHint(string message)
+        {
+            if (message is not { Length: > 0 })
+            {
+                return;
+            }
+
+            Hint?.Invoke(message);
+        }
+
+        public void NotifyFirstValuableGrab()
+        {
+            if (_carryHintSent)
+            {
+                return;
+            }
+
+            _carryHintSent = true;
+            if (IsInSplash)
+            {
+                _pendingCarryHint = true;
+                return;
+            }
+
+            PushHint("Llévalo a una PARED · espera 1 s");
+        }
+
+        private void FlushCarryHint()
+        {
+            if (!_pendingCarryHint)
+            {
+                return;
+            }
+
+            _pendingCarryHint = false;
+            PushHint("Llévalo a una PARED · espera 1 s");
+        }
+
         public void Rematch()
         {
             Time.timeScale = 1f;
+            _paused = false;
             var scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
+        }
+
+        private void TogglePause()
+        {
+            _paused = !_paused;
+            Time.timeScale = _paused ? 0f : 1f;
+            if (_paused)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+
+            Debug.Log(_paused ? "[GravityReceipt] Pausa" : "[GravityReceipt] Reanuda");
+        }
+
+        private void DebugUnstuckPlayers()
+        {
+            var motors = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
+            foreach (var motor in motors)
+            {
+                if (motor != null)
+                {
+                    motor.NudgeUnstuck();
+                }
+            }
+
+            Debug.Log("[GravityReceipt] F3 unstuck jugadores");
         }
 
         /// <summary>
@@ -207,6 +407,19 @@ namespace GravityReceipt.Mission
             {
                 return;
             }
+
+            WarpPlayersAndPackage();
+            Debug.Log("[GravityReceipt] F6 skip → objetivo " + next);
+        }
+
+        private void DebugWarpCheckpoint()
+        {
+            WarpPlayersAndPackage();
+            Debug.Log("[GravityReceipt] F4 warp checkpoint");
+        }
+
+        private void WarpPlayersAndPackage()
+        {
             var checkpoints = CheckpointSystem.Instance;
             var motors = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
             foreach (var motor in motors)
@@ -229,8 +442,6 @@ namespace GravityReceipt.Mission
             {
                 pkg.Respawn();
             }
-
-            Debug.Log("[GravityReceipt] F6 skip → objetivo " + next);
         }
 
         private void End(MatchPhase phase, string reason)
@@ -243,10 +454,20 @@ namespace GravityReceipt.Mission
             _phase = phase;
             _endReason = reason;
             Time.timeScale = 0.22f;
+            _paused = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             MatchEnded?.Invoke(phase, reason);
             MissionSfx.PlayEnd(phase == MatchPhase.Won);
+            StartCoroutine(CaptureEndShot());
+        }
+
+        private IEnumerator CaptureEndShot()
+        {
+            yield return new WaitForSecondsRealtime(0.28f);
+            var name = $"GravityReceipt_end_{System.DateTime.Now:HHmmss}.png";
+            ScreenCapture.CaptureScreenshot(name);
+            Debug.Log("[GravityReceipt] Fin de partida capturado: " + name);
         }
     }
 }

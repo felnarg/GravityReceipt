@@ -33,6 +33,11 @@ namespace GravityReceipt.Gravity
         {
             if (next == gravityManager)
             {
+                if (next != null && isActiveAndEnabled)
+                {
+                    next.Register(this);
+                }
+
                 return;
             }
 
@@ -77,8 +82,23 @@ namespace GravityReceipt.Gravity
             {
                 SetGravityManager(room.Gravity);
             }
+            else if (room != null && !room.HasOwnGravity && gravityManager != null)
+            {
+                gravityManager.Unregister(this);
+            }
 
-            if (IsHeld || _body == null || _body.isKinematic)
+            if (IsHeld)
+            {
+                if (gravityManager != null)
+                {
+                    gravityManager.NotifyValuableMoved(this);
+                }
+
+                _wasMoving = false;
+                return;
+            }
+
+            if (_body == null || _body.isKinematic)
             {
                 _wasMoving = false;
                 return;
@@ -86,7 +106,7 @@ namespace GravityReceipt.Gravity
 
             var moving = _body.linearVelocity.sqrMagnitude > 0.05f
                          || (!_body.IsSleeping() && _body.angularVelocity.sqrMagnitude > 0.05f);
-            if (moving && !_wasMoving && gravityManager != null)
+            if (gravityManager != null && moving != _wasMoving)
             {
                 gravityManager.NotifyValuableMoved(this);
             }

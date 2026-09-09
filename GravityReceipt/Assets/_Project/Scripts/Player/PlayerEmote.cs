@@ -1,5 +1,6 @@
 using GravityReceipt.Mission;
 using GravityReceipt.UI;
+using GravityReceipt.World;
 using UnityEngine;
 
 namespace GravityReceipt.Player
@@ -32,6 +33,11 @@ namespace GravityReceipt.Player
 
         private void Update()
         {
+            if (_input == null)
+            {
+                _input = GetComponent<LocalPlayerInput>();
+            }
+
             if (_input == null)
             {
                 return;
@@ -69,7 +75,9 @@ namespace GravityReceipt.Player
             }
 
             var follow = _bubble.AddComponent<FollowBillboard>();
-            follow.Configure(transform, Vector3.up * 2.35f);
+            follow.Configure(_bubble.transform, Vector3.zero);
+            var upFollow = _bubble.AddComponent<GravityUpFollow>();
+            upFollow.Configure(transform, 2.35f);
             WorldLabel.Create(_bubble.transform, "Text", Labels[index], Vector3.zero, Colors[index], 0.14f);
             Destroy(_bubble, lifetime);
             MissionSfx.PlayEmote(index);

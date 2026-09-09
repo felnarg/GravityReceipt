@@ -13,6 +13,7 @@ namespace GravityReceipt.Gravity
         [SerializeField] private GravityManager gravityManager;
 
         private Rigidbody _body;
+        private Vector3 _appliedGravity;
 
         public GravityManager Manager => gravityManager;
 
@@ -46,6 +47,12 @@ namespace GravityReceipt.Gravity
             var g = gravityManager != null
                 ? gravityManager.CurrentGravity
                 : Vector3.down * 9.81f;
+            if ((g - _appliedGravity).sqrMagnitude > 1f)
+            {
+                _body.WakeUp();
+                _appliedGravity = g;
+            }
+
             _body.AddForce(g, ForceMode.Acceleration);
         }
     }

@@ -24,10 +24,29 @@ namespace GravityReceipt.UI
         private Text _promptP1;
         private Text _promptP2;
         private GameObject _splitBar;
+        private Image _centerPanel;
+        private Image _statusPanel;
+        private Image _matchPanel;
+        private Image _vignette;
+        private Image _flash;
+        private float _flashUntil;
+        private bool _wasTelegraphing;
+        private Text _gChipP1;
+        private Text _gChipP2;
+        private Text _wayP1;
+        private Text _wayP2;
+        private bool _hallwayWarned;
+        private bool _archiveWarned;
+        private bool _flipTaught;
+        private bool _timeWarned;
         private MatchDirector _boundMatch;
         private string _toast = string.Empty;
         private float _toastUntil;
         private bool _chromeHidden;
+        private PlayerMotor _cachedP1;
+        private PlayerMotor _cachedP2;
+        private MissionPackage _cachedPkg;
+        private float _cacheUntil;
 
         private void Awake()
         {
@@ -80,6 +99,30 @@ namespace GravityReceipt.UI
                 rt.anchorMax = new Vector2(0.5f, 0.5f);
             }
 
+            if (_gChipP1 != null)
+            {
+                var rt = _gChipP1.rectTransform;
+                rt.anchorMin = new Vector2(0.5f, 0.92f);
+                rt.anchorMax = new Vector2(0.5f, 0.92f);
+            }
+
+            if (_gChipP2 != null)
+            {
+                _gChipP2.gameObject.SetActive(false);
+            }
+
+            if (_wayP1 != null)
+            {
+                var rt = _wayP1.rectTransform;
+                rt.anchorMin = new Vector2(0.5f, 0.58f);
+                rt.anchorMax = new Vector2(0.5f, 0.58f);
+            }
+
+            if (_wayP2 != null)
+            {
+                _wayP2.gameObject.SetActive(false);
+            }
+
             if (helpText != null)
             {
                 helpText.gameObject.SetActive(false);
@@ -101,13 +144,21 @@ namespace GravityReceipt.UI
             if (Input.GetKeyDown(KeyCode.F9))
             {
                 _chromeHidden = !_chromeHidden;
+                FollowBillboard.Hidden = _chromeHidden;
             }
 
-            var p1 = FindPlayer(LocalPlayerSlot.One);
-            var p2 = FindPlayer(LocalPlayerSlot.Two);
+            RefreshActorCache();
+            var p1 = _cachedP1;
+            var p2 = _cachedP2;
+            var match = MatchDirector.Instance;
             if (statusText != null)
             {
                 statusText.gameObject.SetActive(!_chromeHidden);
+            }
+
+            if (_statusPanel != null)
+            {
+                _statusPanel.enabled = !_chromeHidden;
             }
 
             if (helpP1Text != null)
@@ -122,7 +173,12 @@ namespace GravityReceipt.UI
 
             if (matchText != null)
             {
-                matchText.gameObject.SetActive(!_chromeHidden);
+                matchText.gameObject.SetActive(!_chromeHidden && (match == null || !match.IsInSplash));
+            }
+
+            if (_matchPanel != null)
+            {
+                _matchPanel.enabled = !_chromeHidden && (match == null || !match.IsInSplash);
             }
 
             if (_promptP1 != null)
@@ -134,30 +190,43 @@ namespace GravityReceipt.UI
             {
                 _promptP2.gameObject.SetActive(!_chromeHidden && p2 != null);
             }
-            var gravity = p1 != null && p1.Gravity != null ? p1.Gravity : FindAnyObjectByType<GravityManager>();
+
+            if (_gChipP1 != null)
+            {
+                _gChipP1.gameObject.SetActive(!_chromeHidden);
+            }
+
+            if (_gChipP2 != null)
+            {
+                _gChipP2.gameObject.SetActive(!_chromeHidden && p2 != null);
+            }
+
+            if (_wayP1 != null)
+            {
+                _wayP1.gameObject.SetActive(!_chromeHidden);
+            }
+
+            if (_wayP2 != null)
+            {
+                _wayP2.gameObject.SetActive(!_chromeHidden && p2 != null);
+            }
+            var g1 = p1 != null ? p1.Gravity : null;
+            var g2 = p2 != null ? p2.Gravity : null;
+            var gravity = g1 != null ? g1 : FindAnyObjectByType<GravityManager>();
             var room1 = p1 != null ? RoomRegistry.FindRoom(p1.transform.position) : null;
             var room2 = p2 != null ? RoomRegistry.FindRoom(p2.transform.position) : null;
             var roomName = FormatRoom(room1);
             var room2Name = room2 != null ? FormatRoom(room2) : null;
+            var flipG = FirstTelegraph(p1, p2);
 
-            var dominant = gravity != null && gravity.Dominant != null
-                ? $"{gravity.Dominant.name} (${gravity.Dominant.Price})"
-                : "ninguno";
-            var telegraph = gravity == null
-                ? ""
-                : gravity.IsAnchored
-                    ? "ANCLA"
-                    : gravity.IsTelegraphing
-                        ? $"FLIP en {1f - gravity.TelegraphNormalized:0.0}s"
-                        : "estable";
-            var gDir = gravity != null ? DirName(gravity.CurrentDirection) : "?";
             statusText.text = p2 != null
-                ? $"P1 {roomName}  |  P2 {room2Name}  |  g → {gDir}  |  Dom: {dominant}  |  {telegraph}"
-                : $"Sala: {roomName}  |  g → {gDir}  |  Dominante: {dominant}  |  {telegraph}";
-            statusText.color = gravity != null && gravity.IsTelegraphing ? new Color(1f, 0.9f, 0.2f) : Color.white;
+                ? $"P1 {roomName} g→{DirName(g1)} {DomShort(g1)}  |  P2 {room2Name} g→{DirName(g2)} {DomShort(g2)}  |  {TelegraphLabel(flipG != null ? flipG : g1)}"
+                : $"Sala: {roomName}  |  g → {DirName(gravity)}  |  Dominante: {DomLong(gravity)}  |  {TelegraphLabel(gravity)}";
+            statusText.color = flipG != null || (gravity != null && gravity.ShowFlipBanner)
+                ? new Color(1f, 0.9f, 0.2f)
+                : Color.white;
 
-            var match = MatchDirector.Instance;
-            var pkg = FindAnyObjectByType<MissionPackage>();
+            var pkg = _cachedPkg;
             var rec = MatchHighlightRecorder.Instance;
             if (matchText != null && match != null)
             {
@@ -169,9 +238,9 @@ namespace GravityReceipt.UI
                     ? new Color(1f, 0.45f, 0.4f)
                     : Color.white;
                 matchText.text =
-                    $"⏱ {mm:00}:{ss:00}   Paquete {hearts}  dest {(pkg != null ? pkg.Destructions : 0)}/{(pkg != null ? pkg.MaxDestructions : 3)}\n" +
+                    $"⏱ {mm:00}:{ss:00}   Paquete {hearts}{PackageHolderSuffix()}{PackageRangeSuffix(p1)}  dest {(pkg != null ? pkg.Destructions : 0)}/{(pkg != null ? pkg.MaxDestructions : 3)}\n" +
                     $"{ObjMark(match, 0)} Enchufar   {ObjMark(match, 1)} Entregar   {ObjMark(match, 2)} Sellar   ({match.ObjectivesDone}/{match.ObjectivesToWin})" +
-                    NextObjectiveHint(match) +
+                    NextObjectiveHint(match, p1) +
                     ObjectiveProgressSuffix();
             }
 
@@ -179,14 +248,14 @@ namespace GravityReceipt.UI
             {
                 var r1 = RoleOf(LocalPlayerSlot.One);
                 var wind = WindUp(p1);
-                helpP1Text.text = $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  1-4 emote  Shift sprint  F ancla  Tab rol  F5 restart  F9 HUD{wind}";
+                helpP1Text.text = $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  1-4 emote  Shift sprint  F ancla  Tab rol  P pausa  F10 comfort  F5 restart  F9 HUD{wind}";
             }
 
             if (helpText != null)
             {
                 var r2 = RoleOf(LocalPlayerSlot.Two);
                 helpText.text = p2 != null
-                    ? $"P2 [{r2}] flechas  J/L+I/K mirar  RShift agarrar  / ping  KP1-3/9 emote  Alt sprint  KP0 ancla  KP7 rol"
+                    ? $"P2 [{r2}] flechas  J/L+I/K mirar  RShift agarrar  / ping  KP1-3/9 emote  Alt sprint  KP0 ancla  KP7 rol  P pausa  F10 comfort"
                     : $"P1 [{RoleOf(LocalPlayerSlot.One)}] WASD+ratón  E agarrar  Q ping  1-4 emote  Shift sprint  F ancla";
             }
 
@@ -201,6 +270,13 @@ namespace GravityReceipt.UI
                         ? new Color(0.45f, 1f, 0.55f)
                         : new Color(1f, 0.45f, 0.4f);
                 }
+                else if (match.IsPaused)
+                {
+                    centerText.text = match.IsInSplash
+                        ? $"PAUSA — LEE LA REGLA ({Mathf.CeilToInt(match.SplashSecondsLeft)} s)\nLA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nGrises sin $ no cuentan · taza $15 o caja $80 a una PARED\nP continúa"
+                        : "PAUSA\nP continúa · clic para mirar · F5 restart · F10 comfort";
+                    centerText.color = new Color(0.85f, 0.95f, 1f);
+                }
                 else if (TryTelegraphBanner(p1, p2, out var banner, out var bannerColor))
                 {
                     centerText.text = banner;
@@ -211,20 +287,39 @@ namespace GravityReceipt.UI
                     centerText.text = _toast;
                     centerText.color = new Color(0.55f, 1f, 0.65f);
                 }
-                else if (Time.timeSinceLevelLoad < 9f)
+                else if (match.IsInSplash)
                 {
-                    centerText.text = "LA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nLos cubos grises no cuentan · la caja $80 sí";
+                    centerText.text = "LA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nGrises sin $ no cuentan · taza $15 o caja $80 a una PARED\nSigue la flecha · P pausa para leer\n" + Mathf.CeilToInt(match.SplashSecondsLeft) + " s";
                     centerText.color = new Color(1f, 0.92f, 0.4f);
+                }
+                else if (CursorUnlockedHint(p1))
+                {
+                    centerText.text = "Clic para mirar";
+                    centerText.color = new Color(0.85f, 0.9f, 1f);
                 }
                 else
                 {
                     centerText.text = string.Empty;
                 }
             }
+
+            if (_centerPanel != null)
+            {
+                _centerPanel.enabled = !_chromeHidden
+                    && centerText != null
+                    && centerText.text is { Length: > 0 };
+            }
             TintCross(_crossP1, p1);
             TintCross(_crossP2, p2);
             UpdateLookPrompt(_promptP1, p1, "E");
             UpdateLookPrompt(_promptP2, p2, "RShift");
+            UpdateGravityChip(_gChipP1, p1);
+            UpdateGravityChip(_gChipP2, p2);
+            UpdateOffscreenHint(_wayP1, p1);
+            UpdateOffscreenHint(_wayP2, p2);
+            MaybeWarnHallway(p1, p2, match);
+            MaybeTeachFlip(p1, p2, match);
+            MaybeWarnTime(match);
 
             if (Input.GetKeyDown(KeyCode.F8))
             {
@@ -232,6 +327,52 @@ namespace GravityReceipt.UI
                 ScreenCapture.CaptureScreenshot(name);
                 Debug.Log("[GravityReceipt] Screenshot: " + name);
             }
+
+            if (_vignette != null)
+            {
+                var g = FirstTelegraph(p1, p2);
+                var telegraphing = g != null && g.IsTelegraphing;
+                if (_wasTelegraphing && !telegraphing && g != null && g.ShowFlipBanner)
+                {
+                    _flashUntil = Time.unscaledTime + 0.14f;
+                }
+
+                _wasTelegraphing = telegraphing;
+                var a = 0f;
+                if (g != null && g.IsTelegraphing)
+                {
+                    a = 0.28f * g.TelegraphNormalized;
+                }
+                else if (g != null && g.ShowFlipBanner)
+                {
+                    a = 0.16f;
+                }
+
+                _vignette.color = new Color(0.15f, 0.04f, 0f, a * (MatchDirector.ComfortMode ? 0.35f : 1f));
+            }
+
+            if (_flash != null)
+            {
+                var flashA = Time.unscaledTime < _flashUntil ? 0.32f : 0f;
+                if (MatchDirector.ComfortMode)
+                {
+                    flashA *= 0.35f;
+                }
+                _flash.color = new Color(1f, 0.72f, 0.28f, flashA);
+            }
+        }
+
+        private void RefreshActorCache()
+        {
+            if (Time.unscaledTime < _cacheUntil && _cachedP1 != null)
+            {
+                return;
+            }
+
+            _cacheUntil = Time.unscaledTime + 0.2f;
+            _cachedP1 = FindPlayer(LocalPlayerSlot.One);
+            _cachedP2 = FindPlayer(LocalPlayerSlot.Two);
+            _cachedPkg = FindAnyObjectByType<MissionPackage>();
         }
 
         private static void TintCross(Text cross, PlayerMotor motor)
@@ -244,12 +385,22 @@ namespace GravityReceipt.UI
             var inter = motor != null ? motor.GetComponent<PlayerInteractor>() : null;
             var winding = inter != null && inter.WindUpNormalized > 0.05f;
             var looking = inter != null && inter.HasLookTarget;
+            var focus = inter == null
+                ? null
+                : inter.LookValuable != null
+                    ? inter.LookValuable
+                    : inter.HeldValuable;
+            var dominant = focus != null
+                           && focus.Manager != null
+                           && focus.Manager.Dominant == focus;
             cross.color = winding
                 ? new Color(1f, 0.55f, 0.15f)
-                : looking
-                    ? new Color(1f, 0.92f, 0.25f)
-                    : new Color(1f, 1f, 1f, 0.85f);
-            cross.fontSize = winding ? 28 : 22;
+                : dominant
+                    ? new Color(1f, 0.72f, 0.12f)
+                    : looking
+                        ? new Color(1f, 0.92f, 0.25f)
+                        : new Color(1f, 1f, 1f, 0.85f);
+            cross.fontSize = winding ? 28 : dominant ? 26 : 22;
         }
 
         private static string ObjectiveProgressSuffix()
@@ -278,6 +429,11 @@ namespace GravityReceipt.UI
             return room.HasOwnGravity ? room.RoomId : room.RoomId + " · g hereda";
         }
 
+        private static string DirName(GravityManager g)
+        {
+            return g == null ? "?" : DirName(g.CurrentDirection);
+        }
+
         private static string DirName(Vector3 d)
         {
             if (Vector3.Dot(d, Vector3.down) > 0.9f) return "abajo";
@@ -287,6 +443,56 @@ namespace GravityReceipt.UI
             if (Vector3.Dot(d, Vector3.forward) > 0.9f) return "norte";
             if (Vector3.Dot(d, Vector3.back) > 0.9f) return "sur";
             return d.ToString();
+        }
+
+        private static string PackageHolderSuffix()
+        {
+            var inters = FindObjectsByType<PlayerInteractor>(FindObjectsSortMode.None);
+            foreach (var inter in inters)
+            {
+                if (inter == null || !inter.IsHoldingPackage)
+                {
+                    continue;
+                }
+
+                var input = inter.GetComponent<LocalPlayerInput>();
+                var who = input != null && input.Slot == LocalPlayerSlot.Two ? "P2" : "P1";
+                return $" · {who}";
+            }
+
+            return string.Empty;
+        }
+
+        private static string DomShort(GravityManager g)
+        {
+            return g != null && g.Dominant != null ? $"${g.Dominant.Price}" : "—";
+        }
+
+        private static string DomLong(GravityManager g)
+        {
+            return g != null && g.Dominant != null
+                ? $"{g.Dominant.name} (${g.Dominant.Price})"
+                : "ninguno";
+        }
+
+        private static string TelegraphLabel(GravityManager g)
+        {
+            if (g == null)
+            {
+                return "";
+            }
+
+            if (g.IsAnchored)
+            {
+                return "ANCLA";
+            }
+
+            if (g.IsTelegraphing)
+            {
+                return $"FLIP en {1f - g.TelegraphNormalized:0.0}s";
+            }
+
+            return g.ShowFlipBanner ? "FLIP" : "estable";
         }
 
         private static string Hearts(MissionPackage pkg)
@@ -320,7 +526,7 @@ namespace GravityReceipt.UI
             return index == match.CurrentObjectiveIndex ? "[>]" : "[ ]";
         }
 
-        private static string NextObjectiveHint(MatchDirector match)
+        private static string NextObjectiveHint(MatchDirector match, PlayerMotor from)
         {
             if (match == null || !match.IsPlaying)
             {
@@ -329,11 +535,330 @@ namespace GravityReceipt.UI
 
             return match.CurrentObjectiveIndex switch
             {
-                0 => "\nSiguiente: paquete a la zona VERDE de Archive",
-                1 => "\nSiguiente: suelta el paquete en la losa AZUL",
-                2 => "\nSiguiente: paquete + mantén E en la losa DORADA",
+                0 => "\nSiguiente: paquete a la zona VERDE de Archive" + DistToObjective(0, from),
+                1 => "\nSiguiente: suelta el paquete en la losa AZUL" + DistToObjective(1, from),
+                2 => "\nSiguiente: paquete + mantén E en la losa DORADA" + DistToObjective(2, from),
                 _ => string.Empty
             };
+        }
+
+        private static string DistToObjective(int index, PlayerMotor from)
+        {
+            if (from == null)
+            {
+                return string.Empty;
+            }
+
+            var triggers = FindObjectsByType<ObjectiveTrigger>(FindObjectsSortMode.None);
+            foreach (var t in triggers)
+            {
+                if (t == null || t.Index != index || t.IsDone)
+                {
+                    continue;
+                }
+
+                var m = PlanarDistance(from, t.transform.position);
+                return m >= 3.5f ? $" ({m:0} m)" : string.Empty;
+            }
+
+            return string.Empty;
+        }
+
+        private static string PackageRangeSuffix(PlayerMotor from)
+        {
+            if (from == null)
+            {
+                return string.Empty;
+            }
+
+            var pkg = FindAnyObjectByType<MissionPackage>();
+            if (pkg == null)
+            {
+                return string.Empty;
+            }
+
+            var m = PlanarDistance(from, pkg.transform.position);
+            return m >= 4f ? $" · {m:0}m" : string.Empty;
+        }
+
+        private static float PlanarDistance(PlayerMotor from, Vector3 worldPos)
+        {
+            if (from == null)
+            {
+                return 0f;
+            }
+
+            var gDir = from.Gravity != null ? from.Gravity.CurrentDirection : Vector3.down;
+            return Vector3.ProjectOnPlane(worldPos - from.transform.position, gDir).magnitude;
+        }
+
+        private static bool CursorUnlockedHint(PlayerMotor p1)
+        {
+            if (p1 == null)
+            {
+                return false;
+            }
+
+            var input = p1.GetComponent<LocalPlayerInput>();
+            return input != null && input.UsesMouseLook && Cursor.lockState != CursorLockMode.Locked;
+        }
+
+        private void MaybeWarnHallway(PlayerMotor p1, PlayerMotor p2, MatchDirector match)
+        {
+            if (match == null || !match.IsPlaying || match.IsInSplash)
+            {
+                return;
+            }
+
+            if (Time.unscaledTime < _toastUntil)
+            {
+                return;
+            }
+
+            if (IsSidewaysHallway(p1) || IsSidewaysHallway(p2))
+            {
+                if (_hallwayWarned)
+                {
+                    return;
+                }
+
+                _hallwayWarned = true;
+                _toast = "Pasillo: g hereda · vacío a los lados";
+                _toastUntil = Time.unscaledTime + 2.6f;
+                return;
+            }
+
+            _hallwayWarned = false;
+
+            if (_archiveWarned || match.ObjectivesDone > 0)
+            {
+                return;
+            }
+
+            if (!IsRoom(p1, "Archive") && !IsRoom(p2, "Archive"))
+            {
+                return;
+            }
+
+            var who = IsRoom(p1, "Archive") ? p1 : p2;
+            var archiveG = who != null ? who.Gravity : null;
+            if (archiveG != null && Vector3.Dot(archiveG.CurrentDirection, Vector3.down) < 0.92f)
+            {
+                return;
+            }
+
+            _archiveWarned = true;
+            _toast = "Archive: caja $80 a una PARED";
+            _toastUntil = Time.unscaledTime + 2.8f;
+        }
+
+        private void MaybeWarnTime(MatchDirector match)
+        {
+            if (_timeWarned || match == null || !match.IsPlaying || match.IsInSplash)
+            {
+                return;
+            }
+
+            if (match.RemainingSeconds > 30f)
+            {
+                return;
+            }
+
+            _timeWarned = true;
+            _toast = "¡30 SEGUNDOS!";
+            _toastUntil = Time.unscaledTime + 2.4f;
+        }
+
+        private void MaybeTeachFlip(PlayerMotor p1, PlayerMotor p2, MatchDirector match)
+        {
+            if (_flipTaught || match == null || !match.IsPlaying || match.IsInSplash)
+            {
+                return;
+            }
+
+            if (!HasUnusualGravity(p1) && !HasUnusualGravity(p2))
+            {
+                return;
+            }
+
+            _flipTaught = true;
+            _toast = "Cara CIAN = ABAJO · camina sobre ella";
+            _toastUntil = Time.unscaledTime + 3.2f;
+        }
+
+        private static bool HasUnusualGravity(PlayerMotor motor)
+        {
+            if (motor == null)
+            {
+                return false;
+            }
+
+            var g = motor.Gravity;
+            return g != null
+                   && !g.IsTelegraphing
+                   && Vector3.Dot(g.CurrentDirection, Vector3.down) < 0.92f;
+        }
+
+        private static void UpdateOffscreenHint(Text hint, PlayerMotor motor)
+        {
+            if (hint == null)
+            {
+                return;
+            }
+
+            if (motor == null)
+            {
+                hint.text = "";
+                return;
+            }
+
+            if (!ObjectiveWaypoint.TryPeekTarget(motor, out var worldPos, out var color, out var label))
+            {
+                hint.text = "";
+                return;
+            }
+
+            var input = motor.GetComponent<LocalPlayerInput>();
+            var cam = input != null ? input.PlayerCamera : null;
+            if (cam == null)
+            {
+                hint.text = "";
+                return;
+            }
+
+            var vp = cam.WorldToViewportPoint(worldPos);
+            var onScreen = vp.z > 0.2f && vp.x > 0.14f && vp.x < 0.86f && vp.y > 0.14f && vp.y < 0.86f;
+            if (onScreen)
+            {
+                hint.text = "";
+                return;
+            }
+
+            var dir = new Vector2(vp.x - 0.5f, vp.y - 0.5f);
+            if (vp.z < 0f)
+            {
+                dir = -dir;
+            }
+
+            hint.text = $"{ArrowGlyph(dir)}  {label}";
+            hint.color = color;
+        }
+
+        private static string ArrowGlyph(Vector2 dir)
+        {
+            if (dir.sqrMagnitude < 0.0001f)
+            {
+                return "•";
+            }
+
+            var a = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            if (a >= -22.5f && a < 22.5f)
+            {
+                return "→";
+            }
+
+            if (a >= 22.5f && a < 67.5f)
+            {
+                return "↗";
+            }
+
+            if (a >= 67.5f && a < 112.5f)
+            {
+                return "↑";
+            }
+
+            if (a >= 112.5f && a < 157.5f)
+            {
+                return "↖";
+            }
+
+            if (a >= 157.5f || a < -157.5f)
+            {
+                return "←";
+            }
+
+            if (a >= -157.5f && a < -112.5f)
+            {
+                return "↙";
+            }
+
+            if (a >= -112.5f && a < -67.5f)
+            {
+                return "↓";
+            }
+
+            return "↘";
+        }
+
+        private static bool IsRoom(PlayerMotor motor, string id)
+        {
+            if (motor == null)
+            {
+                return false;
+            }
+
+            var room = RoomRegistry.FindRoom(motor.transform.position);
+            return room != null && room.RoomId == id;
+        }
+
+        private static bool IsSidewaysHallway(PlayerMotor motor)
+        {
+            if (motor == null)
+            {
+                return false;
+            }
+
+            var room = RoomRegistry.FindRoom(motor.transform.position);
+            if (room == null || room.HasOwnGravity)
+            {
+                return false;
+            }
+
+            var g = motor.Gravity;
+            return g != null && Vector3.Dot(g.CurrentDirection, Vector3.down) < 0.92f;
+        }
+
+        private static void UpdateGravityChip(Text chip, PlayerMotor motor)
+        {
+            if (chip == null)
+            {
+                return;
+            }
+
+            if (motor == null)
+            {
+                chip.text = "";
+                return;
+            }
+
+            var g = motor.Gravity;
+            var room = RoomRegistry.FindRoom(motor.transform.position);
+            var inherit = room != null && !room.HasOwnGravity;
+            if (g == null)
+            {
+                chip.text = inherit ? "g hereda" : "";
+                return;
+            }
+
+            var dir = DirName(g);
+            if (g.IsTelegraphing)
+            {
+                chip.text = $"FLIP → {DirName(g.PendingDirection)}";
+                chip.color = new Color(1f, 0.82f, 0.2f);
+                return;
+            }
+
+            if (g.IsAnchored)
+            {
+                chip.text = "ANCLA";
+                chip.color = new Color(0.45f, 0.9f, 1f);
+                return;
+            }
+
+            chip.text = inherit ? $"g hereda → {dir}" : $"g → {dir}";
+            chip.color = Vector3.Dot(g.CurrentDirection, Vector3.down) > 0.92f
+                ? new Color(0.75f, 0.9f, 1f)
+                : new Color(1f, 0.78f, 0.35f);
         }
 
         private static void UpdateLookPrompt(Text prompt, PlayerMotor motor, string grabKey)
@@ -358,8 +883,12 @@ namespace GravityReceipt.UI
 
             if (inter.IsHolding)
             {
-                prompt.text = $"{grabKey}  soltar";
-                prompt.color = new Color(1f, 0.75f, 0.35f);
+                prompt.text = inter.LookHint is { Length: > 0 }
+                    ? $"{grabKey}  {inter.LookHint}"
+                    : $"{grabKey}  soltar";
+                prompt.color = inter.LookHint.Contains("PARED") || inter.LookHint.Contains("FLIP")
+                    ? new Color(1f, 0.85f, 0.3f)
+                    : new Color(1f, 0.75f, 0.35f);
                 return;
             }
 
@@ -455,21 +984,22 @@ namespace GravityReceipt.UI
                 return false;
             }
 
-            var dir = DirName(g.PendingDirection);
+            var dir = DirName(g.BannerDirection);
             var item = g.Dominant != null ? $"${g.Dominant.Price}" : "el objeto caro";
-            banner = $"¡FLIP!\nLa gravedad va hacia {dir}\nSigue a {item}";
+            var room = g.name.StartsWith("Gravity_") ? g.name[8..] : g.name;
+            banner = $"¡FLIP {room.ToUpperInvariant()}!\nLa gravedad va hacia {dir}\nSigue a {item}";
             color = Color.Lerp(new Color(1f, 0.92f, 0.25f), new Color(1f, 0.4f, 0.12f), g.TelegraphNormalized);
             return true;
         }
 
         private static GravityManager FirstTelegraph(PlayerMotor p1, PlayerMotor p2)
         {
-            if (p1 != null && p1.Gravity != null && p1.Gravity.IsTelegraphing)
+            if (p1 != null && p1.Gravity != null && p1.Gravity.ShowFlipBanner)
             {
                 return p1.Gravity;
             }
 
-            if (p2 != null && p2.Gravity != null && p2.Gravity.IsTelegraphing)
+            if (p2 != null && p2.Gravity != null && p2.Gravity.ShowFlipBanner)
             {
                 return p2.Gravity;
             }
@@ -491,6 +1021,8 @@ namespace GravityReceipt.UI
             {
                 _boundMatch.ObjectiveCompleted += OnObjectiveCompleted;
                 _boundMatch.PackageDented += OnPackageDented;
+                _boundMatch.PlayerRespawned += OnPlayerRespawned;
+                _boundMatch.Hint += OnHint;
             }
         }
 
@@ -500,6 +1032,8 @@ namespace GravityReceipt.UI
             {
                 _boundMatch.ObjectiveCompleted -= OnObjectiveCompleted;
                 _boundMatch.PackageDented -= OnPackageDented;
+                _boundMatch.PlayerRespawned -= OnPlayerRespawned;
+                _boundMatch.Hint -= OnHint;
             }
 
             _boundMatch = null;
@@ -507,16 +1041,41 @@ namespace GravityReceipt.UI
 
         private void OnPackageDented()
         {
-            _toast = "¡PAQUETE ABOLLADO!";
-            _toastUntil = Time.unscaledTime + 1.6f;
+            var pkg = _cachedPkg;
+            _toast = pkg != null && pkg.Lives == 1
+                ? "¡PAQUETE a 1 vida!"
+                : "¡PAQUETE ABOLLADO!";
+            _toastUntil = Time.unscaledTime + 1.8f;
         }
 
-        private void OnObjectiveCompleted(int _, string label)
+        private void OnHint(string message)
         {
-            _toast = label is { Length: > 0 }
-                ? $"¡{label.ToUpperInvariant()} COMPLETADO!"
-                : "¡OBJETIVO COMPLETADO!";
-            _toastUntil = Time.unscaledTime + 2.4f;
+            if (message is not { Length: > 0 })
+            {
+                return;
+            }
+
+            _toast = message;
+            _toastUntil = Time.unscaledTime + 3.2f;
+        }
+
+        private void OnPlayerRespawned()
+        {
+            _toast = "Caíste · checkpoint";
+            _toastUntil = Time.unscaledTime + 1.8f;
+        }
+
+        private void OnObjectiveCompleted(int index, string label)
+        {
+            _toast = index switch
+            {
+                0 => "¡ENCHUFAR!  Siguiente: PASILLO → losa AZUL",
+                1 => "¡ENTREGAR!  Siguiente: EXECUTIVE → losa DORADA",
+                _ => label is { Length: > 0 }
+                    ? $"¡{label.ToUpperInvariant()} COMPLETADO!"
+                    : "¡OBJETIVO COMPLETADO!"
+            };
+            _toastUntil = Time.unscaledTime + 3.2f;
         }
 
         private void EnsureCanvas()
@@ -529,6 +1088,14 @@ namespace GravityReceipt.UI
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1920f, 1080f);
             canvasGo.AddComponent<GraphicRaycaster>();
+
+            _statusPanel = MakePanel(canvasGo.transform, "StatusPanel", new Vector2(0.5f, 0.5f), new Vector2(0f, 18f), new Vector2(1680f, 40f));
+            _matchPanel = MakePanel(canvasGo.transform, "MatchPanel", new Vector2(0.5f, 0.5f), new Vector2(0f, -28f), new Vector2(1680f, 86f));
+            _centerPanel = MakePanel(canvasGo.transform, "CenterPanel", new Vector2(0.5f, 0.5f), new Vector2(0f, 80f), new Vector2(920f, 250f));
+            _vignette = MakeVignette(canvasGo.transform);
+            _flash = MakeFlash(canvasGo.transform);
+            _vignette.transform.SetAsFirstSibling();
+            _flash.transform.SetSiblingIndex(1);
 
             statusText = MakeText(canvasGo.transform, "Status", new Vector2(0f, 18f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 36f), 20, TextAnchor.MiddleCenter);
             matchText = MakeText(canvasGo.transform, "Match", new Vector2(0f, -28f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 78f), 18, TextAnchor.MiddleCenter);
@@ -545,6 +1112,14 @@ namespace GravityReceipt.UI
             _promptP1.color = new Color(1f, 0.95f, 0.55f);
             _promptP2 = MakeText(canvasGo.transform, "PromptP2", new Vector2(0f, -36f), new Vector2(0.5f, 0.25f), new Vector2(520f, 32f), 18, TextAnchor.UpperCenter);
             _promptP2.color = new Color(1f, 0.95f, 0.55f);
+            _gChipP1 = MakeText(canvasGo.transform, "GChipP1", new Vector2(0f, 42f), new Vector2(0.5f, 0.75f), new Vector2(420f, 28f), 18, TextAnchor.LowerCenter);
+            _gChipP1.color = new Color(0.7f, 0.92f, 1f);
+            _gChipP2 = MakeText(canvasGo.transform, "GChipP2", new Vector2(0f, 42f), new Vector2(0.5f, 0.25f), new Vector2(420f, 28f), 18, TextAnchor.LowerCenter);
+            _gChipP2.color = new Color(1f, 0.82f, 0.55f);
+            _wayP1 = MakeText(canvasGo.transform, "WayP1", new Vector2(0f, 78f), new Vector2(0.5f, 0.75f), new Vector2(480f, 32f), 20, TextAnchor.LowerCenter);
+            _wayP1.color = new Color(1f, 0.9f, 0.4f);
+            _wayP2 = MakeText(canvasGo.transform, "WayP2", new Vector2(0f, 78f), new Vector2(0.5f, 0.25f), new Vector2(480f, 32f), 20, TextAnchor.LowerCenter);
+            _wayP2.color = new Color(1f, 0.9f, 0.4f);
             _splitBar = MakeSplitBar(canvasGo.transform);
         }
 
@@ -561,6 +1136,52 @@ namespace GravityReceipt.UI
             rt.sizeDelta = new Vector2(0f, 6f);
             rt.anchoredPosition = Vector2.zero;
             return go;
+        }
+
+        private static Image MakePanel(Transform parent, string name, Vector2 anchor, Vector2 anchored, Vector2 size)
+        {
+            var go = new GameObject(name);
+            go.transform.SetParent(parent, false);
+            var img = go.AddComponent<Image>();
+            img.color = new Color(0.03f, 0.04f, 0.07f, 0.72f);
+            var rt = img.rectTransform;
+            rt.anchorMin = anchor;
+            rt.anchorMax = anchor;
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = anchored;
+            rt.sizeDelta = size;
+            return img;
+        }
+
+        private static Image MakeFlash(Transform parent)
+        {
+            var go = new GameObject("FlipFlash");
+            go.transform.SetParent(parent, false);
+            var img = go.AddComponent<Image>();
+            img.color = new Color(1f, 0.72f, 0.28f, 0f);
+            img.raycastTarget = false;
+            var rt = img.rectTransform;
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+            return img;
+        }
+
+        private static Image MakeVignette(Transform parent)
+        {
+            var go = new GameObject("Vignette");
+            go.transform.SetParent(parent, false);
+            go.transform.SetAsFirstSibling();
+            var img = go.AddComponent<Image>();
+            img.color = new Color(0.15f, 0.04f, 0f, 0f);
+            img.raycastTarget = false;
+            var rt = img.rectTransform;
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+            return img;
         }
 
         private static Text MakeCross(Transform parent, string name, Vector2 anchor)
