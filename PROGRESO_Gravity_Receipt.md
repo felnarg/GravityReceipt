@@ -29,7 +29,7 @@ Documento vivo del prototipo.
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
 | **Última actualización** | 2026-09-09 ~00:45 COT (overnight, puertas/2p/HUD) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
-| **Hecho relevante** | Split 2p, g por sala, misión, mapa, HUD regla/FLIP, whoosh, brújula, F6 skip, grab FSM, emotes 1-4, prompt de mirada |
+| **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F4/F6/F7, OOB AABB, pings, hit-stop, carteles dintel, ignore collision P1-P2 |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete + flip con caja dorada a una pared |
 | **Build jugable** | Sí (Editor Play Mode, 1p o 2p local). **Hay que regenerar la escena con el menú Setup.** |
 | **Online 4p** | No (no empezar hasta que el playtest offline sea sólido) |
@@ -89,6 +89,7 @@ Documento vivo del prototipo.
 - Tutorial del Hub subido al dintel: la puerta a Archive queda libre.
 - `SpawnHome.ReturnHome` con llaves correctas (el extra `}` no compilaba).
 - P1 y P2 no colisionan entre sí (el pasillo estrecho no es un empujón al vacío).
+- G se recalcula al **parar** un valuable (no solo al empezar a moverse): el flip usa la posición en la pared.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.

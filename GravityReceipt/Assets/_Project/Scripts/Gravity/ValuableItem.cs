@@ -86,7 +86,7 @@ namespace GravityReceipt.Gravity
 
             var moving = _body.linearVelocity.sqrMagnitude > 0.05f
                          || (!_body.IsSleeping() && _body.angularVelocity.sqrMagnitude > 0.05f);
-            if (moving && !_wasMoving && gravityManager != null)
+            if (gravityManager != null && moving != _wasMoving)
             {
                 gravityManager.NotifyValuableMoved(this);
             }
