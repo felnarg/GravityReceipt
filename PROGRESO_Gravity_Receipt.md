@@ -41,19 +41,21 @@ Documento vivo del prototipo.
 
 ### HECHO
 - Input por jugador + split-screen 2p (P1 WASD+ratón, P2 flechas+numpad/pad; P2 también I/K para pitch).
-- `Grabbable` exclusivo (un holder a la vez) + drop al Warp/disable.
+- `Grabbable` exclusivo (un holder a la vez) + máquina Idle → Winding → Holding + empujón al soltar + drop al Warp.
 - Gravedad **por sala** (`RoomVolume` + `GravityBody`; `Physics.gravity = 0`).
-- `MissionPackage` (3 vidas / 3 destrucciones), 3 objetivos, checkpoints, timer 10:00.
-- Roles stub Runner (sprint) / Anchor (fija g 3 s). Tab / KP7 para cambiar.
+- `MissionPackage` (3 vidas / 3 destrucciones; no dents de jugadores), 3 objetivos, checkpoints, timer 10:00.
+- Roles stub Runner (sprint + FOV) / Anchor (fija g 3 s, CD en HUD). Tab / KP7 para cambiar.
 - Mapa: Hub → Archive → Pasillo con vacío → Open Office → Executive.
-- Tutorial en pared del Hub + carteles de pista (caja a la pared, entregar, sellar).
-- HUD: splash 9 s de la regla, banner **¡FLIP!** durante telegráfo, rematch con **R**.
-- Moment of the Match local (mayor caída).
-- Feel de flip: FOV punch + shake + whoosh procedural.
+- Tutorial Hub: cartel + taza **$15** + props **grises sin $** (también en Archive).
+- HUD: splash 9 s, banner **¡FLIP!**, toast de objetivo, pasillo “g hereda”, rematch **R**.
+- Brújula 3D solo si g no es abajo o hay telegráfo.
+- Moment of the Match: mayor caída + recuento de flips.
+- Feel de flip: FOV punch + shake + whoosh; ding al completar objetivo.
 - Dominante: pulso + etiqueta **¡ESTE TIRA DE G!**.
 - Pasillo: bordillos 0.58 m (ya no se camina al vacío sin querer).
-- Valuables que caen al vacío vuelven a su spawn.
+- Valuables y props que caen al vacío vuelven a su spawn (`SpawnHome`).
 - Losas Entregar/Sellar cubren el paquete agarrado; Sellar también si llevas el paquete.
+- **F5** restart · **F8** PNG · **F9** oculta chrome · **F6** skip objetivo (cheat).
 - Menú Setup 2p (default) y 1p.
 
 ### A MEDIAS

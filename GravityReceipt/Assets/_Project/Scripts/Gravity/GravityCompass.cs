@@ -42,7 +42,7 @@ namespace GravityReceipt.Gravity
                 dir = Vector3.down;
             }
 
-            var unusual = g.IsTelegraphing || Vector3.Dot(dir, Vector3.down) < 0.92f;
+            var unusual = g.IsAnchored || g.IsTelegraphing || Vector3.Dot(dir, Vector3.down) < 0.92f;
             _arrow.gameObject.SetActive(unusual);
             if (!unusual)
             {
@@ -55,9 +55,21 @@ namespace GravityReceipt.Gravity
             _arrow.localScale = new Vector3(0.12f, 0.12f, 0.42f);
             if (_renderer != null)
             {
-                _renderer.material.color = g.IsTelegraphing
-                    ? Color.Lerp(new Color(1f, 0.9f, 0.2f), new Color(1f, 0.35f, 0.1f), g.TelegraphNormalized)
-                    : new Color(0.95f, 0.95f, 0.95f, 0.85f);
+                Color color;
+                if (g.IsAnchored)
+                {
+                    color = new Color(0.35f, 0.85f, 1f);
+                }
+                else if (g.IsTelegraphing)
+                {
+                    color = Color.Lerp(new Color(1f, 0.9f, 0.2f), new Color(1f, 0.35f, 0.1f), g.TelegraphNormalized);
+                }
+                else
+                {
+                    color = new Color(0.95f, 0.95f, 0.95f, 0.85f);
+                }
+
+                _renderer.material.color = color;
             }
         }
 
