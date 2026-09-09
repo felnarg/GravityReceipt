@@ -70,7 +70,11 @@ namespace GravityReceipt.Interaction
             }
             go.transform.position = point;
             go.transform.localScale = Vector3.one * 0.45f;
-            Object.Destroy(go.GetComponent<Collider>());
+            var pingCol = go.GetComponent<Collider>();
+            if (pingCol != null)
+            {
+                pingCol.enabled = false;
+            }
             var renderer = go.GetComponent<Renderer>();
             var color = _input != null && _input.Slot == LocalPlayerSlot.Two
                 ? new Color(1f, 0.55f, 0.2f)

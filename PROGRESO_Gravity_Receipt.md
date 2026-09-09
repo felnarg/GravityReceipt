@@ -136,6 +136,7 @@ Documento vivo del prototipo.
 - LEDs del server Executive parpadean.
 - Distancias HUD (paquete/objetivo) también en el plano de g.
 - Puertas más altas/anchas (2.9 × 3.4 m) para cruzarlas con g de lado.
+- Coyote/jump buffer 0.18 s si g no es suelo (pasillo / paredes).
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.

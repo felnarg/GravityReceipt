@@ -283,15 +283,16 @@ namespace GravityReceipt.Player
 
             Grounded = IsGrounded(gDir);
             Locomotion = Grounded ? LocomotionPhase.Grounded : LocomotionPhase.Airborne;
+            var airAssist = Vector3.Dot(gDir, Vector3.down) > 0.92f ? 0.12f : 0.18f;
             if (_input != null && _input.JumpPressed())
             {
-                _jumpBuffer = 0.12f;
+                _jumpBuffer = airAssist;
             }
 
             _jumpBuffer = Mathf.Max(0f, _jumpBuffer - Time.deltaTime);
             if (Locomotion == LocomotionPhase.Grounded)
             {
-                _coyote = 0.12f;
+                _coyote = airAssist;
                 if (_airFall > 0.5f && _input != null)
                 {
                     var rec = MatchHighlightRecorder.Instance;
