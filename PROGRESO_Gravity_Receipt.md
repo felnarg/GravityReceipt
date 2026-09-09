@@ -639,6 +639,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Pantalla del monitor Office pulsa (LED).
 - Placa **RECEPCIÓN** en el Hub y **CEO** en la mesa Executive.
 - Nota en el corkboard de Archive: **CAJA $80 → PARED**.
+- Papelera gris (Office) y jarrón gris (Executive): se agarran pero **no tiran de g**.
 
 ### 2026-09-09 — Overnight bloque 20 (física)
 - `GravityBody` hace WakeUp al cambiar el vector de g (props dormidos no se quedan pegados al suelo viejo).
