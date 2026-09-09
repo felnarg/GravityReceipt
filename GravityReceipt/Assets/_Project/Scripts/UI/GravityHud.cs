@@ -11,6 +11,7 @@ namespace GravityReceipt.UI
     /// <summary>
     /// HUD: gravedad, telegráfo, objetivos, paquete, timer, roles, rematch.
     /// </summary>
+    [DefaultExecutionOrder(60)]
     public sealed class GravityHud : MonoBehaviour
     {
         [SerializeField] private Text statusText;
