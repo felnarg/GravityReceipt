@@ -339,6 +339,7 @@ namespace GravityReceipt.Player
                 }
 
                 _velocity += -gDir * jumpSpeed;
+                MissionSfx.PlayJump();
             }
 
             var planar = Vector3.ProjectOnPlane(wish, gDir);

@@ -128,6 +128,7 @@ Documento vivo del prototipo.
 - Pasos procedurales al caminar; click al agarrar; cámara baja un poco al aterrizar duro.
 - Losas de techo (grid) + lámparas en el pasillo; teclado, cajas en estantería, lámpara Executive.
 - Cruceta naranja si miras el dominante.
+- Primer agarre de un `$` tostea “Llévalo a una PARED”; el objeto no atraviesa paredes al llevarlo.
 - Chip `g → …` en cada viewport (P1/P2). Toast al entrar al pasillo con g de lado.
 
 ### A MEDIAS
@@ -574,6 +575,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Beacon dorado en la taza $15. Losas de techo + lámparas de pasillo + dress extra.
 - Cruceta naranja al mirar el dominante.
 - Chip `g →` por viewport; toast al cruzar el pasillo con g heredada de lado.
+- Primer agarre de un `$` tostea “Llévalo a una PARED”; el objeto no atraviesa paredes al llevarlo.
 
 ### 2026-09-09 — Overnight bloque 13 (regla visible)
 - Waypoint paquete/objetivo, beacon, linger FLIP, roll, P/F3, arte de salas.

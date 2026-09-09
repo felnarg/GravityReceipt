@@ -31,6 +31,7 @@ namespace GravityReceipt.Mission
         private float _splashLeft = 9f;
         private bool _splashEnded;
         private bool _ruleNudgeSent;
+        private bool _carryHintSent;
 
         public MatchPhase Phase => _phase;
         public float RemainingSeconds => Mathf.Max(0f, _remaining);
@@ -89,6 +90,7 @@ namespace GravityReceipt.Mission
             _paused = false;
             _splashEnded = false;
             _ruleNudgeSent = false;
+            _carryHintSent = false;
             Physics.gravity = Vector3.zero;
             Physics.defaultSolverIterations = 10;
             Physics.defaultSolverVelocityIterations = 4;
@@ -269,6 +271,27 @@ namespace GravityReceipt.Mission
         public void NotifyPlayerRespawned()
         {
             PlayerRespawned?.Invoke();
+        }
+
+        public void PushHint(string message)
+        {
+            if (message is not { Length: > 0 })
+            {
+                return;
+            }
+
+            Hint?.Invoke(message);
+        }
+
+        public void NotifyFirstValuableGrab()
+        {
+            if (_carryHintSent || IsInSplash)
+            {
+                return;
+            }
+
+            _carryHintSent = true;
+            PushHint("Llévalo a una PARED · espera 1 s");
         }
 
         public void Rematch()

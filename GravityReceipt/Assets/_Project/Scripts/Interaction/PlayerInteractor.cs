@@ -176,7 +176,28 @@ namespace GravityReceipt.Interaction
                 return;
             }
 
-            _held.MovePosition(holdPoint.position);
+            var target = holdPoint.position;
+            var cam = _input != null ? _input.PlayerCamera : null;
+            if (cam != null)
+            {
+                var origin = cam.transform.position;
+                var to = target - origin;
+                var dist = to.magnitude;
+                if (dist > 0.08f)
+                {
+                    var dir = to / dist;
+                    if (Physics.SphereCast(origin, 0.14f, dir, out var hit, dist, ~0, QueryTriggerInteraction.Ignore)
+                        && hit.collider != null
+                        && hit.collider.transform != _held.transform
+                        && !hit.collider.transform.IsChildOf(_held.transform)
+                        && hit.collider.GetComponent<CharacterController>() == null)
+                    {
+                        target = hit.point - dir * 0.28f;
+                    }
+                }
+            }
+
+            _held.MovePosition(target);
             _held.MoveRotation(holdPoint.rotation);
         }
 
@@ -283,6 +304,14 @@ namespace GravityReceipt.Interaction
             _windUp = 0f;
             ClearFocus();
             MissionSfx.PlayGrab();
+            if (_heldValuable != null)
+            {
+                var match = MatchDirector.Instance;
+                if (match != null)
+                {
+                    match.NotifyFirstValuableGrab();
+                }
+            }
         }
 
         public void Drop()

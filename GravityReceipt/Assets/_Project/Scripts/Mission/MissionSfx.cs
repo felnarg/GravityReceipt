@@ -14,6 +14,7 @@ namespace GravityReceipt.Mission
         private static AudioClip _tick;
         private static AudioClip _step;
         private static AudioClip _grab;
+        private static AudioClip _jump;
 
         public static void PlayObjective() => Play(_objective ??= MakeClip("ObjectiveDing", 880f, 1320f, 0.22f));
 
@@ -27,6 +28,8 @@ namespace GravityReceipt.Mission
         public static void PlayStep() => Play(_step ??= MakeClip("Footstep", 90f, 70f, 0.05f), 0.12f);
 
         public static void PlayGrab() => Play(_grab ??= MakeClip("GrabClick", 420f, 680f, 0.07f), 0.28f);
+
+        public static void PlayJump() => Play(_jump ??= MakeClip("Jump", 280f, 360f, 0.06f), 0.16f);
 
         public static void PlayTelegraphTick(float intensity)
         {
