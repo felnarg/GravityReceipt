@@ -207,7 +207,7 @@ namespace GravityReceipt.UI
                 }
                 else if (Time.timeSinceLevelLoad < 9f)
                 {
-                    centerText.text = "LA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nLos cubos grises no cuentan · la caja $80 sí";
+                    centerText.text = "LA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nGrises sin $ no cuentan · taza $15 o caja $80 a una PARED";
                     centerText.color = new Color(1f, 0.92f, 0.4f);
                 }
                 else
