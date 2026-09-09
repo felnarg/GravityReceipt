@@ -1,4 +1,5 @@
 using System;
+using GravityReceipt.Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -80,6 +81,12 @@ namespace GravityReceipt.Mission
                 return;
             }
 
+            if (Input.GetKeyDown(KeyCode.F6) && IsPlaying)
+            {
+                DebugSkipObjective();
+                return;
+            }
+
             if (_phase == MatchPhase.Playing)
             {
                 _remaining -= Time.deltaTime;
@@ -140,6 +147,53 @@ namespace GravityReceipt.Mission
             Time.timeScale = 1f;
             var scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
+        }
+
+        /// <summary>
+        /// Cheat de playtest: completa el siguiente objetivo y teleporta al checkpoint.
+        /// </summary>
+        private void DebugSkipObjective()
+        {
+            var next = -1;
+            for (var i = 0; i < _objectives.Length; i++)
+            {
+                if (!_objectives[i])
+                {
+                    next = i;
+                    break;
+                }
+            }
+
+            if (next < 0)
+            {
+                return;
+            }
+
+            CompleteObjective(next, "Skip");
+            var checkpoints = CheckpointSystem.Instance;
+            var motors = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
+            foreach (var motor in motors)
+            {
+                if (motor == null)
+                {
+                    continue;
+                }
+
+                var input = motor.GetComponent<LocalPlayerInput>();
+                var slot = input != null ? input.Slot : LocalPlayerSlot.One;
+                var point = checkpoints != null
+                    ? checkpoints.GetPlayerSpawn(slot)
+                    : motor.transform.position;
+                motor.Warp(point);
+            }
+
+            var pkg = FindAnyObjectByType<MissionPackage>();
+            if (pkg != null)
+            {
+                pkg.Respawn();
+            }
+
+            Debug.Log("[GravityReceipt] F6 skip → objetivo " + next);
         }
 
         private void End(MatchPhase phase, string reason)

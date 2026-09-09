@@ -83,6 +83,7 @@ Documento vivo del prototipo.
 10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre.
 11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
 12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). **F9** oculta help/status para un clip más limpio. Graba 8–10 s mudos del paso 7, o dispara F8 durante el FLIP.
+13. Cheat playtest: **F6** completa el siguiente objetivo y teletea al checkpoint (no está en el HUD a propósito).
 
 ---
 
