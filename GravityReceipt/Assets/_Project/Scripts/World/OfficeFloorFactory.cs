@@ -541,7 +541,10 @@ namespace GravityReceipt.World
             var host = new GameObject(target.name + "_Price");
             host.transform.SetParent(target.root, true);
             var follow = host.AddComponent<FollowBillboard>();
-            follow.Configure(target, Vector3.up * (height * 0.5f + 0.28f));
+            follow.Configure(host.transform, Vector3.zero);
+            var along = height * 0.5f + 0.28f;
+            var upFollow = host.AddComponent<GravityUpFollow>();
+            upFollow.Configure(target, along);
             WorldLabel.Create(host.transform, "Text", text ?? ("$" + price), Vector3.zero, new Color(1f, 0.92f, 0.3f), 0.1f);
         }
 

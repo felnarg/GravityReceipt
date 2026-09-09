@@ -141,6 +141,8 @@ Documento vivo del prototipo.
 - Toast al entrar a Archive si aún no flippeaste: “caja $80 a una PARED”.
 - Columna y barra de objetivo siguen el “arriba” de g (tras un flip).
 - Etiquetas ENCHUFAR/ENTREGAR/SELLAR se pegan al “arriba” de g (`GravityUpFollow`).
+- Etiquetas `$` / PAQUETE y burbujas de emote también usan g-up.
+- Etiquetas `$` / PAQUETE y emotes también flotan en g-up (legibles con el objeto de lado).
 - Pad cian lleva la palabra **ABAJO**. Tras el primer flip: toast “Cara CIAN = ABAJO”.
 - HUD: flecha de borde (→ TAZA / PAQUETE / ENCHUFAR…) si el objetivo está fuera de cámara.
 - Toast al completar Enchufar/Entregar apunta al siguiente (pasillo/losa).
