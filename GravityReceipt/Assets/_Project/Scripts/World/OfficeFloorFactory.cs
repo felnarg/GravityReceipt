@@ -352,6 +352,9 @@ namespace GravityReceipt.World
 
         private static void AddWindow(Transform parent, string name, Vector3 pos, Vector3 scale, Color color)
         {
+            var frameScale = new Vector3(scale.x + 0.08f, scale.y + 0.14f, scale.z + 0.14f);
+            var frame = CreateStaticCube(parent, name + "_Frame", pos, frameScale, new Color(0.12f, 0.1f, 0.1f));
+            DisableCollider(frame);
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             go.name = name;
             go.transform.SetParent(parent, false);

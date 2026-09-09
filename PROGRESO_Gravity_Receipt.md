@@ -342,7 +342,7 @@ Documento vivo del prototipo.
 
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
-| 6.1 | Pass de arte (no final, salir de gris total) | [~] | Ventanas unlit, lámparas (también pasillo), zócalos, cubículos, losas de techo, paletas, sellos de suelo, neón de vacío, laptop/planta; falta texturas |
+| 6.1 | Pass de arte (no final, salir de gris total) | [~] | Ventanas unlit **con marco**, lámparas, zócalos, cubículos, losas de techo, paletas, sellos de suelo, neón de vacío, laptop/planta/corkboard; falta texturas |
 | 6.2 | Pulido UI mínima | [~] | Splash, FLIP linger, toast, `[>]` objetivo, waypoint 3D, distancias, pausa P, paneles HUD, flash, cruceta dominante, chip g, flecha HUD fuera de cámara, ABAJO en pad |
 | 6.3 | Build Steam o itch privada | [ ] | |
 | 6.4 | Trailer 15–20 s del mejor clip | [ ] | |
@@ -631,6 +631,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Chispas al completar Enchufar/Entregar/Sellar.
 - El aro de puerta es un **marco** (no un cubo sólido que tapaba el hueco).
 - Corkboard + notas en Archive; bandeja inbox en el escritorio Office.
+- Marcos oscuros alrededor de las ventanas unlit.
 
 ### 2026-09-09 — Overnight bloque 20 (física)
 - `GravityBody` hace WakeUp al cambiar el vector de g (props dormidos no se quedan pegados al suelo viejo).
