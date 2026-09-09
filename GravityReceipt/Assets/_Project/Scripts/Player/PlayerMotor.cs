@@ -24,6 +24,7 @@ namespace GravityReceipt.Player
         private Vector3 _lastGravityDir = Vector3.down;
         private float _airFall;
         private bool _ownsCursor;
+        private bool _pendingUnstuck;
 
         public GravityManager Gravity => gravityManager;
         public bool Grounded { get; private set; }
@@ -90,6 +91,7 @@ namespace GravityReceipt.Player
         private void OnGravityChanged(Vector3 _, ValuableItem __)
         {
             _velocity *= 0.35f;
+            _pendingUnstuck = true;
         }
 
         private void Update()
@@ -153,6 +155,11 @@ namespace GravityReceipt.Player
             }
 
             AlignToGravity(gDir);
+            if (_pendingUnstuck)
+            {
+                _pendingUnstuck = false;
+                TryUnstuck(gDir);
+            }
 
             var axes = _input is not null ? _input.MoveAxes() : Vector2.zero;
             var input = new Vector3(axes.x, 0f, axes.y);
@@ -194,6 +201,23 @@ namespace GravityReceipt.Player
             var planar = Vector3.ProjectOnPlane(wish, gDir);
             var motion = (planar + _velocity) * Time.deltaTime;
             _controller.Move(motion);
+        }
+
+        private void TryUnstuck(Vector3 gDir)
+        {
+            _controller.enabled = false;
+            var center = transform.TransformPoint(_controller.center);
+            var overlapping = Physics.CheckSphere(
+                center,
+                _controller.radius * 1.15f,
+                ~0,
+                QueryTriggerInteraction.Ignore);
+            if (overlapping)
+            {
+                transform.position += -gDir * 0.4f;
+            }
+
+            _controller.enabled = true;
         }
 
         private bool IsGrounded(Vector3 gDir)
