@@ -315,13 +315,15 @@ namespace GravityReceipt.Mission
                 return false;
             }
 
-            var local = transform.InverseTransformPoint(worldPos);
-            var e = _box.size * 0.5f;
-            var c = _box.center;
-            local -= c;
-            return Mathf.Abs(local.x) <= e.x
-                   && Mathf.Abs(local.y) <= e.y
-                   && Mathf.Abs(local.z) <= e.z;
+            var up = CurrentUp();
+            var to = worldPos - transform.position;
+            var along = Vector3.Dot(to, up);
+            var planar = to - up * along;
+            var lossy = transform.lossyScale;
+            var radius = Mathf.Max(lossy.x, Mathf.Max(lossy.y, lossy.z)) * 0.85f;
+            var minAlong = -Mathf.Max(0.4f, lossy.y * 0.55f);
+            var maxAlong = Mathf.Max(3.2f, Mathf.Abs(_box.size.y) * lossy.y * 0.5f);
+            return planar.magnitude <= radius && along >= minAlong && along <= maxAlong;
         }
     }
 }
