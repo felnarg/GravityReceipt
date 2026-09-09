@@ -208,7 +208,7 @@ namespace GravityReceipt.World
             go.transform.position = center;
             var box = go.AddComponent<BoxCollider>();
             box.isTrigger = true;
-            box.size = new Vector3(size.x * 1.04f, size.y * 0.95f, size.z * 1.04f);
+            box.size = new Vector3(size.x * 1.04f, size.y * 1.12f, size.z * 1.04f);
             var vol = go.AddComponent<RoomVolume>();
             vol.Configure(id, gravity, inherit);
         }
