@@ -1,0 +1,181 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace GravityReceipt.Gravity
+{
+    /// <summary>
+    /// Por sala: la gravedad se alinea al eje dominante hacia el valuable más caro.
+    /// Empate de precio → gana el último movido.
+    /// </summary>
+    public sealed class GravityManager : MonoBehaviour
+    {
+        public static event Action<Vector3, ValuableItem> GravityChanged;
+
+        [SerializeField] private float telegraphSeconds = 1f;
+        [SerializeField] private float gravityMagnitude = 9.81f;
+        [SerializeField] private Vector3 defaultDown = Vector3.down;
+        [SerializeField] private Transform roomCenter;
+
+        private readonly List<ValuableItem> _valuables = new();
+        private ValuableItem _dominant;
+        private Vector3 _currentGravityDirection = Vector3.down;
+        private Vector3 _pendingDirection;
+        private float _telegraphRemaining;
+        private bool _isTelegraphing;
+
+        public Vector3 CurrentGravity => _currentGravityDirection * gravityMagnitude;
+        public Vector3 CurrentDirection => _currentGravityDirection;
+        public ValuableItem Dominant => _dominant;
+        public bool IsTelegraphing => _isTelegraphing;
+        public float TelegraphNormalized =>
+            telegraphSeconds <= 0f ? 0f : 1f - Mathf.Clamp01(_telegraphRemaining / telegraphSeconds);
+
+        public void Register(ValuableItem item)
+        {
+            if (item is not { } || _valuables.Contains(item))
+            {
+                return;
+            }
+
+            _valuables.Add(item);
+            RecalculateDominant(immediate: true);
+        }
+
+        public void Unregister(ValuableItem item)
+        {
+            if (!_valuables.Remove(item))
+            {
+                return;
+            }
+
+            if (_dominant == item)
+            {
+                _dominant = null;
+            }
+
+            RecalculateDominant(immediate: true);
+        }
+
+        public void NotifyValuableMoved(ValuableItem item)
+        {
+            if (item is not { })
+            {
+                return;
+            }
+
+            RecalculateDominant(immediate: false, movedHint: item);
+        }
+
+        private void Update()
+        {
+            if (!_isTelegraphing)
+            {
+                return;
+            }
+
+            _telegraphRemaining -= Time.deltaTime;
+            if (_telegraphRemaining > 0f)
+            {
+                return;
+            }
+
+            ApplyGravity(_pendingDirection, _dominant);
+            _isTelegraphing = false;
+        }
+
+        private void FixedUpdate()
+        {
+            Physics.gravity = CurrentGravity;
+        }
+
+        private void RecalculateDominant(bool immediate, ValuableItem movedHint = null)
+        {
+            ValuableItem best = null;
+            var bestPrice = int.MinValue;
+
+            foreach (var v in _valuables)
+            {
+                if (v is not { IsActiveValuable: true })
+                {
+                    continue;
+                }
+
+                if (v.Price > bestPrice)
+                {
+                    bestPrice = v.Price;
+                    best = v;
+                }
+                else if (v.Price == bestPrice && movedHint == v)
+                {
+                    best = v;
+                }
+            }
+
+            if (best is null)
+            {
+                ScheduleOrApply(defaultDown, null, immediate);
+                return;
+            }
+
+            var direction = DirectionTowardValuable(best);
+            ScheduleOrApply(direction, best, immediate);
+        }
+
+        private Vector3 DirectionTowardValuable(ValuableItem valuable)
+        {
+            var center = roomCenter is not null ? roomCenter.position : Vector3.zero;
+            var toItem = valuable.transform.position - center;
+            if (toItem.sqrMagnitude < 0.25f)
+            {
+                return defaultDown;
+            }
+
+            // Bias vertical: objetos en el suelo/techo no deben voltear a una pared por un offset X/Z pequeño.
+            toItem.y *= 1.75f;
+
+            var ax = Mathf.Abs(toItem.x);
+            var ay = Mathf.Abs(toItem.y);
+            var az = Mathf.Abs(toItem.z);
+
+            if (ay >= ax && ay >= az)
+            {
+                return toItem.y >= 0f ? Vector3.up : Vector3.down;
+            }
+
+            if (ax >= az)
+            {
+                return toItem.x >= 0f ? Vector3.right : Vector3.left;
+            }
+
+            return toItem.z >= 0f ? Vector3.forward : Vector3.back;
+        }
+
+        private void ScheduleOrApply(Vector3 direction, ValuableItem dominant, bool immediate)
+        {
+            direction = direction.normalized;
+            if (immediate || Vector3.Dot(_currentGravityDirection, direction) > 0.99f)
+            {
+                ApplyGravity(direction, dominant);
+                _isTelegraphing = false;
+                return;
+            }
+
+            _dominant = dominant;
+            _pendingDirection = direction;
+            _telegraphRemaining = telegraphSeconds;
+            _isTelegraphing = true;
+        }
+
+        private void ApplyGravity(Vector3 direction, ValuableItem dominant)
+        {
+            var previous = _currentGravityDirection;
+            _currentGravityDirection = direction.normalized;
+            _dominant = dominant;
+            if (Vector3.Dot(previous, _currentGravityDirection) < 0.99f)
+            {
+                GravityChanged?.Invoke(CurrentGravity, dominant);
+            }
+        }
+    }
+}
