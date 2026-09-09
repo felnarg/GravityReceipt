@@ -27,6 +27,7 @@ namespace GravityReceipt.Player
         private CharacterController _controller;
         private LocalPlayerInput _input;
         private PlayerRole _role;
+        private PlayerInteractor _interactor;
         private Vector3 _velocity;
         private float _pitch;
         private Vector3 _lastGravityDir = Vector3.down;
@@ -79,6 +80,7 @@ namespace GravityReceipt.Player
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<LocalPlayerInput>();
             _role = GetComponent<PlayerRole>();
+            _interactor = GetComponent<PlayerInteractor>();
             _ownsCursor = _input != null && _input.UsesMouseLook;
             CacheCamera();
 
@@ -250,6 +252,10 @@ namespace GravityReceipt.Player
             var input = new Vector3(axes.x, 0f, axes.y);
             input = Vector3.ClampMagnitude(input, 1f);
             var speed = moveSpeed * (_role != null ? _role.MoveMultiplier : 1f);
+            if (_interactor != null && _interactor.HeldValuable != null && _interactor.HeldValuable.Price >= 80)
+            {
+                speed *= 0.88f;
+            }
             var wish = transform.TransformDirection(input) * speed;
 
             Grounded = IsGrounded(gDir);
