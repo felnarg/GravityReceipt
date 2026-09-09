@@ -197,6 +197,7 @@ namespace GravityReceipt.World
             }
 
             IgnorePlayerCollisions(playersRoot.transform);
+            IgnorePackagePlayerCollisions(pkg, playersRoot.transform);
 
             var hudGo = new GameObject("GravityHUD");
             hudGo.transform.SetParent(root.transform, false);
@@ -659,6 +660,29 @@ namespace GravityReceipt.World
             WorldLabel.Create(host.transform, "Text", slot == LocalPlayerSlot.One ? "P1" : "P2", Vector3.zero, tagColor, 0.09f);
 
             return player;
+        }
+
+        private static void IgnorePackagePlayerCollisions(GameObject pkg, Transform playersRoot)
+        {
+            if (pkg == null || playersRoot == null)
+            {
+                return;
+            }
+
+            var pkgCol = pkg.GetComponent<Collider>();
+            if (pkgCol == null)
+            {
+                return;
+            }
+
+            var ccs = playersRoot.GetComponentsInChildren<CharacterController>();
+            foreach (var cc in ccs)
+            {
+                if (cc != null)
+                {
+                    Physics.IgnoreCollision(pkgCol, cc, true);
+                }
+            }
         }
 
         private static void IgnorePlayerCollisions(Transform playersRoot)
