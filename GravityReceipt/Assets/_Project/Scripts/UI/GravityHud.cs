@@ -264,7 +264,16 @@ namespace GravityReceipt.UI
             if (_vignette != null)
             {
                 var g = FirstTelegraph(p1, p2);
-                var a = g != null && g.IsTelegraphing ? 0.28f * g.TelegraphNormalized : 0f;
+                var a = 0f;
+                if (g != null && g.IsTelegraphing)
+                {
+                    a = 0.28f * g.TelegraphNormalized;
+                }
+                else if (g != null && g.ShowFlipBanner)
+                {
+                    a = 0.16f;
+                }
+
                 _vignette.color = new Color(0.15f, 0.04f, 0f, a);
             }
         }
