@@ -27,7 +27,7 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla/arte |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~02:30 COT (overnight, F10 comfort + ruta de puertas) |
+| **Última actualización** | 2026-09-09 ~02:40 COT (overnight, comfort + squash paquete + 30 s) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
 | **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F3/F4/F6/F7, OOB AABB, waypoint, beacon paquete, pausa P, linger FLIP, pad cian **ABAJO**, etiquetas de losa siguen g, flecha HUD si el objetivo está fuera de cámara |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete (sigue la flecha) + flip con caja dorada a una pared · mira el sello ABAJO y las etiquetas ENCHUFAR/ENTREGAR/SELLAR |
@@ -618,6 +618,10 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 
 ### 2026-09-09 — Overnight bloque 17 (comfort)
 - **F10** activa Comfort: menos FOV punch, shake, roll de cámara, viñeta y flash. Toast ON/OFF.
+
+### 2026-09-09 — Overnight bloque 18 (paquete + timer)
+- El paquete se aplasta un instante al abollarse; toast “a 1 vida” cuando queda un corazón.
+- Toast **¡30 SEGUNDOS!** al cronómetro. Alfombra Executive.
 
 ---
 
