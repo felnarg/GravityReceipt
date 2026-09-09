@@ -30,7 +30,7 @@ namespace GravityReceipt.EditorTools
             BuildAndSave(1);
             EditorUtility.DisplayDialog(
                 "Gravity Receipt",
-                "Escena 1P regenerada.\n\nWASD + ratón, E agarrar, Q ping, 1-4 emote, Shift sprint, F ancla.\nPlay → paquete naranja → enchufar en Archive → flip con la caja dorada.\nP pausa · F5 restart · F3 unstuck · F7 paquete · F8 PNG · F9 HUD · F6 skip.",
+                "Escena 1P regenerada.\n\nWASD + ratón, E agarrar, Q ping, 1-4 emote, Shift sprint, F ancla.\nPlay → taza $15 (flecha en Hub) o paquete naranja → enchufar en Archive → flip con la caja dorada.\nP pausa · F5 restart · F3 unstuck · F7 paquete · F8 PNG · F9 HUD · F6 skip.",
                 "OK");
         }
 

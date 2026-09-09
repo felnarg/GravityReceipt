@@ -134,6 +134,7 @@ Documento vivo del prototipo.
 - Umbrales de color en cada puerta. Reloj del Hub con agujas que giran.
 - Waypoint proyectado en el plano de g (útil tras un flip de pared).
 - LEDs del server Executive parpadean.
+- Distancias HUD (paquete/objetivo) también en el plano de g.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
