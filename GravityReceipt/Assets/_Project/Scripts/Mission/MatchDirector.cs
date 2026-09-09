@@ -18,6 +18,7 @@ namespace GravityReceipt.Mission
         public event Action<MatchPhase, string> MatchEnded;
         public event Action PackageDented;
         public event Action PlayerRespawned;
+        public event Action<string> Hint;
 
         [SerializeField] private float matchSeconds = 600f;
         [SerializeField] private int objectivesToWin = 3;
@@ -29,6 +30,7 @@ namespace GravityReceipt.Mission
         private bool _paused;
         private float _splashLeft = 9f;
         private bool _splashEnded;
+        private bool _ruleNudgeSent;
 
         public MatchPhase Phase => _phase;
         public float RemainingSeconds => Mathf.Max(0f, _remaining);
@@ -86,6 +88,7 @@ namespace GravityReceipt.Mission
             _splashLeft = 9f;
             _paused = false;
             _splashEnded = false;
+            _ruleNudgeSent = false;
             Physics.gravity = Vector3.zero;
             Physics.defaultSolverIterations = 10;
             Physics.defaultSolverVelocityIterations = 4;
@@ -162,6 +165,15 @@ namespace GravityReceipt.Mission
                     {
                         _splashEnded = true;
                         MissionSfx.PlayObjective();
+                    }
+
+                    if (!_ruleNudgeSent && matchSeconds - _remaining >= 8f)
+                    {
+                        _ruleNudgeSent = true;
+                        if (ObjectivesDone == 0)
+                        {
+                            Hint?.Invoke("Agarrá la taza $15 o la caja $80 · a una PARED");
+                        }
                     }
 
                     _remaining -= Time.deltaTime;
