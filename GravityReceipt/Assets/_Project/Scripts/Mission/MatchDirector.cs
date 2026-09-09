@@ -32,6 +32,7 @@ namespace GravityReceipt.Mission
         private bool _splashEnded;
         private bool _ruleNudgeSent;
         private bool _carryHintSent;
+        private bool _pendingCarryHint;
 
         public MatchPhase Phase => _phase;
         public float RemainingSeconds => Mathf.Max(0f, _remaining);
@@ -91,6 +92,7 @@ namespace GravityReceipt.Mission
             _splashEnded = false;
             _ruleNudgeSent = false;
             _carryHintSent = false;
+            _pendingCarryHint = false;
             Physics.gravity = Vector3.zero;
             Physics.defaultSolverIterations = 10;
             Physics.defaultSolverVelocityIterations = 4;
@@ -167,6 +169,7 @@ namespace GravityReceipt.Mission
                     {
                         _splashEnded = true;
                         MissionSfx.PlayObjective();
+                        FlushCarryHint();
                     }
 
                     if (!_ruleNudgeSent && matchSeconds - _remaining >= 8f)
@@ -206,6 +209,7 @@ namespace GravityReceipt.Mission
             if (!_splashEnded)
             {
                 _splashEnded = true;
+                FlushCarryHint();
             }
         }
 
@@ -285,12 +289,29 @@ namespace GravityReceipt.Mission
 
         public void NotifyFirstValuableGrab()
         {
-            if (_carryHintSent || IsInSplash)
+            if (_carryHintSent)
             {
                 return;
             }
 
             _carryHintSent = true;
+            if (IsInSplash)
+            {
+                _pendingCarryHint = true;
+                return;
+            }
+
+            PushHint("Llévalo a una PARED · espera 1 s");
+        }
+
+        private void FlushCarryHint()
+        {
+            if (!_pendingCarryHint)
+            {
+                return;
+            }
+
+            _pendingCarryHint = false;
             PushHint("Llévalo a una PARED · espera 1 s");
         }
 

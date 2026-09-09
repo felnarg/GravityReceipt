@@ -199,6 +199,11 @@ namespace GravityReceipt.World
                 "→ EXECUTIVE", new Vector3(0f, 2.92f, 42.92f), Quaternion.Euler(0f, 180f, 0f), new Color(0.14f, 0.08f, 0.04f), new Color(1f, 0.82f, 0.45f));
 
             CreatePathChevrons(root.transform);
+            var sillColor = new Color(1f, 0.82f, 0.22f);
+            CreateStaticCube(root.transform, "Sill_Archive", new Vector3(0f, 0.05f, 4f), new Vector3(2.5f, 0.08f, 0.32f), sillColor);
+            CreateStaticCube(root.transform, "Sill_Pasillo", new Vector3(0f, 0.05f, 16f), new Vector3(2.5f, 0.08f, 0.32f), new Color(0.95f, 0.35f, 0.28f));
+            CreateStaticCube(root.transform, "Sill_Office", new Vector3(0f, 0.05f, 27f), new Vector3(2.5f, 0.08f, 0.32f), new Color(0.45f, 0.7f, 1f));
+            CreateStaticCube(root.transform, "Sill_Executive", new Vector3(0f, 0.05f, 43f), new Vector3(2.5f, 0.08f, 0.32f), new Color(0.95f, 0.7f, 0.28f));
 
             var pit = GameObject.CreatePrimitive(PrimitiveType.Cube);
             pit.name = "VoidPit";
