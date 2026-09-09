@@ -7,12 +7,20 @@ namespace GravityReceipt.Interaction
 {
     public sealed class PlayerInteractor : MonoBehaviour
     {
+        private enum GrabPhase
+        {
+            Idle,
+            Winding,
+            Holding
+        }
+
         [SerializeField] private float reach = 3f;
         [SerializeField] private Transform holdPoint;
         [SerializeField] private float grabWindUpSeconds = 0.4f;
         [SerializeField] private LayerMask interactMask = ~0;
 
         private LocalPlayerInput _input;
+        private GrabPhase _phase = GrabPhase.Idle;
         private Rigidbody _held;
         private ValuableItem _heldValuable;
         private Grabbable _heldGrab;
@@ -21,9 +29,11 @@ namespace GravityReceipt.Interaction
         private Color _focusColor;
 
         public float WindUpNormalized =>
-            grabWindUpSeconds <= 0f ? 0f : Mathf.Clamp01(_windUp / grabWindUpSeconds);
-        public bool IsHolding => _held != null;
-        public bool IsHoldingPackage => _held != null && _held.GetComponent<MissionPackage>() != null;
+            _phase != GrabPhase.Winding || grabWindUpSeconds <= 0f
+                ? 0f
+                : Mathf.Clamp01(_windUp / grabWindUpSeconds);
+        public bool IsHolding => _phase == GrabPhase.Holding && _held != null;
+        public bool IsHoldingPackage => IsHolding && _held.GetComponent<MissionPackage>() != null;
         public bool HasLookTarget { get; private set; }
 
         public void Configure(Transform hold)
@@ -43,39 +53,65 @@ namespace GravityReceipt.Interaction
                 return;
             }
 
+            switch (_phase)
+            {
+                case GrabPhase.Holding:
+                    TickHolding();
+                    break;
+                case GrabPhase.Winding:
+                    TickWinding();
+                    break;
+                default:
+                    TickIdle();
+                    break;
+            }
+        }
+
+        private void TickHolding()
+        {
             HasLookTarget = false;
-            if (_held == null)
+            ClearFocus();
+            if (_held == null || _input.DropPressed())
             {
-                _heldValuable = null;
-                _heldGrab = null;
+                Drop();
             }
-            else
-            {
-                ClearFocus();
-                if (_input.DropPressed())
-                {
-                    Drop();
-                }
+        }
 
-                return;
-            }
-
+        private void TickIdle()
+        {
+            HasLookTarget = false;
+            _windUp = 0f;
             if (!TryGetTarget(out var body, out var valuable, out var grab))
             {
-                _windUp = 0f;
                 ClearFocus();
                 return;
             }
 
             HasLookTarget = true;
-
             SetFocus(body);
             if (!_input.GrabHeld())
             {
-                _windUp = 0f;
                 return;
             }
 
+            _phase = GrabPhase.Winding;
+            _windUp = 0f;
+            TickWinding();
+        }
+
+        private void TickWinding()
+        {
+            if (!TryGetTarget(out var body, out var valuable, out var grab) || !_input.GrabHeld())
+            {
+                _phase = GrabPhase.Idle;
+                _windUp = 0f;
+                HasLookTarget = false;
+                ClearFocus();
+                return;
+            }
+
+            HasLookTarget = true;
+            SetFocus(body);
             _windUp += Time.deltaTime;
             if (_windUp < grabWindUpSeconds)
             {
@@ -83,13 +119,11 @@ namespace GravityReceipt.Interaction
             }
 
             Grab(body, valuable, grab);
-            _windUp = 0f;
-            ClearFocus();
         }
 
         private void FixedUpdate()
         {
-            if (_held == null || holdPoint == null)
+            if (_phase != GrabPhase.Holding || _held == null || holdPoint == null)
             {
                 return;
             }
@@ -135,6 +169,8 @@ namespace GravityReceipt.Interaction
         {
             if (body == null || grab == null || !grab.CanGrab)
             {
+                _phase = GrabPhase.Idle;
+                _windUp = 0f;
                 return;
             }
 
@@ -150,12 +186,17 @@ namespace GravityReceipt.Interaction
             }
 
             IgnoreHeldCollision(true);
+            _phase = GrabPhase.Holding;
+            _windUp = 0f;
+            ClearFocus();
         }
 
         public void Drop()
         {
             if (_held == null)
             {
+                _phase = GrabPhase.Idle;
+                _windUp = 0f;
                 return;
             }
 
@@ -186,6 +227,8 @@ namespace GravityReceipt.Interaction
             _held = null;
             _heldValuable = null;
             _heldGrab = null;
+            _phase = GrabPhase.Idle;
+            _windUp = 0f;
         }
 
         private void IgnoreHeldCollision(bool ignore)

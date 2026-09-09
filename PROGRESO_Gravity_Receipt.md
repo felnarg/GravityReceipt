@@ -426,6 +426,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - FOV extra al sprint Runner; cruceta crece al wind-up de agarre.
 - **F9** oculta help/status para grabar el clip 1.11.
 - Soltar un objeto le da un empujón hacia la mirada (menos clip en el jugador).
+- `PlayerInteractor` usa máquina Idle → Winding → Holding.
 
 ---
 
