@@ -522,7 +522,7 @@ namespace GravityReceipt.UI
                     continue;
                 }
 
-                var m = Vector3.Distance(from.transform.position, t.transform.position);
+                var m = PlanarDistance(from, t.transform.position);
                 return m >= 3.5f ? $" ({m:0} m)" : string.Empty;
             }
 
@@ -542,8 +542,19 @@ namespace GravityReceipt.UI
                 return string.Empty;
             }
 
-            var m = Vector3.Distance(from.transform.position, pkg.transform.position);
+            var m = PlanarDistance(from, pkg.transform.position);
             return m >= 4f ? $" · {m:0}m" : string.Empty;
+        }
+
+        private static float PlanarDistance(PlayerMotor from, Vector3 worldPos)
+        {
+            if (from == null)
+            {
+                return 0f;
+            }
+
+            var gDir = from.Gravity != null ? from.Gravity.CurrentDirection : Vector3.down;
+            return Vector3.ProjectOnPlane(worldPos - from.transform.position, gDir).magnitude;
         }
 
         private static bool CursorUnlockedHint(PlayerMotor p1)
