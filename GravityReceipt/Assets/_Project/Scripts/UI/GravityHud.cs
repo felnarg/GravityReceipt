@@ -32,6 +32,10 @@ namespace GravityReceipt.UI
         private string _toast = string.Empty;
         private float _toastUntil;
         private bool _chromeHidden;
+        private PlayerMotor _cachedP1;
+        private PlayerMotor _cachedP2;
+        private MissionPackage _cachedPkg;
+        private float _cacheUntil;
 
         private void Awake()
         {
@@ -108,8 +112,9 @@ namespace GravityReceipt.UI
                 FollowBillboard.Hidden = _chromeHidden;
             }
 
-            var p1 = FindPlayer(LocalPlayerSlot.One);
-            var p2 = FindPlayer(LocalPlayerSlot.Two);
+            RefreshActorCache();
+            var p1 = _cachedP1;
+            var p2 = _cachedP2;
             var match = MatchDirector.Instance;
             if (statusText != null)
             {
@@ -166,7 +171,7 @@ namespace GravityReceipt.UI
                 ? new Color(1f, 0.9f, 0.2f)
                 : Color.white;
 
-            var pkg = FindAnyObjectByType<MissionPackage>();
+            var pkg = _cachedPkg;
             var rec = MatchHighlightRecorder.Instance;
             if (matchText != null && match != null)
             {
@@ -276,6 +281,19 @@ namespace GravityReceipt.UI
 
                 _vignette.color = new Color(0.15f, 0.04f, 0f, a);
             }
+        }
+
+        private void RefreshActorCache()
+        {
+            if (Time.unscaledTime < _cacheUntil && _cachedP1 != null)
+            {
+                return;
+            }
+
+            _cacheUntil = Time.unscaledTime + 0.2f;
+            _cachedP1 = FindPlayer(LocalPlayerSlot.One);
+            _cachedP2 = FindPlayer(LocalPlayerSlot.Two);
+            _cachedPkg = FindAnyObjectByType<MissionPackage>();
         }
 
         private static void TintCross(Text cross, PlayerMotor motor)
