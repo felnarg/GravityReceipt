@@ -188,6 +188,12 @@ namespace GravityReceipt.Gravity
                 return;
             }
 
+            if (_isTelegraphing && Vector3.Dot(_pendingDirection, direction) > 0.99f)
+            {
+                _dominant = dominant;
+                return;
+            }
+
             _dominant = dominant;
             _pendingDirection = direction;
             _telegraphRemaining = telegraphSeconds;

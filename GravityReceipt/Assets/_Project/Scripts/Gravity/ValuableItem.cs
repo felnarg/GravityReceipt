@@ -78,7 +78,18 @@ namespace GravityReceipt.Gravity
                 SetGravityManager(room.Gravity);
             }
 
-            if (IsHeld || _body == null || _body.isKinematic)
+            if (IsHeld)
+            {
+                if (gravityManager != null)
+                {
+                    gravityManager.NotifyValuableMoved(this);
+                }
+
+                _wasMoving = false;
+                return;
+            }
+
+            if (_body == null || _body.isKinematic)
             {
                 _wasMoving = false;
                 return;

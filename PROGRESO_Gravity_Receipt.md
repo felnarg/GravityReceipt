@@ -90,6 +90,7 @@ Documento vivo del prototipo.
 - `SpawnHome.ReturnHome` con llaves correctas (el extra `}` no compilaba).
 - P1 y P2 no colisionan entre sí (el pasillo estrecho no es un empujón al vacío).
 - G se recalcula al **parar** un valuable (no solo al empezar a moverse): el flip usa la posición en la pared.
+- Llevar el dominante a una pared **también** telegráfa (el timer no se reinicia si g pendiente no cambia).
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
