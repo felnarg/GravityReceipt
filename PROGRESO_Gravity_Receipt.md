@@ -58,6 +58,7 @@ Documento vivo del prototipo.
 - **F5** restart · **F8** PNG · **F9** oculta chrome · **F6** skip objetivo (cheat).
 - Fog + fondo de cámara oscuro; franja azul = suelo original; coyote/jump buffer; SFX win/lose.
 - Franja naranja en techos (si g apunta arriba, estás en el techo).
+- Damping en props para que se asienten tras un flip.
 - Menú Setup 2p (default) y 1p.
 
 ### A MEDIAS
