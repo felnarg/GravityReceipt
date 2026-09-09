@@ -121,7 +121,7 @@ namespace GravityReceipt.UI
             {
                 var r2 = RoleOf(LocalPlayerSlot.Two);
                 helpText.text = p2 != null
-                    ? $"P2 [{r2}] flechas  J/L o numpad mirar  RShift agarrar  / ping  Alt sprint  KP0 ancla"
+                    ? $"P2 [{r2}] flechas  J/L mirar  RShift agarrar  / ping  Alt sprint  KP0 ancla  KP7 rol"
                     : $"P1 [{RoleOf(LocalPlayerSlot.One)}] WASD+ratón  E agarrar  Q ping  Shift sprint  F ancla";
             }
 
