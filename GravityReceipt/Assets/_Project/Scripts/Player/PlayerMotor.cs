@@ -119,6 +119,11 @@ namespace GravityReceipt.Player
             _fovPunch = 14f;
             _shake = 0.28f;
             GravityFlipSfx.Play();
+            var rec = MatchHighlightRecorder.Instance;
+            if (rec != null)
+            {
+                rec.ReportFlip();
+            }
         }
 
         private void Update()

@@ -259,6 +259,11 @@ namespace GravityReceipt.UI
                 var input = r.GetComponent<LocalPlayerInput>();
                 if (input != null && input.Slot == slot)
                 {
+                    if (r.Role == RoleKind.Anchor && r.AnchorCooldownLeft > 0.2f)
+                    {
+                        return $"Anchor CD {r.AnchorCooldownLeft:0}";
+                    }
+
                     return r.RoleLabel;
                 }
             }

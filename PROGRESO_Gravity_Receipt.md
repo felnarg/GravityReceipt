@@ -420,6 +420,10 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Props grises (caja/silla/mesa) **sin** `$`: se pueden agarrar pero no tiran de g.
 - `SpawnHome` los devuelve si caen al vacío.
 
+### 2026-09-09 — Overnight bloque 5 (juice)
+- Ding al completar objetivo. HUD muestra cooldown de Anchor.
+- Moment of the Match cuenta flips además de caídas.
+
 ---
 
 ## Checklist del día (copiar al empezar una sesión)

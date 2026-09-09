@@ -25,6 +25,7 @@ namespace GravityReceipt.Player
 
         public RoleKind Role => role;
         public string RoleLabel => role == RoleKind.Runner ? "Runner" : "Anchor";
+        public float AnchorCooldownLeft => Mathf.Max(0f, _anchorReadyAt - Time.time);
 
         public float MoveMultiplier =>
             role == RoleKind.Runner && _input != null && _input.SprintHeld()
