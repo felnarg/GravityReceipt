@@ -9,7 +9,7 @@ namespace GravityReceipt.Interaction
     /// </summary>
     public sealed class PlayerPing : MonoBehaviour
     {
-        [SerializeField] private float range = 18f;
+        [SerializeField] private float range = 22f;
         [SerializeField] private float lifetime = 2.2f;
         [SerializeField] private LayerMask mask = ~0;
 
