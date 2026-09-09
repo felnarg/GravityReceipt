@@ -428,6 +428,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Soltar un objeto le da un empujón hacia la mirada (menos clip en el jugador).
 - `PlayerInteractor` usa máquina Idle → Winding → Holding.
 - HUD marca pasillo como “g hereda”.
+- Brújula 3D a los pies: apunta a g actual (amarillo en telegráfo).
 
 ---
 
