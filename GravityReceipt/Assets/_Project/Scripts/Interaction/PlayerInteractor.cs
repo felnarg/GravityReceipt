@@ -333,6 +333,11 @@ namespace GravityReceipt.Interaction
                 return;
             }
 
+            if (!ignore && _held.GetComponent<MissionPackage>() != null)
+            {
+                return;
+            }
+
             Physics.IgnoreCollision(col, cc, ignore);
         }
 
