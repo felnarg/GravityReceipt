@@ -143,6 +143,8 @@ namespace GravityReceipt.Mission
             _phase = phase;
             _endReason = reason;
             Time.timeScale = 0.22f;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             MatchEnded?.Invoke(phase, reason);
         }
     }
