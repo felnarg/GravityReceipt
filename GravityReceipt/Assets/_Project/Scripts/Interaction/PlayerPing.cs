@@ -1,3 +1,4 @@
+using GravityReceipt.Mission;
 using GravityReceipt.Player;
 using GravityReceipt.UI;
 using UnityEngine;
@@ -11,10 +12,12 @@ namespace GravityReceipt.Interaction
     {
         [SerializeField] private float range = 22f;
         [SerializeField] private float lifetime = 2.2f;
+        [SerializeField] private float cooldown = 0.85f;
         [SerializeField] private LayerMask mask = ~0;
 
         private LocalPlayerInput _input;
         private PingMarker _mine;
+        private float _readyAt;
 
         private void Awake()
         {
@@ -28,11 +31,18 @@ namespace GravityReceipt.Interaction
                 return;
             }
 
+            if (Time.unscaledTime < _readyAt)
+            {
+                return;
+            }
+
             var cam = _input.PlayerCamera;
             if (cam == null)
             {
                 return;
             }
+
+            _readyAt = Time.unscaledTime + cooldown;
 
             var ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             var point = ray.origin + ray.direction * 6f;
@@ -89,6 +99,7 @@ namespace GravityReceipt.Interaction
 
             _mine = go.AddComponent<PingMarker>();
             _mine.Begin(lifetime);
+            MissionSfx.PlayPing();
         }
 
         private void OnDisable()

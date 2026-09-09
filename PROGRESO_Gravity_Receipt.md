@@ -76,6 +76,7 @@ Documento vivo del prototipo.
 - Barra 3D de captura sobre la losa mientras enchufas / entregas / sellas.
 - Franjas amarillo/negro en el suelo del pasillo.
 - Cámara tiembla durante el telegráfo (más fuerte al acercarse el flip).
+- Ping con cooldown 0.85 s y blip; P1 y P2 no se pisan.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
