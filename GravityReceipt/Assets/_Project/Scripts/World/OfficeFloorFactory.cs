@@ -84,6 +84,8 @@ namespace GravityReceipt.World
             CreateProp(root.transform, "Prop_CajaGris", new Vector3(2.4f, 0.4f, -1.4f), new Vector3(0.7f, 0.7f, 0.7f), new Color(0.42f, 0.44f, 0.46f), hubG);
             CreateProp(root.transform, "Prop_Silla", new Vector3(-3.4f, 0.45f, -1.2f), new Vector3(0.45f, 0.85f, 0.45f), new Color(0.32f, 0.3f, 0.28f), hubG);
             CreateProp(root.transform, "Prop_Mesa", new Vector3(3.2f, 0.35f, 1.6f), new Vector3(1.4f, 0.12f, 0.8f), new Color(0.38f, 0.28f, 0.2f), hubG);
+            CreateProp(root.transform, "Prop_CajaArchive", new Vector3(-5.2f, 0.4f, 11.5f), new Vector3(0.65f, 0.65f, 0.65f), new Color(0.4f, 0.4f, 0.42f), arcG);
+            CreateProp(root.transform, "Prop_Libros", new Vector3(5.2f, 0.35f, 13.5f), new Vector3(0.9f, 0.35f, 0.5f), new Color(0.45f, 0.22f, 0.18f), arcG);
 
             var matchGo = new GameObject("MatchDirector");
             matchGo.transform.SetParent(root.transform, false);

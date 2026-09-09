@@ -27,9 +27,9 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~00:00 COT (sesión overnight Cloud Agent, bloque 5) |
+| **Última actualización** | 2026-09-09 ~00:05 COT (overnight, bloque compass/F6) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
-| **Hecho relevante** | Split 2p, gravedad por sala, misión, mapa Hub→Executive, rematch, HUD de regla, flip feel, curbs del pasillo, valuables vuelven a casa |
+| **Hecho relevante** | Split 2p, g por sala, misión, mapa, HUD regla/FLIP, whoosh, brújula, F6 skip, grab FSM |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete + flip con caja dorada a una pared |
 | **Build jugable** | Sí (Editor Play Mode, 1p o 2p local). **Hay que regenerar la escena con el menú Setup.** |
 | **Online 4p** | No (no empezar hasta que el playtest offline sea sólido) |
