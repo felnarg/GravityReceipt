@@ -464,6 +464,9 @@ namespace GravityReceipt.World
 
             var cam = camGo.AddComponent<Camera>();
             cam.nearClipPlane = 0.08f;
+            cam.farClipPlane = 90f;
+            cam.clearFlags = CameraClearFlags.SolidColor;
+            cam.backgroundColor = new Color(0.05f, 0.055f, 0.07f);
             cam.rect = camRect;
             cam.depth = slot == LocalPlayerSlot.One ? 0f : 1f;
             if (audio)
