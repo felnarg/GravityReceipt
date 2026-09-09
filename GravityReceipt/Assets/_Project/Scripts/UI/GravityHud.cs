@@ -28,6 +28,9 @@ namespace GravityReceipt.UI
         private Image _statusPanel;
         private Image _matchPanel;
         private Image _vignette;
+        private Image _flash;
+        private float _flashUntil;
+        private bool _wasTelegraphing;
         private MatchDirector _boundMatch;
         private string _toast = string.Empty;
         private float _toastUntil;
@@ -269,6 +272,13 @@ namespace GravityReceipt.UI
             if (_vignette != null)
             {
                 var g = FirstTelegraph(p1, p2);
+                var telegraphing = g != null && g.IsTelegraphing;
+                if (_wasTelegraphing && !telegraphing && g != null && g.ShowFlipBanner)
+                {
+                    _flashUntil = Time.unscaledTime + 0.14f;
+                }
+
+                _wasTelegraphing = telegraphing;
                 var a = 0f;
                 if (g != null && g.IsTelegraphing)
                 {
@@ -280,6 +290,12 @@ namespace GravityReceipt.UI
                 }
 
                 _vignette.color = new Color(0.15f, 0.04f, 0f, a);
+            }
+
+            if (_flash != null)
+            {
+                var flashA = Time.unscaledTime < _flashUntil ? 0.32f : 0f;
+                _flash.color = new Color(1f, 0.72f, 0.28f, flashA);
             }
         }
 
@@ -306,12 +322,22 @@ namespace GravityReceipt.UI
             var inter = motor != null ? motor.GetComponent<PlayerInteractor>() : null;
             var winding = inter != null && inter.WindUpNormalized > 0.05f;
             var looking = inter != null && inter.HasLookTarget;
+            var focus = inter == null
+                ? null
+                : inter.LookValuable != null
+                    ? inter.LookValuable
+                    : inter.HeldValuable;
+            var dominant = focus != null
+                           && focus.Manager != null
+                           && focus.Manager.Dominant == focus;
             cross.color = winding
                 ? new Color(1f, 0.55f, 0.15f)
-                : looking
-                    ? new Color(1f, 0.92f, 0.25f)
-                    : new Color(1f, 1f, 1f, 0.85f);
-            cross.fontSize = winding ? 28 : 22;
+                : dominant
+                    ? new Color(1f, 0.72f, 0.12f)
+                    : looking
+                        ? new Color(1f, 0.92f, 0.25f)
+                        : new Color(1f, 1f, 1f, 0.85f);
+            cross.fontSize = winding ? 28 : dominant ? 26 : 22;
         }
 
         private static string ObjectiveProgressSuffix()
@@ -727,6 +753,9 @@ namespace GravityReceipt.UI
             _matchPanel = MakePanel(canvasGo.transform, "MatchPanel", new Vector2(0.5f, 0.5f), new Vector2(0f, -28f), new Vector2(1680f, 86f));
             _centerPanel = MakePanel(canvasGo.transform, "CenterPanel", new Vector2(0.5f, 0.5f), new Vector2(0f, 80f), new Vector2(920f, 250f));
             _vignette = MakeVignette(canvasGo.transform);
+            _flash = MakeFlash(canvasGo.transform);
+            _vignette.transform.SetAsFirstSibling();
+            _flash.transform.SetSiblingIndex(1);
 
             statusText = MakeText(canvasGo.transform, "Status", new Vector2(0f, 18f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 36f), 20, TextAnchor.MiddleCenter);
             matchText = MakeText(canvasGo.transform, "Match", new Vector2(0f, -28f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 78f), 18, TextAnchor.MiddleCenter);
@@ -773,6 +802,21 @@ namespace GravityReceipt.UI
             rt.pivot = new Vector2(0.5f, 0.5f);
             rt.anchoredPosition = anchored;
             rt.sizeDelta = size;
+            return img;
+        }
+
+        private static Image MakeFlash(Transform parent)
+        {
+            var go = new GameObject("FlipFlash");
+            go.transform.SetParent(parent, false);
+            var img = go.AddComponent<Image>();
+            img.color = new Color(1f, 0.72f, 0.28f, 0f);
+            img.raycastTarget = false;
+            var rt = img.rectTransform;
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
             return img;
         }
 

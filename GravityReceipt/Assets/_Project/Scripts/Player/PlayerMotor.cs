@@ -43,6 +43,8 @@ namespace GravityReceipt.Player
         private float _jumpBuffer;
         private float _coyote;
         private float _camRoll;
+        private float _stepAcc;
+        private float _landDip;
 
         public GravityManager Gravity => gravityManager;
         public bool Grounded { get; private set; }
@@ -208,7 +210,8 @@ namespace GravityReceipt.Player
                     (Mathf.PerlinNoise(0.7f, Time.time * 31f) - 0.5f) * _shake * 0.12f,
                     0f)
                 : Vector3.zero;
-            cameraPivot.localPosition = _camBaseLocal + offset;
+            _landDip = Mathf.MoveTowards(_landDip, 0f, Time.deltaTime * 0.55f);
+            cameraPivot.localPosition = _camBaseLocal + offset + Vector3.down * _landDip;
 
             var rollTarget = 0f;
             if (gravityManager != null && gravityManager.IsTelegraphing)
@@ -302,6 +305,7 @@ namespace GravityReceipt.Player
                 {
                     _fovPunch = Mathf.Max(_fovPunch, 8f);
                     _shake = Mathf.Max(_shake, 0.18f);
+                    _landDip = Mathf.Max(_landDip, 0.11f);
                     MissionSfx.PlayLand();
                 }
 
@@ -338,6 +342,20 @@ namespace GravityReceipt.Player
             }
 
             var planar = Vector3.ProjectOnPlane(wish, gDir);
+            if (Locomotion == LocomotionPhase.Grounded && planar.magnitude > 0.45f)
+            {
+                _stepAcc += planar.magnitude * Time.deltaTime;
+                while (_stepAcc >= 1.65f)
+                {
+                    _stepAcc -= 1.65f;
+                    MissionSfx.PlayStep();
+                }
+            }
+            else if (Locomotion != LocomotionPhase.Grounded)
+            {
+                _stepAcc = 0.8f;
+            }
+
             var motion = (planar + _velocity) * Time.deltaTime;
             _controller.Move(motion);
         }
@@ -421,6 +439,8 @@ namespace GravityReceipt.Player
             _jumpBuffer = 0f;
             _coyote = 0f;
             _camRoll = 0f;
+            _landDip = 0f;
+            _stepAcc = 0f;
             if (cameraPivot != null)
             {
                 cameraPivot.localEulerAngles = Vector3.zero;

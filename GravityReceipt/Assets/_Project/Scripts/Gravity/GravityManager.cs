@@ -225,6 +225,8 @@ namespace GravityReceipt.Gravity
                 GravityChanged?.Invoke(CurrentGravity, dominant);
                 if (isActiveAndEnabled && Time.timeSinceLevelLoad > 1f)
                 {
+                    var origin = roomCenter != null ? roomCenter.position : transform.position;
+                    GravityFlipBurst.Spawn(origin, _currentGravityDirection);
                     if (_hitStop != null)
                     {
                         StopCoroutine(_hitStop);

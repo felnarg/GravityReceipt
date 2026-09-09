@@ -37,6 +37,7 @@ namespace GravityReceipt.Interaction
         public bool IsWinding => _phase == GrabPhase.Winding;
         public bool IsHoldingPackage => IsHolding && _held.GetComponent<MissionPackage>() != null;
         public ValuableItem HeldValuable => _heldValuable;
+        public ValuableItem LookValuable { get; private set; }
         public bool HasLookTarget { get; private set; }
         public string LookHint { get; private set; } = "";
 
@@ -74,6 +75,7 @@ namespace GravityReceipt.Interaction
         private void TickHolding()
         {
             HasLookTarget = false;
+            LookValuable = _heldValuable;
             LookHint = HoldHint();
             ClearFocus();
             if (_held == null || _input.DropPressed())
@@ -112,6 +114,7 @@ namespace GravityReceipt.Interaction
         {
             HasLookTarget = false;
             LookHint = "";
+            LookValuable = null;
             _windUp = 0f;
             if (!TryGetTarget(out var body, out var valuable, out var grab, out var occupied))
             {
@@ -119,6 +122,7 @@ namespace GravityReceipt.Interaction
                 {
                     HasLookTarget = true;
                     LookHint = $"{FormatHint(body, valuable)}  · ocupado";
+                    LookValuable = valuable;
                 }
 
                 ClearFocus();
@@ -127,6 +131,7 @@ namespace GravityReceipt.Interaction
 
             HasLookTarget = true;
             LookHint = FormatHint(body, valuable);
+            LookValuable = valuable;
             SetFocus(body);
             if (!_input.GrabHeld())
             {
@@ -146,12 +151,14 @@ namespace GravityReceipt.Interaction
                 _windUp = 0f;
                 HasLookTarget = false;
                 LookHint = "";
+                LookValuable = null;
                 ClearFocus();
                 return;
             }
 
             HasLookTarget = true;
             LookHint = FormatHint(body, valuable);
+            LookValuable = valuable;
             SetFocus(body);
             _windUp += Time.deltaTime;
             if (_windUp < grabWindUpSeconds)
@@ -275,6 +282,7 @@ namespace GravityReceipt.Interaction
             _phase = GrabPhase.Holding;
             _windUp = 0f;
             ClearFocus();
+            MissionSfx.PlayGrab();
         }
 
         public void Drop()
@@ -316,6 +324,7 @@ namespace GravityReceipt.Interaction
             _phase = GrabPhase.Idle;
             _windUp = 0f;
             LookHint = "";
+            LookValuable = null;
             HasLookTarget = false;
         }
 

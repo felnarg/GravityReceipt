@@ -46,6 +46,16 @@ namespace GravityReceipt.Player
         {
             if (_input == null)
             {
+                _input = GetComponent<LocalPlayerInput>();
+            }
+
+            if (_motor == null)
+            {
+                _motor = GetComponent<PlayerMotor>();
+            }
+
+            if (_input == null)
+            {
                 return;
             }
 
