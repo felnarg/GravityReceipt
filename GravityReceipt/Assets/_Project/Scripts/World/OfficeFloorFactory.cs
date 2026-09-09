@@ -15,8 +15,8 @@ namespace GravityReceipt.World
     {
         public const float MatchSeconds = 600f;
         private const float WallT = 0.4f;
-        private const float DoorW = 2.6f;
-        private const float DoorH = 2.8f;
+        private const float DoorW = 2.9f;
+        private const float DoorH = 3.4f;
 
         private static readonly Vector3 HubC = new(0f, 2.5f, 0f);
         private static readonly Vector3 HubS = new(10f, 5f, 8f);
@@ -183,12 +183,12 @@ namespace GravityReceipt.World
             CreateObjective(root.transform, "Obj2_Entregar", 1, "Entregar", new Vector3(0f, 0.22f, 40.5f), new Vector3(2.6f, 0.12f, 2.6f), new Vector3(1f, 28f, 1f), 0.5f, package: true, player: false, hold: false, new Color(0.3f, 0.6f, 1f));
             CreateObjective(root.transform, "Obj3_Sellar", 2, "Sellar", new Vector3(0f, 0.22f, 54.2f), new Vector3(2.8f, 0.12f, 2.4f), new Vector3(1f, 32f, 1f), 1.0f, package: true, player: true, hold: true, new Color(0.95f, 0.75f, 0.2f));
 
-            CreateSign(root.transform, "TutorialSign", new Vector3(0f, 3.2f, 3.82f), new Vector3(6.2f, 0.7f, 0.12f),
-                "LA GRAVEDAD SIGUE LO MÁS CARO", new Vector3(0f, 3.2f, 3.65f), Quaternion.Euler(0f, 180f, 0f), new Color(0.08f, 0.1f, 0.12f), new Color(1f, 0.92f, 0.35f));
+            CreateSign(root.transform, "TutorialSign", new Vector3(0f, 3.88f, 3.82f), new Vector3(6.2f, 0.5f, 0.12f),
+                "LA GRAVEDAD SIGUE LO MÁS CARO", new Vector3(0f, 3.88f, 3.65f), Quaternion.Euler(0f, 180f, 0f), new Color(0.08f, 0.1f, 0.12f), new Color(1f, 0.92f, 0.35f));
             CreateSign(root.transform, "Sign_HintPared", new Vector3(-4.72f, 1.7f, 0f), new Vector3(0.1f, 1.1f, 3.6f),
                 "SIN $ NO TIRA · CAJA $80 SÍ", new Vector3(-4.45f, 1.7f, 0f), Quaternion.Euler(0f, 90f, 0f), new Color(0.12f, 0.1f, 0.04f), new Color(1f, 0.85f, 0.35f));
-            CreateSign(root.transform, "Sign_Pasillo", new Vector3(0f, 3.05f, 16.15f), new Vector3(3.2f, 0.45f, 0.1f),
-                "CUIDADO: VACÍO", new Vector3(0f, 3.05f, 16.0f), Quaternion.Euler(0f, 180f, 0f), new Color(0.18f, 0.06f, 0.06f), new Color(1f, 0.5f, 0.45f));
+            CreateSign(root.transform, "Sign_Pasillo", new Vector3(0f, 3.72f, 16.15f), new Vector3(3.2f, 0.4f, 0.1f),
+                "CUIDADO: VACÍO", new Vector3(0f, 3.72f, 16.0f), Quaternion.Euler(0f, 180f, 0f), new Color(0.18f, 0.06f, 0.06f), new Color(1f, 0.5f, 0.45f));
             CreateSign(root.transform, "Sign_Socket", new Vector3(6.72f, 2.35f, 10f), new Vector3(0.1f, 0.55f, 2.6f),
                 "ENCHUFA EL PAQUETE", new Vector3(6.4f, 2.35f, 10f), Quaternion.Euler(0f, -90f, 0f), new Color(0.08f, 0.2f, 0.14f), new Color(0.55f, 1f, 0.75f));
             CreateSign(root.transform, "Sign_ArchivePared", new Vector3(-6.72f, 2.2f, 10f), new Vector3(0.1f, 0.7f, 3.4f),
@@ -197,21 +197,21 @@ namespace GravityReceipt.World
                 "SUELTA EL PAQUETE EN LA LOSA AZUL", new Vector3(7.4f, 1.8f, 40.5f), Quaternion.Euler(0f, -90f, 0f), new Color(0.06f, 0.12f, 0.22f), new Color(0.65f, 0.85f, 1f));
             CreateSign(root.transform, "Sign_Sellar", new Vector3(-5.72f, 1.8f, 54.2f), new Vector3(0.1f, 0.7f, 3.0f),
                 "PAQUETE + MANTÉN E PARA SELLAR", new Vector3(-5.4f, 1.8f, 54.2f), Quaternion.Euler(0f, 90f, 0f), new Color(0.18f, 0.12f, 0.04f), new Color(1f, 0.85f, 0.4f));
-            CreateSign(root.transform, "Door_Archive", new Vector3(0f, 2.92f, 4.05f), new Vector3(2.2f, 0.28f, 0.08f),
-                "→ ARCHIVE", new Vector3(0f, 2.92f, 3.92f), Quaternion.Euler(0f, 180f, 0f), new Color(0.08f, 0.08f, 0.1f), new Color(1f, 0.9f, 0.45f));
-            CreateSign(root.transform, "Door_Pasillo", new Vector3(0f, 2.92f, 16.05f), new Vector3(2.2f, 0.28f, 0.08f),
-                "→ PASILLO", new Vector3(0f, 2.92f, 15.92f), Quaternion.Euler(0f, 180f, 0f), new Color(0.12f, 0.05f, 0.05f), new Color(1f, 0.55f, 0.45f));
-            CreateSign(root.transform, "Door_Office", new Vector3(0f, 2.92f, 27.05f), new Vector3(2.4f, 0.28f, 0.08f),
-                "→ OPEN OFFICE", new Vector3(0f, 2.92f, 26.92f), Quaternion.Euler(0f, 180f, 0f), new Color(0.06f, 0.1f, 0.16f), new Color(0.7f, 0.88f, 1f));
-            CreateSign(root.transform, "Door_Executive", new Vector3(0f, 2.92f, 43.05f), new Vector3(2.4f, 0.28f, 0.08f),
-                "→ EXECUTIVE", new Vector3(0f, 2.92f, 42.92f), Quaternion.Euler(0f, 180f, 0f), new Color(0.14f, 0.08f, 0.04f), new Color(1f, 0.82f, 0.45f));
+            CreateSign(root.transform, "Door_Archive", new Vector3(0f, 3.62f, 4.05f), new Vector3(2.4f, 0.28f, 0.08f),
+                "→ ARCHIVE", new Vector3(0f, 3.62f, 3.92f), Quaternion.Euler(0f, 180f, 0f), new Color(0.08f, 0.08f, 0.1f), new Color(1f, 0.9f, 0.45f));
+            CreateSign(root.transform, "Door_Pasillo", new Vector3(0f, 3.62f, 16.05f), new Vector3(2.4f, 0.28f, 0.08f),
+                "→ PASILLO", new Vector3(0f, 3.62f, 15.92f), Quaternion.Euler(0f, 180f, 0f), new Color(0.12f, 0.05f, 0.05f), new Color(1f, 0.55f, 0.45f));
+            CreateSign(root.transform, "Door_Office", new Vector3(0f, 3.62f, 27.05f), new Vector3(2.5f, 0.28f, 0.08f),
+                "→ OPEN OFFICE", new Vector3(0f, 3.62f, 26.92f), Quaternion.Euler(0f, 180f, 0f), new Color(0.06f, 0.1f, 0.16f), new Color(0.7f, 0.88f, 1f));
+            CreateSign(root.transform, "Door_Executive", new Vector3(0f, 3.62f, 43.05f), new Vector3(2.5f, 0.28f, 0.08f),
+                "→ EXECUTIVE", new Vector3(0f, 3.62f, 42.92f), Quaternion.Euler(0f, 180f, 0f), new Color(0.14f, 0.08f, 0.04f), new Color(1f, 0.82f, 0.45f));
 
             CreatePathChevrons(root.transform);
             var sillColor = new Color(1f, 0.82f, 0.22f);
-            CreateStaticCube(root.transform, "Sill_Archive", new Vector3(0f, 0.05f, 4f), new Vector3(2.5f, 0.08f, 0.32f), sillColor);
-            CreateStaticCube(root.transform, "Sill_Pasillo", new Vector3(0f, 0.05f, 16f), new Vector3(2.5f, 0.08f, 0.32f), new Color(0.95f, 0.35f, 0.28f));
-            CreateStaticCube(root.transform, "Sill_Office", new Vector3(0f, 0.05f, 27f), new Vector3(2.5f, 0.08f, 0.32f), new Color(0.45f, 0.7f, 1f));
-            CreateStaticCube(root.transform, "Sill_Executive", new Vector3(0f, 0.05f, 43f), new Vector3(2.5f, 0.08f, 0.32f), new Color(0.95f, 0.7f, 0.28f));
+            CreateStaticCube(root.transform, "Sill_Archive", new Vector3(0f, 0.05f, 4f), new Vector3(2.8f, 0.08f, 0.32f), sillColor);
+            CreateStaticCube(root.transform, "Sill_Pasillo", new Vector3(0f, 0.05f, 16f), new Vector3(2.8f, 0.08f, 0.32f), new Color(0.95f, 0.35f, 0.28f));
+            CreateStaticCube(root.transform, "Sill_Office", new Vector3(0f, 0.05f, 27f), new Vector3(2.8f, 0.08f, 0.32f), new Color(0.45f, 0.7f, 1f));
+            CreateStaticCube(root.transform, "Sill_Executive", new Vector3(0f, 0.05f, 43f), new Vector3(2.8f, 0.08f, 0.32f), new Color(0.95f, 0.7f, 0.28f));
 
             var pit = GameObject.CreatePrimitive(PrimitiveType.Cube);
             pit.name = "VoidPit";
