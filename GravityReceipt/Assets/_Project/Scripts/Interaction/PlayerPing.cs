@@ -1,4 +1,5 @@
 using GravityReceipt.Player;
+using GravityReceipt.UI;
 using UnityEngine;
 
 namespace GravityReceipt.Interaction
@@ -92,7 +93,7 @@ namespace GravityReceipt.Interaction
             private void Update()
             {
                 transform.localScale = Vector3.one * (0.45f + 0.08f * Mathf.Sin(Time.time * 10f));
-                var cam = Camera.main;
+                var cam = FollowBillboard.ClosestCamera(transform.position);
                 if (cam is not null)
                 {
                     var label = GetComponentInChildren<TextMesh>();

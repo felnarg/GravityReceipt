@@ -62,6 +62,12 @@ namespace GravityReceipt.Gravity
                 return;
             }
 
+            if (_current is { IsHeld: true })
+            {
+                _current.transform.localScale = _baseScale;
+                return;
+            }
+
             var pulse = 1f + 0.05f * Mathf.Sin(Time.time * pulseSpeed);
             _current.transform.localScale = _baseScale * pulse;
         }

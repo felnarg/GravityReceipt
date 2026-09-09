@@ -25,11 +25,37 @@ namespace GravityReceipt.UI
             }
 
             transform.position = target.position + worldOffset;
-            var cam = Camera.main;
+            var cam = ClosestCamera(transform.position);
             if (cam is not null)
             {
                 transform.rotation = Quaternion.LookRotation(transform.position - cam.transform.position);
             }
+        }
+
+        public static Camera ClosestCamera(Vector3 worldPos)
+        {
+            Camera best = null;
+            var bestSqr = float.MaxValue;
+            var cams = Camera.allCameras;
+            for (var i = 0; i < cams.Length; i++)
+            {
+                var cam = cams[i];
+                if (cam is not { isActiveAndEnabled: true })
+                {
+                    continue;
+                }
+
+                var d = (cam.transform.position - worldPos).sqrMagnitude;
+                if (d >= bestSqr)
+                {
+                    continue;
+                }
+
+                bestSqr = d;
+                best = cam;
+            }
+
+            return best != null ? best : Camera.main;
         }
     }
 }
