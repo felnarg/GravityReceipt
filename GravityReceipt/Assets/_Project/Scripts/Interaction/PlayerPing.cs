@@ -53,6 +53,11 @@ namespace GravityReceipt.Interaction
 
             var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             go.name = "PingMarker";
+            var floor = GameObject.Find("OfficeFloor");
+            if (floor != null)
+            {
+                go.transform.SetParent(floor.transform, true);
+            }
             go.transform.position = point;
             go.transform.localScale = Vector3.one * 0.45f;
             Object.Destroy(go.GetComponent<Collider>());
