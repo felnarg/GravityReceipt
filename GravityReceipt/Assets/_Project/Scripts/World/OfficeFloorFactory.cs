@@ -68,18 +68,18 @@ namespace GravityReceipt.World
             CreateRoomVolume(root.transform, "OpenOffice", OffC, OffS, offG, inherit: false);
             CreateRoomVolume(root.transform, "Executive", ExeC, ExeS, exeG, inherit: false);
 
-            CreateValuable("Valuable_Taza_15", new Vector3(-2.2f, 0.48f, 1.1f), new Vector3(0.28f, 0.22f, 0.28f), 15, hubG, new Color(0.75f, 0.45f, 0.28f), PrimitiveType.Cylinder);
-            CreateValuable("Valuable_Archivador_40", new Vector3(-3.6f, 1.0f, 8.5f), new Vector3(0.8f, 1.6f, 0.5f), 40, arcG, new Color(0.55f, 0.38f, 0.22f), PrimitiveType.Cube);
-            CreateValuable("Valuable_CajaFuerte_80", new Vector3(3.4f, 0.75f, 12.2f), new Vector3(1.1f, 1.1f, 1.1f), 80, arcG, new Color(0.9f, 0.72f, 0.18f), PrimitiveType.Cube);
-            CreateValuable("Valuable_Monitor_120", new Vector3(4.5f, 0.55f, 32f), new Vector3(1.4f, 0.85f, 0.12f), 120, offG, new Color(0.15f, 0.45f, 0.95f), PrimitiveType.Cube);
-            CreateValuable("Valuable_Planta_60", new Vector3(-5.5f, 0.85f, 38f), new Vector3(0.55f, 0.85f, 0.55f), 60, offG, new Color(0.2f, 0.72f, 0.28f), PrimitiveType.Capsule);
-            CreateValuable("Valuable_Cafetera_90", new Vector3(6f, 0.55f, 37.5f), new Vector3(0.55f, 0.55f, 0.55f), 90, offG, new Color(0.82f, 0.18f, 0.14f), PrimitiveType.Cylinder);
-            CreateValuable("Valuable_Maletin_200", new Vector3(2.2f, 0.32f, 47.5f), new Vector3(1.05f, 0.28f, 0.7f), 200, exeG, new Color(0.12f, 0.08f, 0.06f), PrimitiveType.Cube);
-            CreateValuable("Valuable_Trofeo_150", new Vector3(-3.2f, 0.85f, 52.5f), new Vector3(0.35f, 0.85f, 0.35f), 150, exeG, new Color(0.98f, 0.82f, 0.18f), PrimitiveType.Capsule);
-            CreateValuable("Valuable_Server_110", new Vector3(4.2f, 0.95f, 54f), new Vector3(0.7f, 1.7f, 0.55f), 110, exeG, new Color(0.28f, 0.32f, 0.42f), PrimitiveType.Cube);
-            CreateValuable("Valuable_PlantaOro_95", new Vector3(-4.4f, 0.85f, 46.5f), new Vector3(0.6f, 0.9f, 0.6f), 95, exeG, new Color(0.88f, 0.72f, 0.12f), PrimitiveType.Capsule);
+            CreateValuable(root.transform, "Valuable_Taza_15", new Vector3(-2.2f, 0.48f, 1.1f), new Vector3(0.28f, 0.22f, 0.28f), 15, hubG, new Color(0.75f, 0.45f, 0.28f), PrimitiveType.Cylinder);
+            CreateValuable(root.transform, "Valuable_Archivador_40", new Vector3(-3.6f, 1.0f, 8.5f), new Vector3(0.8f, 1.6f, 0.5f), 40, arcG, new Color(0.55f, 0.38f, 0.22f), PrimitiveType.Cube);
+            CreateValuable(root.transform, "Valuable_CajaFuerte_80", new Vector3(3.4f, 0.75f, 12.2f), new Vector3(1.1f, 1.1f, 1.1f), 80, arcG, new Color(0.9f, 0.72f, 0.18f), PrimitiveType.Cube);
+            CreateValuable(root.transform, "Valuable_Monitor_120", new Vector3(4.5f, 0.55f, 32f), new Vector3(1.4f, 0.85f, 0.12f), 120, offG, new Color(0.15f, 0.45f, 0.95f), PrimitiveType.Cube);
+            CreateValuable(root.transform, "Valuable_Planta_60", new Vector3(-5.5f, 0.85f, 38f), new Vector3(0.55f, 0.85f, 0.55f), 60, offG, new Color(0.2f, 0.72f, 0.28f), PrimitiveType.Capsule);
+            CreateValuable(root.transform, "Valuable_Cafetera_90", new Vector3(6f, 0.55f, 37.5f), new Vector3(0.55f, 0.55f, 0.55f), 90, offG, new Color(0.82f, 0.18f, 0.14f), PrimitiveType.Cylinder);
+            CreateValuable(root.transform, "Valuable_Maletin_200", new Vector3(2.2f, 0.32f, 47.5f), new Vector3(1.05f, 0.28f, 0.7f), 200, exeG, new Color(0.12f, 0.08f, 0.06f), PrimitiveType.Cube);
+            CreateValuable(root.transform, "Valuable_Trofeo_150", new Vector3(-3.2f, 0.85f, 52.5f), new Vector3(0.35f, 0.85f, 0.35f), 150, exeG, new Color(0.98f, 0.82f, 0.18f), PrimitiveType.Capsule);
+            CreateValuable(root.transform, "Valuable_Server_110", new Vector3(4.2f, 0.95f, 54f), new Vector3(0.7f, 1.7f, 0.55f), 110, exeG, new Color(0.28f, 0.32f, 0.42f), PrimitiveType.Cube);
+            CreateValuable(root.transform, "Valuable_PlantaOro_95", new Vector3(-4.4f, 0.85f, 46.5f), new Vector3(0.6f, 0.9f, 0.6f), 95, exeG, new Color(0.88f, 0.72f, 0.12f), PrimitiveType.Capsule);
 
-            var pkg = CreatePackage(new Vector3(0f, 0.45f, 0.6f), hubG);
+            var pkg = CreatePackage(root.transform, new Vector3(0f, 0.45f, 0.6f), hubG);
             AttachPriceTag(pkg.transform, 0, 0.45f, "PAQUETE");
             CreateProp(root.transform, "Prop_CajaGris", new Vector3(2.4f, 0.4f, -1.4f), new Vector3(0.7f, 0.7f, 0.7f), new Color(0.42f, 0.44f, 0.46f), hubG);
             CreateProp(root.transform, "Prop_Silla", new Vector3(-3.4f, 0.45f, -1.2f), new Vector3(0.45f, 0.85f, 0.45f), new Color(0.32f, 0.3f, 0.28f), hubG);
@@ -267,10 +267,11 @@ namespace GravityReceipt.World
             }
         }
 
-        private static GameObject CreateValuable(string name, Vector3 position, Vector3 scale, int price, GravityManager gravity, Color color, PrimitiveType primitive)
+        private static GameObject CreateValuable(Transform parent, string name, Vector3 position, Vector3 scale, int price, GravityManager gravity, Color color, PrimitiveType primitive)
         {
             var go = GameObject.CreatePrimitive(primitive);
             go.name = name;
+            go.transform.SetParent(parent, false);
             go.transform.position = position;
             go.transform.localScale = scale;
             SetColor(go, color);
@@ -297,6 +298,7 @@ namespace GravityReceipt.World
         private static void AttachPriceTag(Transform target, int price, float height, string text = null)
         {
             var host = new GameObject(target.name + "_Price");
+            host.transform.SetParent(target.root, true);
             var follow = host.AddComponent<FollowBillboard>();
             follow.Configure(target, Vector3.up * (height * 0.5f + 0.28f));
             WorldLabel.Create(host.transform, "Text", text ?? ("$" + price), Vector3.zero, new Color(1f, 0.92f, 0.3f), 0.1f);
@@ -325,10 +327,11 @@ namespace GravityReceipt.World
             return go;
         }
 
-        private static GameObject CreatePackage(Vector3 position, GravityManager gravity)
+        private static GameObject CreatePackage(Transform parent, Vector3 position, GravityManager gravity)
         {
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             go.name = "MissionPackage";
+            go.transform.SetParent(parent, false);
             go.transform.position = position;
             go.transform.localScale = new Vector3(0.7f, 0.45f, 0.55f);
             SetColor(go, new Color(0.95f, 0.55f, 0.12f));

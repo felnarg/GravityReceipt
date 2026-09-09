@@ -435,6 +435,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - La brújula solo aparece si g no es “abajo” o hay telegráfo.
 - Orden de ejecución: GravityManager → ValuableItem → GravityBody → PlayerMotor → Interactor.
 - `PlayerMotor` distingue Grounded / Airborne.
+- Valuables y paquete cuelgan del root OfficeFloor (jerarquía limpia).
 
 ---
 
