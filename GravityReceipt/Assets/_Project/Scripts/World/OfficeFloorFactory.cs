@@ -175,6 +175,8 @@ namespace GravityReceipt.World
                 CreatePlayer(playersRoot.transform, "Player2", p2Spawn, new Color(0.95f, 0.5f, 0.2f), LocalPlayerSlot.Two, false, hubG, new Rect(0f, 0f, 1f, 0.5f), audio: false, RoleKind.Anchor);
             }
 
+            IgnorePlayerCollisions(playersRoot.transform);
+
             var hudGo = new GameObject("GravityHUD");
             hudGo.transform.SetParent(root.transform, false);
             hudGo.AddComponent<GravityHud>();
@@ -575,6 +577,21 @@ namespace GravityReceipt.World
             WorldLabel.Create(host.transform, "Text", slot == LocalPlayerSlot.One ? "P1" : "P2", Vector3.zero, tagColor, 0.09f);
 
             return player;
+        }
+
+        private static void IgnorePlayerCollisions(Transform playersRoot)
+        {
+            var ccs = playersRoot.GetComponentsInChildren<CharacterController>();
+            for (var i = 0; i < ccs.Length; i++)
+            {
+                for (var j = i + 1; j < ccs.Length; j++)
+                {
+                    if (ccs[i] != null && ccs[j] != null)
+                    {
+                        Physics.IgnoreCollision(ccs[i], ccs[j], true);
+                    }
+                }
+            }
         }
 
         private static GameObject CreateCube(Transform parent, string name, Vector3 localPos, Vector3 scale, Color color)

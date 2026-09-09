@@ -88,6 +88,7 @@ Documento vivo del prototipo.
 - Carteles sin collider (el “CUIDADO: VACÍO” ya no tapa la puerta del pasillo).
 - Tutorial del Hub subido al dintel: la puerta a Archive queda libre.
 - `SpawnHome.ReturnHome` con llaves correctas (el extra `}` no compilaba).
+- P1 y P2 no colisionan entre sí (el pasillo estrecho no es un empujón al vacío).
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
