@@ -160,7 +160,7 @@ namespace GravityReceipt.Mission
             }
 
             _progressBar.gameObject.SetActive(true);
-            _progressBar.position = transform.position + Vector3.up * 0.45f;
+            _progressBar.position = transform.position + transform.up * 0.45f;
             _progressBar.localScale = new Vector3(Mathf.Max(0.15f, shown * 2.2f), 0.09f, 0.09f);
         }
 
@@ -205,7 +205,7 @@ namespace GravityReceipt.Mission
 
             _beacon.gameObject.SetActive(true);
             var h = 2.6f + 0.25f * Mathf.Sin(Time.unscaledTime * 4f);
-            _beacon.position = transform.position + Vector3.up * (h * 0.5f + 0.2f);
+            _beacon.position = transform.position + transform.up * (h * 0.5f + 0.2f);
             _beacon.localScale = new Vector3(0.18f, h * 0.5f, 0.18f);
             if (_beaconRenderer != null)
             {
