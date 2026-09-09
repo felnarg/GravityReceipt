@@ -1,4 +1,6 @@
 using GravityReceipt.Gravity;
+using GravityReceipt.Mission;
+using GravityReceipt.World;
 using UnityEngine;
 
 namespace GravityReceipt.Player
@@ -15,56 +17,102 @@ namespace GravityReceipt.Player
         [SerializeField] private GravityManager gravityManager;
 
         private CharacterController _controller;
+        private LocalPlayerInput _input;
+        private PlayerRole _role;
         private Vector3 _velocity;
         private float _pitch;
         private Vector3 _lastGravityDir = Vector3.down;
+        private float _airFall;
+        private bool _ownsCursor;
+
+        public GravityManager Gravity => gravityManager;
+        public bool Grounded { get; private set; }
+
+        public void Configure(Transform pivot, GravityManager gravity)
+        {
+            cameraPivot = pivot;
+            SetGravityManager(gravity);
+        }
+
+        public void SetGravityManager(GravityManager next)
+        {
+            if (next == gravityManager)
+            {
+                return;
+            }
+
+            if (gravityManager is not null)
+            {
+                gravityManager.GravityChanged -= OnGravityChanged;
+            }
+
+            gravityManager = next;
+            if (gravityManager is not null)
+            {
+                gravityManager.GravityChanged += OnGravityChanged;
+                _lastGravityDir = gravityManager.CurrentDirection;
+            }
+        }
 
         private void Awake()
         {
             _controller = GetComponent<CharacterController>();
-            if (gravityManager is null)
-            {
-                gravityManager = FindAnyObjectByType<GravityManager>();
-            }
+            _input = GetComponent<LocalPlayerInput>();
+            _role = GetComponent<PlayerRole>();
+            _ownsCursor = _input is not { UsesMouseLook: false };
 
-            if (cameraPivot is null && Camera.main is { } cam)
+            if (cameraPivot is null && _input is { PlayerCamera: { } cam })
             {
                 cameraPivot = cam.transform;
             }
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            if (_ownsCursor)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
 
             if (gravityManager is not null)
             {
-                GravityManager.GravityChanged += OnGravityChanged;
+                gravityManager.GravityChanged += OnGravityChanged;
                 _lastGravityDir = gravityManager.CurrentDirection;
             }
         }
 
         private void OnDestroy()
         {
-            GravityManager.GravityChanged -= OnGravityChanged;
+            if (gravityManager is not null)
+            {
+                gravityManager.GravityChanged -= OnGravityChanged;
+            }
         }
 
         private void OnGravityChanged(Vector3 _, ValuableItem __)
         {
-            // Inercia corta: conserva algo de velocidad lateral, corta la caída anterior.
             _velocity *= 0.35f;
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (_ownsCursor)
             {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
+
+                if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked)
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                }
             }
 
-            if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked)
+            var room = RoomRegistry.FindRoom(transform.position);
+            if (room is { HasOwnGravity: true, Gravity: { } roomGravity })
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                SetGravityManager(roomGravity);
             }
 
             Look();
@@ -73,13 +121,19 @@ namespace GravityReceipt.Player
 
         private void Look()
         {
-            if (Cursor.lockState != CursorLockMode.Locked)
+            if (_input is null)
             {
                 return;
             }
 
-            var mx = Input.GetAxisRaw("Mouse X") * mouseSensitivity;
-            var my = Input.GetAxisRaw("Mouse Y") * mouseSensitivity;
+            if (_ownsCursor && Cursor.lockState != CursorLockMode.Locked)
+            {
+                return;
+            }
+
+            var look = _input.LookDelta();
+            var mx = look.x * mouseSensitivity;
+            var my = look.y * mouseSensitivity;
             transform.Rotate(0f, mx, 0f, Space.Self);
             _pitch = Mathf.Clamp(_pitch - my, -80f, 80f);
             if (cameraPivot is not null)
@@ -100,21 +154,29 @@ namespace GravityReceipt.Player
 
             AlignToGravity(gDir);
 
-            var input = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
+            var axes = _input is not null ? _input.MoveAxes() : Vector2.zero;
+            var input = new Vector3(axes.x, 0f, axes.y);
             input = Vector3.ClampMagnitude(input, 1f);
-            var wish = transform.TransformDirection(input) * moveSpeed;
+            var speed = moveSpeed * (_role is not null ? _role.MoveMultiplier : 1f);
+            var wish = transform.TransformDirection(input) * speed;
 
-            var grounded = IsGrounded(gDir);
-            if (grounded)
+            Grounded = IsGrounded(gDir);
+            if (Grounded)
             {
-                // Amortigua velocidad hacia el suelo.
+                if (_airFall > 0.5f && _input is not null)
+                {
+                    MatchHighlightRecorder.Instance?.ReportFall(_input.Slot, _airFall);
+                }
+
+                _airFall = 0f;
+
                 var intoGround = Vector3.Dot(_velocity, gDir);
                 if (intoGround > 0f)
                 {
                     _velocity -= gDir * intoGround;
                 }
 
-                if (Input.GetButtonDown("Jump"))
+                if (_input is not null && _input.JumpPressed())
                 {
                     _velocity += -gDir * jumpSpeed;
                 }
@@ -122,9 +184,13 @@ namespace GravityReceipt.Player
             else
             {
                 _velocity += gDir * gMag * Time.deltaTime;
+                var fallStep = Vector3.Dot(_velocity, gDir) * Time.deltaTime;
+                if (fallStep > 0f)
+                {
+                    _airFall += fallStep;
+                }
             }
 
-            // Movimiento horizontal relativo al "arriba" actual.
             var planar = Vector3.ProjectOnPlane(wish, gDir);
             var motion = (planar + _velocity) * Time.deltaTime;
             _controller.Move(motion);
@@ -152,6 +218,23 @@ namespace GravityReceipt.Player
                 transform.rotation,
                 rot,
                 1f - Mathf.Exp(-alignSpeed * Time.deltaTime));
+        }
+
+        public void Warp(Vector3 position)
+        {
+            if (_controller is not null)
+            {
+                _controller.enabled = false;
+            }
+
+            transform.SetPositionAndRotation(position, Quaternion.identity);
+            _velocity = Vector3.zero;
+            _pitch = 0f;
+
+            if (_controller is not null)
+            {
+                _controller.enabled = true;
+            }
         }
     }
 }

@@ -1,10 +1,9 @@
-using GravityReceipt.Gravity;
 using UnityEngine;
 
 namespace GravityReceipt.Gravity
 {
     /// <summary>
-    /// Resalta el valuable dominante con un outline por escala + color emisivo simple.
+    /// Resalta el valuable dominante con un pulso de escala + color.
     /// </summary>
     public sealed class DominantValuableOutline : MonoBehaviour
     {
@@ -17,22 +16,29 @@ namespace GravityReceipt.Gravity
         private Color _baseColor;
         private Vector3 _baseScale;
 
+        public void Bind(GravityManager manager)
+        {
+            Unbind();
+            gravityManager = manager;
+            Bind();
+        }
+
         private void Awake()
         {
             if (gravityManager is null)
             {
-                gravityManager = FindAnyObjectByType<GravityManager>();
+                gravityManager = GetComponent<GravityManager>();
             }
         }
 
         private void OnEnable()
         {
-            GravityManager.GravityChanged += OnGravityChanged;
+            Bind();
         }
 
         private void OnDisable()
         {
-            GravityManager.GravityChanged -= OnGravityChanged;
+            Unbind();
             Clear();
         }
 
@@ -46,23 +52,34 @@ namespace GravityReceipt.Gravity
 
         private void Update()
         {
-            if (_current is null || _renderer is null)
-            {
-                if (gravityManager is { Dominant: { } d } && d != _current)
-                {
-                    SetDominant(d);
-                }
-
-                return;
-            }
-
             if (gravityManager is { Dominant: { } current } && current != _current)
             {
                 SetDominant(current);
             }
 
+            if (_current is null || _renderer is null)
+            {
+                return;
+            }
+
             var pulse = 1f + 0.05f * Mathf.Sin(Time.time * pulseSpeed);
             _current.transform.localScale = _baseScale * pulse;
+        }
+
+        private void Bind()
+        {
+            if (gravityManager is not null)
+            {
+                gravityManager.GravityChanged += OnGravityChanged;
+            }
+        }
+
+        private void Unbind()
+        {
+            if (gravityManager is not null)
+            {
+                gravityManager.GravityChanged -= OnGravityChanged;
+            }
         }
 
         private void OnGravityChanged(Vector3 _, ValuableItem dominant)

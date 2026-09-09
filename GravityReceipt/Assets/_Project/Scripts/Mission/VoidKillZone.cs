@@ -1,3 +1,4 @@
+using GravityReceipt.Player;
 using UnityEngine;
 
 namespace GravityReceipt.Mission
@@ -8,32 +9,30 @@ namespace GravityReceipt.Mission
     /// </summary>
     public sealed class VoidKillZone : MonoBehaviour
     {
-        [SerializeField] private Vector3 respawnPoint = new(0f, 0.5f, -3.5f);
-        [SerializeField] private float maxDistanceFromOrigin = 14f;
-        [SerializeField] private Transform player;
-
-        private void Awake()
-        {
-            if (player is null)
-            {
-                var tagged = GameObject.FindWithTag("Player");
-                if (tagged is not null)
-                {
-                    player = tagged.transform;
-                }
-            }
-        }
+        [SerializeField] private float maxDistanceFromOrigin = 80f;
+        [SerializeField] private float killY = -4f;
 
         private void Update()
         {
-            if (player is null)
+            var players = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
+            foreach (var motor in players)
             {
-                return;
+                if (motor is not { })
+                {
+                    continue;
+                }
+
+                var p = motor.transform.position;
+                if (p.y < killY || p.magnitude > maxDistanceFromOrigin)
+                {
+                    RespawnPlayer(motor);
+                }
             }
 
-            if (player.position.magnitude > maxDistanceFromOrigin || player.position.y < -4f)
+            var pkg = FindAnyObjectByType<MissionPackage>();
+            if (pkg is { } && (pkg.transform.position.y < killY || pkg.transform.position.magnitude > maxDistanceFromOrigin))
             {
-                RespawnPlayer(player.gameObject);
+                pkg.Respawn();
             }
         }
 
@@ -44,9 +43,17 @@ namespace GravityReceipt.Mission
                 return;
             }
 
-            if (other.CompareTag("Player") || other.GetComponent<CharacterController>() is not null)
+            var motor = other.GetComponentInParent<PlayerMotor>();
+            if (motor is not null)
             {
-                RespawnPlayer(other.gameObject);
+                RespawnPlayer(motor);
+                return;
+            }
+
+            var pkg = other.GetComponentInParent<MissionPackage>();
+            if (pkg is not null)
+            {
+                pkg.Respawn();
                 return;
             }
 
@@ -54,24 +61,21 @@ namespace GravityReceipt.Mission
             {
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
-                rb.position = respawnPoint + Vector3.right * Random.Range(-1.5f, 1.5f);
+                var spawn = CheckpointSystem.Instance is { } cp
+                    ? cp.PackageSpawn
+                    : new Vector3(0f, 1f, 0f);
+                rb.position = spawn + Vector3.right * Random.Range(-1.2f, 1.2f);
             }
         }
 
-        private void RespawnPlayer(GameObject go)
+        private void RespawnPlayer(PlayerMotor motor)
         {
-            var cc = go.GetComponent<CharacterController>();
-            if (cc is not null)
-            {
-                cc.enabled = false;
-            }
-
-            go.transform.SetPositionAndRotation(respawnPoint, Quaternion.identity);
-
-            if (cc is not null)
-            {
-                cc.enabled = true;
-            }
+            var input = motor.GetComponent<LocalPlayerInput>();
+            var slot = input is not null ? input.Slot : LocalPlayerSlot.One;
+            var point = CheckpointSystem.Instance is { } cp
+                ? cp.GetPlayerSpawn(slot)
+                : new Vector3(0f, 1f, 0f);
+            motor.Warp(point);
         }
     }
 }
