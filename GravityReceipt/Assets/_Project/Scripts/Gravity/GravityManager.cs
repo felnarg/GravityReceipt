@@ -38,6 +38,8 @@ namespace GravityReceipt.Gravity
         public bool ShowFlipBanner => IsTelegraphing || Time.unscaledTime < _flipBannerUntil;
         public Vector3 PendingDirection => _pendingDirection;
         public Vector3 BannerDirection => IsTelegraphing ? _pendingDirection : _currentGravityDirection;
+        public Vector3 PreviewDirection =>
+            _dominant == null ? _currentGravityDirection : DirectionTowardValuable(_dominant);
         public float TelegraphNormalized =>
             telegraphSeconds <= 0f ? 0f : 1f - Mathf.Clamp01(_telegraphRemaining / telegraphSeconds);
 

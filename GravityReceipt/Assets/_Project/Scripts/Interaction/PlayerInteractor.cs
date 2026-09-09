@@ -36,6 +36,7 @@ namespace GravityReceipt.Interaction
         public bool IsHolding => _phase == GrabPhase.Holding && _held != null;
         public bool IsWinding => _phase == GrabPhase.Winding;
         public bool IsHoldingPackage => IsHolding && _held.GetComponent<MissionPackage>() != null;
+        public ValuableItem HeldValuable => _heldValuable;
         public bool HasLookTarget { get; private set; }
         public string LookHint { get; private set; } = "";
 

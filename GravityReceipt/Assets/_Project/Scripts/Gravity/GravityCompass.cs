@@ -1,3 +1,4 @@
+using GravityReceipt.Interaction;
 using GravityReceipt.Player;
 using UnityEngine;
 
@@ -36,13 +37,21 @@ namespace GravityReceipt.Gravity
             }
 
             EnsureArrow();
-            var dir = g.ShowFlipBanner ? g.BannerDirection : g.CurrentDirection;
+            var inter = GetComponent<PlayerInteractor>();
+            var holdingDom = inter != null
+                             && inter.HeldValuable != null
+                             && g.Dominant == inter.HeldValuable;
+            var dir = g.ShowFlipBanner
+                ? g.BannerDirection
+                : holdingDom
+                    ? g.PreviewDirection
+                    : g.CurrentDirection;
             if (dir.sqrMagnitude < 0.01f)
             {
                 dir = Vector3.down;
             }
 
-            var unusual = g.IsAnchored || g.ShowFlipBanner || Vector3.Dot(dir, Vector3.down) < 0.92f;
+            var unusual = g.IsAnchored || g.ShowFlipBanner || holdingDom || Vector3.Dot(dir, Vector3.down) < 0.92f;
             _arrow.gameObject.SetActive(unusual);
             if (!unusual)
             {
@@ -63,6 +72,10 @@ namespace GravityReceipt.Gravity
                 else if (g.ShowFlipBanner)
                 {
                     color = Color.Lerp(new Color(1f, 0.9f, 0.2f), new Color(1f, 0.35f, 0.1f), g.TelegraphNormalized);
+                }
+                else if (holdingDom)
+                {
+                    color = new Color(1f, 0.82f, 0.2f);
                 }
                 else
                 {
