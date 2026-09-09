@@ -43,6 +43,11 @@ namespace GravityReceipt.Mission
         {
             _box = GetComponent<BoxCollider>();
             _box.isTrigger = true;
+            _renderer = GetComponent<Renderer>();
+            if (_renderer != null)
+            {
+                _baseColor = _renderer.material.color;
+            }
         }
 
         private void Update()
@@ -71,6 +76,11 @@ namespace GravityReceipt.Mission
             }
 
             _done = true;
+            if (_renderer != null)
+            {
+                _renderer.material.color = Color.Lerp(_baseColor, new Color(0.15f, 0.15f, 0.15f), 0.65f);
+            }
+
             MatchDirector.Instance.CompleteObjective(objectiveIndex, objectiveLabel);
         }
 
