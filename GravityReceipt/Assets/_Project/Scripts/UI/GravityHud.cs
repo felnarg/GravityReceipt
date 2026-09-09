@@ -503,7 +503,8 @@ namespace GravityReceipt.UI
 
             var dir = DirName(g.PendingDirection);
             var item = g.Dominant != null ? $"${g.Dominant.Price}" : "el objeto caro";
-            banner = $"¡FLIP!\nLa gravedad va hacia {dir}\nSigue a {item}";
+            var room = g.name.StartsWith("Gravity_") ? g.name[8..] : g.name;
+            banner = $"¡FLIP {room.ToUpperInvariant()}!\nLa gravedad va hacia {dir}\nSigue a {item}";
             color = Color.Lerp(new Color(1f, 0.92f, 0.25f), new Color(1f, 0.4f, 0.12f), g.TelegraphNormalized);
             return true;
         }
