@@ -134,27 +134,21 @@ namespace GravityReceipt.UI
             {
                 _promptP2.gameObject.SetActive(!_chromeHidden && p2 != null);
             }
-            var gravity = p1 != null && p1.Gravity != null ? p1.Gravity : FindAnyObjectByType<GravityManager>();
+            var g1 = p1 != null ? p1.Gravity : null;
+            var g2 = p2 != null ? p2.Gravity : null;
+            var gravity = g1 != null ? g1 : FindAnyObjectByType<GravityManager>();
             var room1 = p1 != null ? RoomRegistry.FindRoom(p1.transform.position) : null;
             var room2 = p2 != null ? RoomRegistry.FindRoom(p2.transform.position) : null;
             var roomName = FormatRoom(room1);
             var room2Name = room2 != null ? FormatRoom(room2) : null;
+            var flipG = FirstTelegraph(p1, p2);
 
-            var dominant = gravity != null && gravity.Dominant != null
-                ? $"{gravity.Dominant.name} (${gravity.Dominant.Price})"
-                : "ninguno";
-            var telegraph = gravity == null
-                ? ""
-                : gravity.IsAnchored
-                    ? "ANCLA"
-                    : gravity.IsTelegraphing
-                        ? $"FLIP en {1f - gravity.TelegraphNormalized:0.0}s"
-                        : "estable";
-            var gDir = gravity != null ? DirName(gravity.CurrentDirection) : "?";
             statusText.text = p2 != null
-                ? $"P1 {roomName}  |  P2 {room2Name}  |  g → {gDir}  |  Dom: {dominant}  |  {telegraph}"
-                : $"Sala: {roomName}  |  g → {gDir}  |  Dominante: {dominant}  |  {telegraph}";
-            statusText.color = gravity != null && gravity.IsTelegraphing ? new Color(1f, 0.9f, 0.2f) : Color.white;
+                ? $"P1 {roomName} g→{DirName(g1)} {DomShort(g1)}  |  P2 {room2Name} g→{DirName(g2)} {DomShort(g2)}  |  {TelegraphLabel(flipG != null ? flipG : g1)}"
+                : $"Sala: {roomName}  |  g → {DirName(gravity)}  |  Dominante: {DomLong(gravity)}  |  {TelegraphLabel(gravity)}";
+            statusText.color = flipG != null || (gravity != null && gravity.IsTelegraphing)
+                ? new Color(1f, 0.9f, 0.2f)
+                : Color.white;
 
             var match = MatchDirector.Instance;
             var pkg = FindAnyObjectByType<MissionPackage>();
@@ -278,6 +272,11 @@ namespace GravityReceipt.UI
             return room.HasOwnGravity ? room.RoomId : room.RoomId + " · g hereda";
         }
 
+        private static string DirName(GravityManager g)
+        {
+            return g == null ? "?" : DirName(g.CurrentDirection);
+        }
+
         private static string DirName(Vector3 d)
         {
             if (Vector3.Dot(d, Vector3.down) > 0.9f) return "abajo";
@@ -305,6 +304,35 @@ namespace GravityReceipt.UI
             }
 
             return string.Empty;
+        }
+
+        private static string DomShort(GravityManager g)
+        {
+            return g != null && g.Dominant != null ? $"${g.Dominant.Price}" : "—";
+        }
+
+        private static string DomLong(GravityManager g)
+        {
+            return g != null && g.Dominant != null
+                ? $"{g.Dominant.name} (${g.Dominant.Price})"
+                : "ninguno";
+        }
+
+        private static string TelegraphLabel(GravityManager g)
+        {
+            if (g == null)
+            {
+                return "";
+            }
+
+            if (g.IsAnchored)
+            {
+                return "ANCLA";
+            }
+
+            return g.IsTelegraphing
+                ? $"FLIP en {1f - g.TelegraphNormalized:0.0}s"
+                : "estable";
         }
 
         private static string Hearts(MissionPackage pkg)

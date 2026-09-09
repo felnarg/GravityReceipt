@@ -83,6 +83,7 @@ Documento vivo del prototipo.
 - Volúmenes de sala más altos (techo) para no salir de “sala” al caminar con g invertida.
 - Server con “LEDs” verde/rojo.
 - HUD de timer/objetivos oculto durante el splash 9 s para leer la regla.
+- Status 2p: g y `$` dominante **por jugador** (Archive de lado / Office normal).
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
