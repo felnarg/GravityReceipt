@@ -158,8 +158,9 @@ namespace GravityReceipt.Gravity
                 return defaultDown;
             }
 
-            // Bias vertical: objetos en el suelo/techo no deben voltear a una pared por un offset X/Z pequeño.
-            toItem.y *= 1.75f;
+            // Bias vertical: suelo/techo no voltean a una pared por un offset X/Z pequeño.
+            // En las manos el objeto está a altura de pecho: hace falta más bias o el flip dispara en el centro de la sala.
+            toItem.y *= valuable.IsHeld ? 4.4f : 1.75f;
 
             var ax = Mathf.Abs(toItem.x);
             var ay = Mathf.Abs(toItem.y);
