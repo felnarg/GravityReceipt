@@ -68,6 +68,8 @@ Documento vivo del prototipo.
 - Pings 2p independientes (P1 amarillo / P2 naranja).
 - OOB: AABB de mapa (cae de lado en el pasillo con g heredada ya no vuela al infinito).
 - Toast + thud si el paquete se abolla.
+- Hit-stop 80 ms al aplicar un flip; etiquetas `$` siguen el “arriba” del objeto.
+- Siluetas: asa en la taza, pomo en la caja, asa en el maletín, bola en el trofeo.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -240,7 +242,7 @@ Documento vivo del prototipo.
 | 5.2 | Medir rematch % | [ ] | Meta ≥ 55% |
 | 5.3 | Medir mareo % | [ ] | Meta < 10% |
 | 5.4 | Medir comprensión de la regla | [ ] | Meta ≥ 80% en 1ª partida |
-| 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + banner FLIP; falta ajustar con mareo real |
+| 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + banner + hit-stop 80 ms; falta ajustar con mareo real |
 | 5.6 | Pass siluetas/colores valuables | [~] | Primitivas distintas (caja/cápsula/cilindro) + masa por precio; falta arte |
 | 5.7 | Emotes (4) + whoosh final | [x] | Whoosh en cada flip; emotes billboard OK/NO/?/¡AQUÍ! (sin animación de avatar) |
 | 5.8 | Decisión go / no-go | [ ] | Ver métricas abajo |
@@ -468,6 +470,11 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Volumen del pasillo más ancho para el HUD “g hereda”.
 - Ping por jugador (ya no se pisan el marcador).
 - Toast “¡PAQUETE ABOLLADO!” + thud al dent.
+
+### 2026-09-09 — Overnight bloque 8 (hit-stop + siluetas)
+- Congela 0.08 s (unscaled) al aplicar g nueva; no pisa el slow-mo de fin de partida.
+- Billboards en espacio local del objeto (tras un flip el `$` queda “arriba” del valuable).
+- Piezas extra en taza / caja fuerte / maletín / trofeo.
 
 ---
 

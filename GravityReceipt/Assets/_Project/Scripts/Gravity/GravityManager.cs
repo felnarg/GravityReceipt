@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using GravityReceipt.Mission;
 using UnityEngine;
 
 namespace GravityReceipt.Gravity
@@ -25,6 +27,7 @@ namespace GravityReceipt.Gravity
         private float _telegraphRemaining;
         private bool _isTelegraphing;
         private float _anchorUntil;
+        private Coroutine _hitStop;
 
         public Vector3 CurrentGravity => _currentGravityDirection * gravityMagnitude;
         public Vector3 CurrentDirection => _currentGravityDirection;
@@ -199,7 +202,35 @@ namespace GravityReceipt.Gravity
             if (Vector3.Dot(previous, _currentGravityDirection) < 0.99f)
             {
                 GravityChanged?.Invoke(CurrentGravity, dominant);
+                if (isActiveAndEnabled)
+                {
+                    if (_hitStop != null)
+                    {
+                        StopCoroutine(_hitStop);
+                    }
+
+                    _hitStop = StartCoroutine(HitStop());
+                }
             }
+        }
+
+        private IEnumerator HitStop()
+        {
+            var match = MatchDirector.Instance;
+            if (match == null || !match.IsPlaying)
+            {
+                _hitStop = null;
+                yield break;
+            }
+
+            Time.timeScale = 0.18f;
+            yield return new WaitForSecondsRealtime(0.08f);
+            if (match != null && match.IsPlaying)
+            {
+                Time.timeScale = 1f;
+            }
+
+            _hitStop = null;
         }
 
         public static void ResetFlipScreenshotFlag()

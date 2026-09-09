@@ -24,7 +24,7 @@ namespace GravityReceipt.UI
                 return;
             }
 
-            transform.position = target.position + worldOffset;
+            transform.position = target.position + target.rotation * worldOffset;
             var cam = ClosestCamera(transform.position);
             if (cam != null)
             {
