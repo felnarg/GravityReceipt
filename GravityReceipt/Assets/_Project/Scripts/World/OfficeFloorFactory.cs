@@ -169,6 +169,11 @@ namespace GravityReceipt.World
             AddLocalVisual(exeLamp.transform, PrimitiveType.Sphere, new Vector3(0f, 0.62f, 0f), new Vector3(2.4f, 1.1f, 2.4f), new Color(1f, 0.88f, 0.45f));
             var hubPlaque = CreateStaticCube(root.transform, "Furn_HubPlaque", new Vector3(0f, 0.95f, -3.55f), new Vector3(0.9f, 0.28f, 0.06f), new Color(0.12f, 0.22f, 0.24f));
             DisableCollider(hubPlaque);
+            var plaqueText = new GameObject("Furn_HubPlaque_Text");
+            plaqueText.transform.SetParent(root.transform, false);
+            plaqueText.transform.position = new Vector3(0f, 0.95f, -3.48f);
+            plaqueText.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            WorldLabel.Create(plaqueText.transform, "Text", "RECEPCIÓN", Vector3.zero, new Color(0.75f, 0.95f, 1f), 0.07f);
             var papers = CreateStaticCube(root.transform, "Furn_DeskPapers", new Vector3(-5.7f, 0.46f, 34.05f), new Vector3(0.35f, 0.02f, 0.28f), new Color(0.92f, 0.9f, 0.82f));
             DisableCollider(papers);
             var laptop = CreateStaticCube(root.transform, "Furn_Laptop", new Vector3(-6.55f, 0.5f, 34.15f), new Vector3(0.42f, 0.04f, 0.28f), new Color(0.16f, 0.18f, 0.22f));
@@ -176,6 +181,11 @@ namespace GravityReceipt.World
             AddLocalVisual(laptop.transform, PrimitiveType.Cube, new Vector3(0f, 2.4f, -0.55f), new Vector3(0.95f, 8.5f, 0.08f), new Color(0.22f, 0.45f, 0.72f));
             var exePlate = CreateStaticCube(root.transform, "Furn_ExePlate", new Vector3(0f, 0.48f, 50.2f), new Vector3(0.7f, 0.04f, 0.22f), new Color(0.78f, 0.64f, 0.22f));
             DisableCollider(exePlate);
+            var ceoText = new GameObject("Furn_ExePlate_Text");
+            ceoText.transform.SetParent(root.transform, false);
+            ceoText.transform.position = new Vector3(0f, 0.52f, 50.2f);
+            ceoText.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            WorldLabel.Create(ceoText.transform, "Text", "CEO", Vector3.zero, new Color(0.2f, 0.1f, 0.05f), 0.08f);
             var rug = CreateStaticCube(root.transform, "Furn_ExeRug", new Vector3(0f, 0.04f, 50.2f), new Vector3(4.4f, 0.03f, 2.8f), new Color(0.42f, 0.16f, 0.12f));
             DisableCollider(rug);
             var plantPot = CreateStaticCube(root.transform, "Furn_HubPlantPot", new Vector3(-4.35f, 0.22f, -2.4f), new Vector3(0.38f, 0.32f, 0.38f), new Color(0.42f, 0.28f, 0.18f));
