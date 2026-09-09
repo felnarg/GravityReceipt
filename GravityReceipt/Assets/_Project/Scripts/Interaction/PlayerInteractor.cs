@@ -21,6 +21,7 @@ namespace GravityReceipt.Interaction
         public float WindUpNormalized =>
             grabWindUpSeconds <= 0f ? 0f : Mathf.Clamp01(_windUp / grabWindUpSeconds);
         public bool IsHolding => _held != null;
+        public bool HasLookTarget { get; private set; }
 
         public void Configure(Transform hold)
         {
@@ -39,6 +40,7 @@ namespace GravityReceipt.Interaction
                 return;
             }
 
+            HasLookTarget = false;
             if (_held == null)
             {
                 _heldValuable = null;
@@ -60,6 +62,8 @@ namespace GravityReceipt.Interaction
                 ClearFocus();
                 return;
             }
+
+            HasLookTarget = true;
 
             SetFocus(body);
             if (!_input.GrabHeld())

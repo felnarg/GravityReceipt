@@ -141,6 +141,25 @@ namespace GravityReceipt.UI
                         : new Color(1f, 0.45f, 0.4f);
                 }
             }
+            TintCross(_crossP1, p1);
+            TintCross(_crossP2, p2);
+        }
+
+        private static void TintCross(Text cross, PlayerMotor motor)
+        {
+            if (cross == null)
+            {
+                return;
+            }
+
+            var inter = motor != null ? motor.GetComponent<PlayerInteractor>() : null;
+            var winding = inter != null && inter.WindUpNormalized > 0.05f;
+            var looking = inter != null && inter.HasLookTarget;
+            cross.color = winding
+                ? new Color(1f, 0.55f, 0.15f)
+                : looking
+                    ? new Color(1f, 0.92f, 0.25f)
+                    : new Color(1f, 1f, 1f, 0.85f);
         }
 
         private static string ObjectiveProgressSuffix()
