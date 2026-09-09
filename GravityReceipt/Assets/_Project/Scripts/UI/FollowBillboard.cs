@@ -12,6 +12,9 @@ namespace GravityReceipt.UI
 
         public static bool Hidden { get; set; }
 
+        private Renderer[] _renderers;
+        private bool _hideApplied;
+
         public void Configure(Transform follow, Vector3 offset)
         {
             target = follow;
@@ -27,13 +30,21 @@ namespace GravityReceipt.UI
             }
 
             transform.position = target.position + target.rotation * worldOffset;
-            var show = !Hidden;
-            var renderers = GetComponentsInChildren<Renderer>(true);
-            for (var i = 0; i < renderers.Length; i++)
+            if (_renderers == null || _renderers.Length == 0)
             {
-                if (renderers[i] != null)
+                _renderers = GetComponentsInChildren<Renderer>(true);
+            }
+
+            if (Hidden != _hideApplied)
+            {
+                _hideApplied = Hidden;
+                var show = !Hidden;
+                for (var i = 0; i < _renderers.Length; i++)
                 {
-                    renderers[i].enabled = show;
+                    if (_renderers[i] != null)
+                    {
+                        _renderers[i].enabled = show;
+                    }
                 }
             }
             var cam = ClosestCamera(transform.position);

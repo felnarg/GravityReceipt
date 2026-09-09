@@ -110,6 +110,7 @@ Documento vivo del prototipo.
 - Paneles oscuros detrás del HUD (status, objetivos, splash/FLIP) para contraste.
 - Hub: dispensador de agua, reloj, alfombra de spawn; Office: impresora.
 - Los jugadores no empujan el paquete (IgnoreCollision): no se cae al vacío de un encontrón.
+- **F9** oculta también las etiquetas 3D (`$`, PAQUETE, carteles billboard) para el clip 1.11.
 - Barandillas en el pasillo (dos alturas) para leer el vacío y frenar un poco con g de lado.
 
 ### A MEDIAS
@@ -139,7 +140,7 @@ Documento vivo del prototipo.
 9. Losa azul Open Office = Entregar. Losa dorada Executive + paquete en manos o mantener E = Sellar.
 10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre. El cronómetro no baja durante el splash inicial. **P** pausa.
 11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
-12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). **F9** oculta help/status para un clip más limpio. Graba 8–10 s mudos del paso 7, o usa el PNG automático del primer flip.
+12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). **F9** oculta help/status **y** etiquetas `$` para un clip más limpio. Graba 8–10 s mudos del paso 7, o usa el PNG automático del primer flip.
 13. Cheats playtest: **F3** unstuck · **F4** warp al checkpoint · **F6** skip objetivo + warp · **F7** solo respawnea el paquete.
 14. Emotes: P1 teclas **1–4**, P2 **KP1 / KP2 / KP3 / KP9**. Apunta a un cubo gris: el prompt debe decir “(sin $)”.
 
