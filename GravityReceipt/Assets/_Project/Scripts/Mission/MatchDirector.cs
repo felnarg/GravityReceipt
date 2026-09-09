@@ -101,8 +101,17 @@ namespace GravityReceipt.Mission
                 return;
             }
 
+            if (index > 0 && !_objectives[index - 1])
+            {
+                return;
+            }
+
             _objectives[index] = true;
-            CheckpointSystem.Instance?.Advance(index);
+            var checkpoints = CheckpointSystem.Instance;
+            if (checkpoints != null)
+            {
+                checkpoints.Advance(index);
+            }
             ObjectiveCompleted?.Invoke(index, label);
 
             if (ObjectivesDone >= objectivesToWin)

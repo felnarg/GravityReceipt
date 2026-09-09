@@ -198,7 +198,6 @@ namespace GravityReceipt.Gravity
             if (Vector3.Dot(previous, _currentGravityDirection) < 0.99f)
             {
                 GravityChanged?.Invoke(CurrentGravity, dominant);
-                CaptureFirstFlip();
             }
         }
 
