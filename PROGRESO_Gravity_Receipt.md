@@ -106,6 +106,7 @@ Documento vivo del prototipo.
 - Brújula dorada mientras llevas el dominante: apunta a la g **prevista** (abajo en el centro, a la pared al acercarte).
 - Toast “Caíste · checkpoint” al respawnear por vacío.
 - Ding al terminar el splash de 9 s (el timer 10:00 arranca).
+- Paneles oscuros detrás del HUD (status, objetivos, splash/FLIP) para contraste.
 - Barandillas en el pasillo (dos alturas) para leer el vacío y frenar un poco con g de lado.
 
 ### A MEDIAS
@@ -297,7 +298,7 @@ Documento vivo del prototipo.
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
 | 6.1 | Pass de arte (no final, salir de gris total) | [~] | Ventanas unlit, lámparas, zócalos, cubículos, paletas por sala; falta texturas |
-| 6.2 | Pulido UI mínima | [~] | Splash, FLIP linger, toast, `[>]` objetivo, waypoint 3D, distancias, pausa P |
+| 6.2 | Pulido UI mínima | [~] | Splash, FLIP linger, toast, `[>]` objetivo, waypoint 3D, distancias, pausa P, paneles oscuros HUD |
 | 6.3 | Build Steam o itch privada | [ ] | |
 | 6.4 | Trailer 15–20 s del mejor clip | [ ] | |
 | 6.5 | Lista bugs P0 cerrada | [ ] | Gravedad, softlock, desync |
