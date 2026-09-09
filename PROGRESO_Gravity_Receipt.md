@@ -82,6 +82,7 @@ Documento vivo del prototipo.
 - Dent del paquete: shake/FOV a jugadores a < 8 m.
 - Volúmenes de sala más altos (techo) para no salir de “sala” al caminar con g invertida.
 - Server con “LEDs” verde/rojo.
+- HUD de timer/objetivos oculto durante el splash 9 s para leer la regla.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.

@@ -122,7 +122,7 @@ namespace GravityReceipt.UI
 
             if (matchText != null)
             {
-                matchText.gameObject.SetActive(!_chromeHidden);
+                matchText.gameObject.SetActive(!_chromeHidden && Time.timeSinceLevelLoad >= 9f);
             }
 
             if (_promptP1 != null)
