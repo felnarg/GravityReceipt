@@ -195,7 +195,12 @@ namespace GravityReceipt.World
             root.transform.position = center;
 
             CreateCube(root.transform, "Floor", new Vector3(0f, -size.y * 0.5f, 0f), new Vector3(size.x + WallT, WallT, size.z + WallT), floor);
-            CreateCube(root.transform, "FloorStripe", new Vector3(0f, -size.y * 0.5f + WallT * 0.5f + 0.02f, 0f), new Vector3(0.28f, 0.03f, size.z * 0.82f), new Color(0.25f, 0.62f, 0.78f));
+            var stripe = CreateCube(root.transform, "FloorStripe", new Vector3(0f, -size.y * 0.5f + WallT * 0.5f + 0.02f, 0f), new Vector3(0.28f, 0.03f, size.z * 0.82f), new Color(0.25f, 0.62f, 0.78f));
+            var stripeCol = stripe.GetComponent<Collider>();
+            if (stripeCol != null)
+            {
+                stripeCol.enabled = false;
+            }
             CreateCube(root.transform, "Ceiling", new Vector3(0f, size.y * 0.5f, 0f), new Vector3(size.x + WallT, WallT, size.z + WallT), wall * 1.15f);
             CreateWallOnZ(root.transform, "Wall_N", new Vector3(0f, 0f, size.z * 0.5f), size, wall, northDoor);
             CreateWallOnZ(root.transform, "Wall_S", new Vector3(0f, 0f, -size.z * 0.5f), size, wall, southDoor);
@@ -500,7 +505,7 @@ namespace GravityReceipt.World
             return player;
         }
 
-        private static void CreateCube(Transform parent, string name, Vector3 localPos, Vector3 scale, Color color)
+        private static GameObject CreateCube(Transform parent, string name, Vector3 localPos, Vector3 scale, Color color)
         {
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             go.name = name;
@@ -508,6 +513,7 @@ namespace GravityReceipt.World
             go.transform.localPosition = localPos;
             go.transform.localScale = scale;
             SetColor(go, color);
+            return go;
         }
 
         private static void SetColor(GameObject go, Color color)
