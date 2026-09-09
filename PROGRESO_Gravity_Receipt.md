@@ -78,6 +78,7 @@ Documento vivo del prototipo.
 - Cámara tiembla durante el telegráfo (más fuerte al acercarse el flip).
 - Ping con cooldown 0.85 s y blip; P1 y P2 no se pisan.
 - El timer 10:00 no corre durante el splash de 9 s (leer la regla).
+- Ancla: anillo cian a los pies durante los 3 s de g fija.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.

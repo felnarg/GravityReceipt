@@ -1,4 +1,3 @@
-using GravityReceipt.Gravity;
 using UnityEngine;
 
 namespace GravityReceipt.Player
@@ -72,6 +71,33 @@ namespace GravityReceipt.Player
 
             _motor.Gravity.AnchorFor(anchorSeconds);
             _anchorReadyAt = Time.time + anchorCooldown;
+            SpawnAnchorRing();
+        }
+
+        private void SpawnAnchorRing()
+        {
+            var go = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            go.name = "AnchorRing";
+            go.transform.SetParent(transform, false);
+            go.transform.localPosition = new Vector3(0f, 0.06f, 0f);
+            go.transform.localScale = new Vector3(1.7f, 0.04f, 1.7f);
+            var col = go.GetComponent<Collider>();
+            if (col != null)
+            {
+                col.enabled = false;
+            }
+
+            var rend = go.GetComponent<Renderer>();
+            if (rend != null)
+            {
+                var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
+                if (shader != null)
+                {
+                    rend.sharedMaterial = new Material(shader) { color = new Color(0.35f, 0.85f, 1f) };
+                }
+            }
+
+            Destroy(go, anchorSeconds);
         }
     }
 }
