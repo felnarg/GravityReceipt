@@ -12,13 +12,25 @@ namespace GravityReceipt.Mission
 
         private float _bestFall;
         private LocalPlayerSlot _bestSlot;
+        private int _flips;
+        private float _lastFlip = -10f;
 
         public float BestFall => _bestFall;
         public LocalPlayerSlot BestSlot => _bestSlot;
-        public string Summary =>
-            _bestFall < 0.5f
-                ? "sin caída destacada"
-                : $"{_bestFall:0.0} m (P{(int)_bestSlot + 1})";
+        public int Flips => _flips;
+        public string Summary
+        {
+            get
+            {
+                if (_bestFall >= 0.5f)
+                {
+                    return $"{_bestFall:0.0} m (P{(int)_bestSlot + 1})"
+                           + (_flips > 0 ? $" · {_flips} flip(s)" : string.Empty);
+                }
+
+                return _flips > 0 ? $"{_flips} flip(s) de gravedad" : "sin caída destacada";
+            }
+        }
 
         private void Awake()
         {
@@ -42,6 +54,17 @@ namespace GravityReceipt.Mission
 
             _bestFall = meters;
             _bestSlot = slot;
+        }
+
+        public void ReportFlip()
+        {
+            if (Time.unscaledTime - _lastFlip < 0.08f)
+            {
+                return;
+            }
+
+            _lastFlip = Time.unscaledTime;
+            _flips++;
         }
     }
 }

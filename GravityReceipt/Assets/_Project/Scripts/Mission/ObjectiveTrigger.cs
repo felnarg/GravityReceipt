@@ -1,3 +1,4 @@
+using GravityReceipt.Interaction;
 using GravityReceipt.Player;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace GravityReceipt.Mission
     /// Objetivo genérico: el paquete (y opcionalmente un jugador) debe permanecer en zona.
     /// </summary>
     [RequireComponent(typeof(BoxCollider))]
+    [DefaultExecutionOrder(40)]
     public sealed class ObjectiveTrigger : MonoBehaviour
     {
         [SerializeField] private int objectiveIndex;
@@ -19,6 +21,8 @@ namespace GravityReceipt.Mission
         private BoxCollider _box;
         private float _progress;
         private bool _done;
+        private Renderer _renderer;
+        private Color _baseColor;
 
         public int Index => objectiveIndex;
         public string Label => objectiveLabel;
@@ -39,12 +43,31 @@ namespace GravityReceipt.Mission
         {
             _box = GetComponent<BoxCollider>();
             _box.isTrigger = true;
+            _renderer = GetComponent<Renderer>();
+            if (_renderer != null)
+            {
+                _baseColor = _renderer.material.color;
+            }
         }
 
         private void Update()
         {
-            if (_done || MatchDirector.Instance is not { IsPlaying: true })
+            TickVisual();
+
+            if (_done || MatchDirector.Instance == null || !MatchDirector.Instance.IsPlaying)
             {
+                return;
+            }
+
+            if (MatchDirector.Instance.IsObjectiveComplete(objectiveIndex))
+            {
+                MarkCompleteVisual();
+                return;
+            }
+
+            if (objectiveIndex > 0 && !MatchDirector.Instance.IsObjectiveComplete(objectiveIndex - 1))
+            {
+                _progress = 0f;
                 return;
             }
 
@@ -61,7 +84,42 @@ namespace GravityReceipt.Mission
             }
 
             _done = true;
+            MarkCompleteVisual();
             MatchDirector.Instance.CompleteObjective(objectiveIndex, objectiveLabel);
+        }
+
+        private void TickVisual()
+        {
+            if (_renderer == null)
+            {
+                return;
+            }
+
+            if (_done || (MatchDirector.Instance != null && MatchDirector.Instance.IsObjectiveComplete(objectiveIndex)))
+            {
+                MarkCompleteVisual();
+                return;
+            }
+
+            var current = MatchDirector.Instance != null
+                          && MatchDirector.Instance.CurrentObjectiveIndex == objectiveIndex;
+            if (current)
+            {
+                var pulse = 0.5f + 0.5f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 3.2f));
+                _renderer.material.color = Color.Lerp(_baseColor, Color.white, pulse * 0.5f);
+                return;
+            }
+
+            _renderer.material.color = Color.Lerp(_baseColor, new Color(0.12f, 0.12f, 0.14f), 0.45f);
+        }
+
+        private void MarkCompleteVisual()
+        {
+            _done = true;
+            if (_renderer != null)
+            {
+                _renderer.material.color = Color.Lerp(_baseColor, new Color(0.15f, 0.15f, 0.15f), 0.65f);
+            }
         }
 
         private bool ConditionsMet()
@@ -69,7 +127,7 @@ namespace GravityReceipt.Mission
             if (requirePackage)
             {
                 var pkg = FindAnyObjectByType<MissionPackage>();
-                if (pkg is not { isActiveAndEnabled: true } || !Contains(pkg.transform.position))
+                if (pkg == null || !pkg.isActiveAndEnabled || !Contains(pkg.transform.position))
                 {
                     return false;
                 }
@@ -81,7 +139,7 @@ namespace GravityReceipt.Mission
                 var any = false;
                 foreach (var p in players)
                 {
-                    if (p is not { } || !Contains(p.transform.position))
+                    if (p == null || !Contains(p.transform.position))
                     {
                         continue;
                     }
@@ -89,7 +147,9 @@ namespace GravityReceipt.Mission
                     if (requireHoldInteract)
                     {
                         var input = p.GetComponent<LocalPlayerInput>();
-                        if (input is not { } || !input.GrabHeld())
+                        var inter = p.GetComponent<PlayerInteractor>();
+                        var holdingPackage = inter != null && inter.IsHoldingPackage;
+                        if (!holdingPackage && (input == null || !input.GrabHeld()))
                         {
                             continue;
                         }
@@ -110,9 +170,14 @@ namespace GravityReceipt.Mission
 
         private bool Contains(Vector3 worldPos)
         {
-            if (_box is null)
+            if (_box == null)
             {
                 _box = GetComponent<BoxCollider>();
+            }
+
+            if (_box == null)
+            {
+                return false;
             }
 
             var local = transform.InverseTransformPoint(worldPos);

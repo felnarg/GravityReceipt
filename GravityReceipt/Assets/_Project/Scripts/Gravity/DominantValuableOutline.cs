@@ -1,3 +1,4 @@
+using GravityReceipt.UI;
 using UnityEngine;
 
 namespace GravityReceipt.Gravity
@@ -15,6 +16,7 @@ namespace GravityReceipt.Gravity
         private Renderer _renderer;
         private Color _baseColor;
         private Vector3 _baseScale;
+        private GameObject _beacon;
 
         public void Bind(GravityManager manager)
         {
@@ -25,7 +27,7 @@ namespace GravityReceipt.Gravity
 
         private void Awake()
         {
-            if (gravityManager is null)
+            if (gravityManager == null)
             {
                 gravityManager = GetComponent<GravityManager>();
             }
@@ -44,31 +46,37 @@ namespace GravityReceipt.Gravity
 
         private void Start()
         {
-            if (gravityManager is { Dominant: { } d })
+            if (gravityManager != null && gravityManager.Dominant != null)
             {
-                SetDominant(d);
+                SetDominant(gravityManager.Dominant);
             }
         }
 
         private void Update()
         {
-            if (gravityManager is { Dominant: { } current } && current != _current)
+            if (gravityManager != null && gravityManager.Dominant != _current)
             {
-                SetDominant(current);
+                SetDominant(gravityManager.Dominant);
             }
 
-            if (_current is null || _renderer is null)
+            if (_current == null || _renderer == null)
             {
                 return;
             }
 
-            var pulse = 1f + 0.05f * Mathf.Sin(Time.time * pulseSpeed);
+            if (_current.IsHeld)
+            {
+                _current.transform.localScale = _baseScale;
+                return;
+            }
+
+            var pulse = 1f + 0.1f * Mathf.Sin(Time.time * pulseSpeed);
             _current.transform.localScale = _baseScale * pulse;
         }
 
         private void Bind()
         {
-            if (gravityManager is not null)
+            if (gravityManager != null)
             {
                 gravityManager.GravityChanged += OnGravityChanged;
             }
@@ -76,7 +84,7 @@ namespace GravityReceipt.Gravity
 
         private void Unbind()
         {
-            if (gravityManager is not null)
+            if (gravityManager != null)
             {
                 gravityManager.GravityChanged -= OnGravityChanged;
             }
@@ -90,7 +98,7 @@ namespace GravityReceipt.Gravity
         private void SetDominant(ValuableItem item)
         {
             Clear();
-            if (item is null)
+            if (item == null)
             {
                 return;
             }
@@ -98,8 +106,9 @@ namespace GravityReceipt.Gravity
             _current = item;
             _baseScale = item.transform.localScale;
             _renderer = item.GetComponent<Renderer>();
-            if (_renderer is not null && _renderer.material is { } mat)
+            if (_renderer != null && _renderer.material != null)
             {
+                var mat = _renderer.material;
                 _baseColor = mat.color;
                 mat.color = dominantColor;
                 if (mat.HasProperty("_EmissionColor"))
@@ -108,17 +117,35 @@ namespace GravityReceipt.Gravity
                     mat.SetColor("_EmissionColor", dominantColor * 0.4f);
                 }
             }
+
+            SpawnBeacon(item);
+        }
+
+        private void SpawnBeacon(ValuableItem item)
+        {
+            ClearBeacon();
+            _beacon = new GameObject("DominantBeacon");
+            if (item.transform.root != null)
+            {
+                _beacon.transform.SetParent(item.transform.root, true);
+            }
+            var follow = _beacon.AddComponent<FollowBillboard>();
+            var height = _baseScale.y * 0.5f + 0.55f;
+            follow.Configure(item.transform, Vector3.up * height);
+            WorldLabel.Create(_beacon.transform, "Text", "¡ESTE TIRA DE G!", Vector3.zero, new Color(1f, 0.9f, 0.25f), 0.09f);
         }
 
         private void Clear()
         {
-            if (_current is not null)
+            ClearBeacon();
+            if (_current != null)
             {
                 _current.transform.localScale = _baseScale;
             }
 
-            if (_renderer is not null && _renderer.material is { } mat)
+            if (_renderer != null && _renderer.material != null)
             {
+                var mat = _renderer.material;
                 mat.color = _baseColor;
                 if (mat.HasProperty("_EmissionColor"))
                 {
@@ -128,6 +155,23 @@ namespace GravityReceipt.Gravity
 
             _current = null;
             _renderer = null;
+        }
+
+        private void ClearBeacon()
+        {
+            if (_beacon != null)
+            {
+                if (Application.isPlaying)
+                {
+                    Object.Destroy(_beacon);
+                }
+                else
+                {
+                    Object.DestroyImmediate(_beacon);
+                }
+
+                _beacon = null;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using GravityReceipt.Player;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,6 +15,7 @@ namespace GravityReceipt.Mission
 
         public event Action<int, string> ObjectiveCompleted;
         public event Action<MatchPhase, string> MatchEnded;
+        public event Action PackageDented;
 
         [SerializeField] private float matchSeconds = 600f;
         [SerializeField] private int objectivesToWin = 3;
@@ -46,6 +48,22 @@ namespace GravityReceipt.Mission
         public string EndReason => _endReason;
         public bool IsPlaying => _phase == MatchPhase.Playing;
 
+        public int CurrentObjectiveIndex
+        {
+            get
+            {
+                for (var i = 0; i < _objectives.Length; i++)
+                {
+                    if (!_objectives[i])
+                    {
+                        return i;
+                    }
+                }
+
+                return -1;
+            }
+        }
+
         public void Configure(float seconds, int needed)
         {
             matchSeconds = seconds;
@@ -58,6 +76,11 @@ namespace GravityReceipt.Mission
             _phase = MatchPhase.Playing;
             _remaining = matchSeconds;
             Physics.gravity = Vector3.zero;
+            Physics.defaultSolverIterations = 10;
+            Physics.defaultSolverVelocityIterations = 4;
+            Time.timeScale = 1f;
+            Application.targetFrameRate = 60;
+            GravityReceipt.Gravity.GravityManager.ResetFlipScreenshotFlag();
         }
 
         private void OnDestroy()
@@ -70,6 +93,18 @@ namespace GravityReceipt.Mission
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.F5))
+            {
+                Rematch();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.F6) && IsPlaying)
+            {
+                DebugSkipObjective();
+                return;
+            }
+
             if (_phase == MatchPhase.Playing)
             {
                 _remaining -= Time.deltaTime;
@@ -100,13 +135,26 @@ namespace GravityReceipt.Mission
                 return;
             }
 
+            if (index > 0 && !_objectives[index - 1])
+            {
+                return;
+            }
+
             _objectives[index] = true;
-            CheckpointSystem.Instance?.Advance(index);
+            var checkpoints = CheckpointSystem.Instance;
+            if (checkpoints != null)
+            {
+                checkpoints.Advance(index);
+            }
             ObjectiveCompleted?.Invoke(index, label);
 
             if (ObjectivesDone >= objectivesToWin)
             {
                 End(MatchPhase.Won, "Objetivos completados");
+            }
+            else
+            {
+                MissionSfx.PlayObjective();
             }
         }
 
@@ -115,10 +163,74 @@ namespace GravityReceipt.Mission
             End(MatchPhase.Lost, "El paquete se destruyó 3 veces");
         }
 
+        public void NotifyPackageDented()
+        {
+            PackageDented?.Invoke();
+        }
+
         public void Rematch()
         {
+            Time.timeScale = 1f;
             var scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
+        }
+
+        /// <summary>
+        /// Cheat de playtest: completa el siguiente objetivo y teleporta al checkpoint.
+        /// </summary>
+        private void DebugSkipObjective()
+        {
+            var next = -1;
+            for (var i = 0; i < _objectives.Length; i++)
+            {
+                if (!_objectives[i])
+                {
+                    next = i;
+                    break;
+                }
+            }
+
+            if (next < 0)
+            {
+                return;
+            }
+
+            CompleteObjective(next, next switch
+            {
+                0 => "Enchufar",
+                1 => "Entregar",
+                2 => "Sellar",
+                _ => "Objetivo"
+            });
+
+            if (!IsPlaying)
+            {
+                return;
+            }
+            var checkpoints = CheckpointSystem.Instance;
+            var motors = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
+            foreach (var motor in motors)
+            {
+                if (motor == null)
+                {
+                    continue;
+                }
+
+                var input = motor.GetComponent<LocalPlayerInput>();
+                var slot = input != null ? input.Slot : LocalPlayerSlot.One;
+                var point = checkpoints != null
+                    ? checkpoints.GetPlayerSpawn(slot)
+                    : motor.transform.position;
+                motor.Warp(point);
+            }
+
+            var pkg = FindAnyObjectByType<MissionPackage>();
+            if (pkg != null)
+            {
+                pkg.Respawn();
+            }
+
+            Debug.Log("[GravityReceipt] F6 skip → objetivo " + next);
         }
 
         private void End(MatchPhase phase, string reason)
@@ -130,7 +242,11 @@ namespace GravityReceipt.Mission
 
             _phase = phase;
             _endReason = reason;
+            Time.timeScale = 0.22f;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             MatchEnded?.Invoke(phase, reason);
+            MissionSfx.PlayEnd(phase == MatchPhase.Won);
         }
     }
 }

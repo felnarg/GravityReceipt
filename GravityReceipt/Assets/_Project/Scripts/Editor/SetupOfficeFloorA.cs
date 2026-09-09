@@ -20,7 +20,7 @@ namespace GravityReceipt.EditorTools
             BuildAndSave(2);
             EditorUtility.DisplayDialog(
                 "Gravity Receipt",
-                "Escena 2P regenerada (split).\n\nP1 arriba: WASD + ratón, E agarrar, Q ping, Shift sprint, F ancla.\nP2 abajo: flechas + numpad 4/6/8/5, RShift agarrar, / ping.\n\n1) Play\n2) Agarra el paquete NARANJA\n3) Enchúfalo en Archive (zona verde, pared este)\n4) Caja DORADA a una pared → flip de g (~1 s)\n\nR = rematch al ganar/perder.",
+                "Escena 2P regenerada (split).\n\nP1 arriba: WASD + ratón, E agarrar, Q ping, Shift sprint, F ancla.\nP2 abajo: flechas + J/L e I/K (o numpad 4/6/8/5), RShift agarrar, / ping.\n\n1) Play\n2) Agarra el paquete NARANJA\n3) Enchúfalo en Archive (zona verde, pared este)\n4) Caja DORADA a una pared → flip de g (~1 s)\n\nR = rematch al ganar/perder. F5 = restart. F8 = screenshot.",
                 "OK");
         }
 

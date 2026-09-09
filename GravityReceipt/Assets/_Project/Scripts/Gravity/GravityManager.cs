@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using GravityReceipt.Mission;
 using UnityEngine;
 
 namespace GravityReceipt.Gravity
@@ -8,6 +10,7 @@ namespace GravityReceipt.Gravity
     /// Por sala: la gravedad se alinea al eje dominante hacia el valuable más caro.
     /// Empate de precio → gana el último movido.
     /// </summary>
+    [DefaultExecutionOrder(-20)]
     public sealed class GravityManager : MonoBehaviour
     {
         public event Action<Vector3, ValuableItem> GravityChanged;
@@ -24,12 +27,14 @@ namespace GravityReceipt.Gravity
         private float _telegraphRemaining;
         private bool _isTelegraphing;
         private float _anchorUntil;
+        private Coroutine _hitStop;
 
         public Vector3 CurrentGravity => _currentGravityDirection * gravityMagnitude;
         public Vector3 CurrentDirection => _currentGravityDirection;
         public ValuableItem Dominant => _dominant;
         public bool IsTelegraphing => _isTelegraphing && !IsAnchored;
         public bool IsAnchored => Time.time < _anchorUntil;
+        public Vector3 PendingDirection => _pendingDirection;
         public float TelegraphNormalized =>
             telegraphSeconds <= 0f ? 0f : 1f - Mathf.Clamp01(_telegraphRemaining / telegraphSeconds);
 
@@ -47,7 +52,7 @@ namespace GravityReceipt.Gravity
 
         public void Register(ValuableItem item)
         {
-            if (item is not { } || _valuables.Contains(item))
+            if (item == null || _valuables.Contains(item))
             {
                 return;
             }
@@ -73,7 +78,7 @@ namespace GravityReceipt.Gravity
 
         public void NotifyValuableMoved(ValuableItem item)
         {
-            if (item is not { })
+            if (item == null)
             {
                 return;
             }
@@ -96,6 +101,7 @@ namespace GravityReceipt.Gravity
 
             ApplyGravity(_pendingDirection, _dominant);
             _isTelegraphing = false;
+            CaptureFirstFlip();
         }
 
         private void RecalculateDominant(bool immediate, ValuableItem movedHint = null)
@@ -108,9 +114,16 @@ namespace GravityReceipt.Gravity
             ValuableItem best = null;
             var bestPrice = int.MinValue;
 
-            foreach (var v in _valuables)
+            for (var i = _valuables.Count - 1; i >= 0; i--)
             {
-                if (v is not { IsActiveValuable: true })
+                var v = _valuables[i];
+                if (v == null)
+                {
+                    _valuables.RemoveAt(i);
+                    continue;
+                }
+
+                if (!v.IsActiveValuable)
                 {
                     continue;
                 }
@@ -126,7 +139,7 @@ namespace GravityReceipt.Gravity
                 }
             }
 
-            if (best is null)
+            if (best == null)
             {
                 ScheduleOrApply(defaultDown, null, immediate);
                 return;
@@ -138,7 +151,7 @@ namespace GravityReceipt.Gravity
 
         private Vector3 DirectionTowardValuable(ValuableItem valuable)
         {
-            var center = roomCenter is not null ? roomCenter.position : transform.position;
+            var center = roomCenter != null ? roomCenter.position : transform.position;
             var toItem = valuable.transform.position - center;
             if (toItem.sqrMagnitude < 0.25f)
             {
@@ -189,7 +202,55 @@ namespace GravityReceipt.Gravity
             if (Vector3.Dot(previous, _currentGravityDirection) < 0.99f)
             {
                 GravityChanged?.Invoke(CurrentGravity, dominant);
+                if (isActiveAndEnabled)
+                {
+                    if (_hitStop != null)
+                    {
+                        StopCoroutine(_hitStop);
+                    }
+
+                    _hitStop = StartCoroutine(HitStop());
+                }
             }
+        }
+
+        private IEnumerator HitStop()
+        {
+            var match = MatchDirector.Instance;
+            if (match == null || !match.IsPlaying)
+            {
+                _hitStop = null;
+                yield break;
+            }
+
+            Time.timeScale = 0.18f;
+            yield return new WaitForSecondsRealtime(0.08f);
+            if (match != null && match.IsPlaying)
+            {
+                Time.timeScale = 1f;
+            }
+
+            _hitStop = null;
+        }
+
+        public static void ResetFlipScreenshotFlag()
+        {
+            _flipShotTaken = false;
+        }
+
+        private static bool _flipShotTaken;
+
+        private static void CaptureFirstFlip()
+        {
+            if (_flipShotTaken)
+            {
+                return;
+            }
+
+            _flipShotTaken = true;
+            var name = $"GravityReceipt_flip_{System.DateTime.Now:HHmmss}.png";
+            ScreenCapture.CaptureScreenshot(name);
+            Debug.Log("[GravityReceipt] Primer flip capturado: " + name);
         }
     }
 }

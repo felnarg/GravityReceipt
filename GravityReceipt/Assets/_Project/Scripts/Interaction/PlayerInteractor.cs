@@ -1,24 +1,43 @@
 using GravityReceipt.Gravity;
+using GravityReceipt.Mission;
 using GravityReceipt.Player;
 using UnityEngine;
 
 namespace GravityReceipt.Interaction
 {
+    [DefaultExecutionOrder(30)]
     public sealed class PlayerInteractor : MonoBehaviour
     {
-        [SerializeField] private float reach = 3f;
+        private enum GrabPhase
+        {
+            Idle,
+            Winding,
+            Holding
+        }
+
+        [SerializeField] private float reach = 3.4f;
         [SerializeField] private Transform holdPoint;
         [SerializeField] private float grabWindUpSeconds = 0.4f;
         [SerializeField] private LayerMask interactMask = ~0;
 
         private LocalPlayerInput _input;
+        private GrabPhase _phase = GrabPhase.Idle;
         private Rigidbody _held;
         private ValuableItem _heldValuable;
+        private Grabbable _heldGrab;
         private float _windUp;
+        private Renderer _focus;
+        private Color _focusColor;
 
         public float WindUpNormalized =>
-            grabWindUpSeconds <= 0f ? 0f : Mathf.Clamp01(_windUp / grabWindUpSeconds);
-        public bool IsHolding => _held is not null;
+            _phase != GrabPhase.Winding || grabWindUpSeconds <= 0f
+                ? 0f
+                : Mathf.Clamp01(_windUp / grabWindUpSeconds);
+        public bool IsHolding => _phase == GrabPhase.Holding && _held != null;
+        public bool IsWinding => _phase == GrabPhase.Winding;
+        public bool IsHoldingPackage => IsHolding && _held.GetComponent<MissionPackage>() != null;
+        public bool HasLookTarget { get; private set; }
+        public string LookHint { get; private set; } = "";
 
         public void Configure(Transform hold)
         {
@@ -32,46 +51,93 @@ namespace GravityReceipt.Interaction
 
         private void Update()
         {
-            if (_input is null)
+            if (_input == null)
             {
                 return;
             }
 
-            if (_held is not null)
+            switch (_phase)
             {
-                if (_input.DropPressed())
+                case GrabPhase.Holding:
+                    TickHolding();
+                    break;
+                case GrabPhase.Winding:
+                    TickWinding();
+                    break;
+                default:
+                    TickIdle();
+                    break;
+            }
+        }
+
+        private void TickHolding()
+        {
+            HasLookTarget = false;
+            LookHint = _held != null ? "soltar" : "";
+            ClearFocus();
+            if (_held == null || _input.DropPressed())
+            {
+                Drop();
+            }
+        }
+
+        private void TickIdle()
+        {
+            HasLookTarget = false;
+            LookHint = "";
+            _windUp = 0f;
+            if (!TryGetTarget(out var body, out var valuable, out var grab, out var occupied))
+            {
+                if (occupied && body != null)
                 {
-                    Drop();
+                    HasLookTarget = true;
+                    LookHint = $"{FormatHint(body, valuable)}  · ocupado";
                 }
 
+                ClearFocus();
                 return;
             }
 
+            HasLookTarget = true;
+            LookHint = FormatHint(body, valuable);
+            SetFocus(body);
             if (!_input.GrabHeld())
             {
-                _windUp = 0f;
                 return;
             }
 
-            if (!TryGetTarget(out var body, out var valuable))
+            _phase = GrabPhase.Winding;
+            _windUp = 0f;
+            TickWinding();
+        }
+
+        private void TickWinding()
+        {
+            if (!TryGetTarget(out var body, out var valuable, out var grab, out _) || !_input.GrabHeld())
             {
+                _phase = GrabPhase.Idle;
                 _windUp = 0f;
+                HasLookTarget = false;
+                LookHint = "";
+                ClearFocus();
                 return;
             }
 
+            HasLookTarget = true;
+            LookHint = FormatHint(body, valuable);
+            SetFocus(body);
             _windUp += Time.deltaTime;
             if (_windUp < grabWindUpSeconds)
             {
                 return;
             }
 
-            Grab(body, valuable);
-            _windUp = 0f;
+            Grab(body, valuable, grab);
         }
 
         private void FixedUpdate()
         {
-            if (_held is null || holdPoint is null)
+            if (_phase != GrabPhase.Holding || _held == null || holdPoint == null)
             {
                 return;
             }
@@ -80,12 +146,14 @@ namespace GravityReceipt.Interaction
             _held.MoveRotation(holdPoint.rotation);
         }
 
-        private bool TryGetTarget(out Rigidbody body, out ValuableItem valuable)
+        private bool TryGetTarget(out Rigidbody body, out ValuableItem valuable, out Grabbable grab, out bool occupied)
         {
             body = null;
             valuable = null;
-            var cam = _input is { PlayerCamera: { } c } ? c : Camera.main;
-            if (cam is null)
+            grab = null;
+            occupied = false;
+            var cam = _input != null && _input.PlayerCamera != null ? _input.PlayerCamera : Camera.main;
+            if (cam == null)
             {
                 return false;
             }
@@ -97,43 +165,183 @@ namespace GravityReceipt.Interaction
             }
 
             body = hit.rigidbody;
-            if (body is null)
+            if (body == null)
             {
                 return false;
             }
 
-            var grabbable = body.GetComponent<Grabbable>();
-            if (grabbable is not { CanGrab: true })
+            grab = body.GetComponent<Grabbable>();
+            if (grab == null)
             {
                 return false;
             }
 
             valuable = body.GetComponent<ValuableItem>();
+            if (!grab.CanGrab)
+            {
+                occupied = true;
+                return false;
+            }
+
             return true;
         }
 
-        private void Grab(Rigidbody body, ValuableItem valuable)
+        private static string FormatHint(Rigidbody body, ValuableItem valuable)
         {
-            _held = body;
-            _heldValuable = valuable;
-            _held.isKinematic = true;
-            _held.useGravity = false;
-            _heldValuable?.SetHeld(true);
+            if (body == null)
+            {
+                return "";
+            }
+
+            var pretty = PrettyName(body.name);
+            if (body.GetComponent<MissionPackage>() != null)
+            {
+                return "PAQUETE";
+            }
+
+            return valuable != null ? $"{pretty}  ${valuable.Price}" : $"{pretty}  (sin $)";
         }
 
-        private void Drop()
+        private static string PrettyName(string n)
         {
-            if (_held is null)
+            if (n is not { Length: > 0 })
             {
+                return "objeto";
+            }
+
+            if (n.StartsWith("Valuable_"))
+            {
+                var rest = n[9..];
+                var us = rest.LastIndexOf('_');
+                return us > 0 ? rest[..us] : rest;
+            }
+
+            if (n.StartsWith("Prop_"))
+            {
+                return n[5..];
+            }
+
+            return n;
+        }
+
+        private void Grab(Rigidbody body, ValuableItem valuable, Grabbable grab)
+        {
+            if (body == null || grab == null || !grab.CanGrab)
+            {
+                _phase = GrabPhase.Idle;
+                _windUp = 0f;
+                return;
+            }
+
+            _held = body;
+            _heldValuable = valuable;
+            _heldGrab = grab;
+            _held.isKinematic = true;
+            _held.useGravity = false;
+            grab.BeginGrab();
+            if (_heldValuable != null)
+            {
+                _heldValuable.SetHeld(true);
+            }
+
+            IgnoreHeldCollision(true);
+            _phase = GrabPhase.Holding;
+            _windUp = 0f;
+            ClearFocus();
+        }
+
+        public void Drop()
+        {
+            if (_held == null)
+            {
+                _phase = GrabPhase.Idle;
+                _windUp = 0f;
                 return;
             }
 
             _held.isKinematic = false;
             _held.useGravity = false;
-            _heldValuable?.SetHeld(false);
-            _heldValuable?.MarkMovedByPlayer();
+            IgnoreHeldCollision(false);
+            if (_heldValuable != null)
+            {
+                _heldValuable.SetHeld(false);
+                _heldValuable.MarkMovedByPlayer();
+            }
+
+            if (_heldGrab != null)
+            {
+                _heldGrab.EndGrab();
+            }
+
+            var cam = _input != null && _input.PlayerCamera != null ? _input.PlayerCamera : Camera.main;
+            if (cam != null)
+            {
+                var motor = GetComponent<PlayerMotor>();
+                var up = motor != null && motor.Gravity != null
+                    ? -motor.Gravity.CurrentDirection
+                    : Vector3.up;
+                _held.linearVelocity = cam.transform.forward * 2.4f + up * 0.55f;
+            }
+
             _held = null;
             _heldValuable = null;
+            _heldGrab = null;
+            _phase = GrabPhase.Idle;
+            _windUp = 0f;
+            LookHint = "";
+            HasLookTarget = false;
+        }
+
+        private void IgnoreHeldCollision(bool ignore)
+        {
+            if (_held == null)
+            {
+                return;
+            }
+
+            var col = _held.GetComponent<Collider>();
+            var cc = GetComponent<CharacterController>();
+            if (col == null || cc == null)
+            {
+                return;
+            }
+
+            Physics.IgnoreCollision(col, cc, ignore);
+        }
+
+        private void SetFocus(Rigidbody body)
+        {
+            var renderer = body.GetComponent<Renderer>();
+            if (renderer == _focus)
+            {
+                return;
+            }
+
+            ClearFocus();
+            if (renderer == null)
+            {
+                return;
+            }
+
+            _focus = renderer;
+            _focusColor = renderer.material.color;
+            renderer.material.color = Color.Lerp(_focusColor, Color.white, 0.45f);
+        }
+
+        private void ClearFocus()
+        {
+            if (_focus != null)
+            {
+                _focus.material.color = _focusColor;
+            }
+
+            _focus = null;
+        }
+
+        private void OnDisable()
+        {
+            ClearFocus();
+            Drop();
         }
     }
 }

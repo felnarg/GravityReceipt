@@ -9,7 +9,7 @@ namespace GravityReceipt.World
 
         public static void Register(RoomVolume room)
         {
-            if (room is not { } || Rooms.Contains(room))
+            if (room == null || Rooms.Contains(room))
             {
                 return;
             }
@@ -26,10 +26,16 @@ namespace GravityReceipt.World
         {
             RoomVolume best = null;
             var bestSqr = float.MaxValue;
-            for (var i = 0; i < Rooms.Count; i++)
+            for (var i = Rooms.Count - 1; i >= 0; i--)
             {
                 var room = Rooms[i];
-                if (room is not { } || !room.Contains(worldPos))
+                if (room == null)
+                {
+                    Rooms.RemoveAt(i);
+                    continue;
+                }
+
+                if (!room.Contains(worldPos))
                 {
                     continue;
                 }

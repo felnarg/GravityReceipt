@@ -25,11 +25,11 @@ Documento vivo del prototipo.
 
 | Campo | Valor |
 |-------|--------|
-| **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline implementado |
+| **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 (sesión overnight Cloud Agent) |
+| **Última actualización** | 2026-09-09 ~00:20 COT (overnight, bloque emotes/HUD) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
-| **Hecho relevante** | Split 2p, gravedad por sala, paquete/objetivos/timer, mapa Hub→Executive, rematch R |
+| **Hecho relevante** | Split 2p, g por sala, misión, mapa, HUD regla/FLIP, whoosh, brújula, F6 skip, grab FSM, emotes 1-4, prompt de mirada |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete + flip con caja dorada a una pared |
 | **Build jugable** | Sí (Editor Play Mode, 1p o 2p local). **Hay que regenerar la escena con el menú Setup.** |
 | **Online 4p** | No (no empezar hasta que el playtest offline sea sólido) |
@@ -40,19 +40,44 @@ Documento vivo del prototipo.
 ## Cierre de sesión (2026-09-09 overnight)
 
 ### HECHO
-- Input por jugador + split-screen 2p (P1 WASD+ratón, P2 flechas+numpad/pad).
-- `Grabbable`, ping radial Q / `/`.
+- Input por jugador + split-screen 2p (P1 WASD+ratón, P2 flechas+numpad/pad; P2 también I/K para pitch).
+- `Grabbable` exclusivo (un holder a la vez) + máquina Idle → Winding → Holding + empujón al soltar + drop al Warp.
 - Gravedad **por sala** (`RoomVolume` + `GravityBody`; `Physics.gravity = 0`).
-- `MissionPackage` (3 vidas / 3 destrucciones), 3 objetivos, checkpoints, timer 10:00.
-- Roles stub Runner (sprint) / Anchor (fija g 3 s). Tab / KP7 para cambiar.
+- `MissionPackage` (3 vidas / 3 destrucciones; no dents de jugadores), 3 objetivos, checkpoints, timer 10:00.
+- Roles stub Runner (sprint + FOV) / Anchor (fija g 3 s, CD en HUD). Tab / KP7 para cambiar.
 - Mapa: Hub → Archive → Pasillo con vacío → Open Office → Executive.
-- Tutorial en pared del Hub. HUD de partida + rematch con **R**. Moment of the Match local (mayor caída).
+- Tutorial Hub: cartel + taza **$15** + props **grises sin $** (también en Archive).
+- HUD: splash 9 s, banner **¡FLIP!**, toast de objetivo, pasillo “g hereda”, rematch **R**.
+- Brújula 3D solo si g no es abajo o hay telegráfo.
+- Moment of the Match: mayor caída + recuento de flips.
+- Feel de flip: FOV punch + shake + whoosh; ding al completar objetivo.
+- Dominante: pulso + etiqueta **¡ESTE TIRA DE G!**.
+- Pasillo: bordillos 0.58 m (ya no se camina al vacío sin querer).
+- Valuables y props que caen al vacío vuelven a su spawn (`SpawnHome`).
+- Losas Entregar/Sellar cubren el paquete agarrado; Sellar también si llevas el paquete.
+- **F5** restart · **F8** PNG · **F9** oculta chrome · **F6** skip objetivo (cheat).
+- Fog + fondo de cámara oscuro; franja azul = suelo original; coyote/jump buffer; SFX win/lose.
+- Franja naranja en techos (si g apunta arriba, estás en el techo).
+- Damping en props para que se asienten tras un flip.
 - Menú Setup 2p (default) y 1p.
+- Losa del objetivo **actual** pulsa en blanco; las otras se atenúan; F6 también las apaga.
+- Prompt de mirada bajo la cruceta: nombre + `$` o “(sin $)”.
+- HUD `[>]` + línea “Siguiente: …” para el objetivo en curso.
+- 4 emotes (P1: 1–4 · P2: KP1/2/3/9): OK / NO / ? / ¡AQUÍ!
+- Muebles estáticos (mostrador, estantería, escritorio, mesa) para leer cada sala.
+- Pings 2p independientes (P1 amarillo / P2 naranja).
+- OOB: AABB de mapa (cae de lado en el pasillo con g heredada ya no vuela al infinito).
+- Toast + thud si el paquete se abolla.
+- Hit-stop 80 ms al aplicar un flip; etiquetas `$` siguen el “arriba” del objeto.
+- Siluetas: asa en la taza, pomo en la caja, asa en el maletín, bola en el trofeo.
+- Prompt “ocupado” si el otro jugador ya lleva el objeto.
+- Respaldo en sillas; letreros → ARCHIVE / PASILLO / OPEN OFFICE / EXECUTIVE.
 
 ### A MEDIAS
-- Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. Hay que pulsar Setup en el Editor para generar el piso nuevo (el factory vive en código).
+- Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
 - 1.10 / 2.7 playtest: código listo, **cero playtests reales** (no hay Unity aquí).
 - Outline dominante sigue siendo pulso de escala + tint, no un outline URP de verdad.
+- Whoosh de flip listo; emotes son billboard (sin animación de avatar).
 
 ### FALTA
 - 1.11 Vídeo mudo 8–10 s del flip (grabar en Unity local).
@@ -64,18 +89,19 @@ Documento vivo del prototipo.
 
 1. Abre Unity Hub → proyecto **GravityReceipt** con Editor **6000.6.0f1**.
 2. Espera a que compile (scripts nuevos en `Assets/_Project/Scripts/...`).
-3. Menú **GravityReceipt → Setup Office Floor A** → OK. (Esto **borra y recrea** la escena.)
-4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja).
+3. Opción A (recomendada): menú **GravityReceipt → Setup Office Floor A** → OK.  
+   Opción B: pulsa **Play** directo; si la escena es la vieja, se reconstruye sola (2p).
+4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja). Los valuables muestran `$` encima. Splash 9 s: “LA GRAVEDAD SIGUE AL OBJETO MÁS CARO”.
 5. **P1:** WASD + ratón. Agarra el cubo naranja (mantener E ~0.4 s).
-6. Entra a Archive (norte). Zona verde en la pared este: suelta el paquete dentro → objetivo Enchufar.
-7. Agarra la **caja dorada** y déjala pegada a una pared. Espera ~1 s: HUD dice FLIP y g cambia.
-8. Cruza el pasillo estrecho (si caes al vacío, respawneas).
-9. Losa azul Open Office = Entregar. Losa dorada Executive + mantener E = Sellar.
-10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s.
+6. Entra a Archive (norte). Zona verde en la pared este: paquete dentro → objetivo Enchufar.
+7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y déjala pegada a una **pared**. Espera ~1 s: banner **¡FLIP!**, whoosh, FOV, g cambia.
+8. Cruza el pasillo (bordillos rojos altos; vacío a los lados). Si caes **o sales volando a los lados** (g heredada), respawneas. Si un valuable cae, vuelve a su sitio.
+9. Losa azul Open Office = Entregar. Losa dorada Executive + paquete en manos o mantener E = Sellar.
+10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre.
 11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
-12. Para 1.11: graba 8–10 s mudos del paso 7 (caja a la pared → flip).
-
-Si la consola dice que falta `MatchDirector`, no corriste el paso 3.
+12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). **F9** oculta help/status para un clip más limpio. Graba 8–10 s mudos del paso 7, o dispara F8 durante el FLIP.
+13. Cheat playtest: **F6** completa el siguiente objetivo y teletea al checkpoint (no está en el HUD a propósito).
+14. Emotes: P1 teclas **1–4**, P2 **KP1 / KP2 / KP3 / KP9**. Apunta a un cubo gris: el prompt debe decir “(sin $)”.
 
 ---
 
@@ -139,12 +165,12 @@ Si la consola dice que falta `MatchDirector`, no corriste el paso 3.
 | 1.3 | `ValuableItem` con precio `$` | [x] | |
 | 1.4 | `GravityManager` por sala | [x] | Ya no es global: un manager por sala |
 | 1.5 | Aplicar vector de gravedad | [x] | Snap a ejes; `GravityBody` por rigidbody |
-| 1.6 | Telegráfo 1.0 s antes del flip | [x] | HUD |
+| 1.6 | Telegráfo 1.0 s antes del flip | [x] | HUD + flecha 3D en la sala |
 | 1.7 | Inercia corta al cambiar g | [x] | Reset parcial de velocidad + ground raycast |
 | 1.8 | Outline del valuable dominante | [x] | Pulso/color (no outline URP) |
 | 1.9 | Escena mínima: 1 sala + 2 valuables | [x] | Archive sigue existiendo dentro del piso |
 | 1.10 | Playtest local 2p (misma máquina o builds) | [~] | Split-screen implementado; falta que 2 personas lo jueguen |
-| 1.11 | Vídeo mudo 8–10 s del flip | [ ] | Requiere grabar en Unity local |
+| 1.11 | Vídeo mudo 8–10 s del flip | [~] | F8 screenshot + auto PNG en el **primer** flip; falta vídeo humano |
 
 **Gate 1–2:** si no se entiende en 30 s → simplificar UI, no añadir features.
 
@@ -174,7 +200,7 @@ Si la consola dice que falta `MatchDirector`, no corriste el paso 3.
 
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
-| 3.1 | Blockout Pasillo + vacío lateral | [x] | Catwalk 3.2 m, sin paredes laterales |
+| 3.1 | Blockout Pasillo + vacío lateral | [x] | Catwalk 3.6 m, bordillos 0.58 m, sin paredes laterales |
 | 3.2 | Blockout Sala B Open Office | [x] | Monitor $120, Planta $60, Cafetera $90 |
 | 3.3 | Blockout Sala C Executive | [x] | Maletín $200, Trofeo $150, Server $110, Planta oro $95 |
 | 3.4 | Objetivo 2: entregar paquete | [x] | Losa azul Open Office |
@@ -218,9 +244,9 @@ Si la consola dice que falta `MatchDirector`, no corriste el paso 3.
 | 5.2 | Medir rematch % | [ ] | Meta ≥ 55% |
 | 5.3 | Medir mareo % | [ ] | Meta < 10% |
 | 5.4 | Medir comprensión de la regla | [ ] | Meta ≥ 80% en 1ª partida |
-| 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [ ] | |
-| 5.6 | Pass siluetas/colores valuables | [ ] | |
-| 5.7 | Emotes (4) + whoosh final | [ ] | |
+| 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + banner + hit-stop 80 ms; falta ajustar con mareo real |
+| 5.6 | Pass siluetas/colores valuables | [~] | Primitivas distintas (caja/cápsula/cilindro) + masa por precio; falta arte |
+| 5.7 | Emotes (4) + whoosh final | [x] | Whoosh en cada flip; emotes billboard OK/NO/?/¡AQUÍ! (sin animación de avatar) |
 | 5.8 | Decisión go / no-go | [ ] | Ver métricas abajo |
 
 **Gate go:** rematch ≥ 55% **o** ≥ 40% de grupos envían clip solos.  
@@ -235,7 +261,7 @@ Si la consola dice que falta `MatchDirector`, no corriste el paso 3.
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
 | 6.1 | Pass de arte (no final, salir de gris total) | [ ] | |
-| 6.2 | Pulido UI mínima | [ ] | |
+| 6.2 | Pulido UI mínima | [~] | Splash, FLIP, toast, `[>]` objetivo, prompt de mirada, pista “Siguiente” |
 | 6.3 | Build Steam o itch privada | [ ] | |
 | 6.4 | Trailer 15–20 s del mejor clip | [ ] | |
 | 6.5 | Lista bugs P0 cerrada | [ ] | Gravedad, softlock, desync |
@@ -299,7 +325,7 @@ Cuando exista el proyecto, marcar `0.5`–`0.7` y pegar aquí la ruta real si ca
 | Paquete de misión | `MissionPackage` | [x] | |
 | Objetivos | `ObjectiveTrigger` | [x] | 3 en el piso |
 | Roles | `PlayerRole` | [x] | Runner / Anchor stub |
-| UI telegráfo / outline | `GravityHud` + `DominantValuableOutline` | [x] | HUD completo; outline simple |
+| UI telegráfo / outline | `GravityHud` + `DominantValuableOutline` | [x] | Splash + banner FLIP; beacon “TIRA DE G” |
 | Moment of the Match | `MatchHighlightRecorder` | [x] | Local |
 | Red (host auth g) | por definir en 4.1 | [ ] | |
 | Player move | `PlayerMotor` + `LocalPlayerInput` | [x] | 2p |
@@ -321,7 +347,7 @@ Eje +Z (metros aprox.): Hub z=-4..4 → Archive 4..16 → Pasillo 16..27 → Off
 
 | Sala | Valuables (MVP) | Estado blockout |
 |------|-----------------|-----------------|
-| Hub | — | [x] | Tutorial + spawn + paquete |
+| Hub | Taza $15 (tutorial) | [x] | Tutorial + spawn + paquete + props sin $ |
 | A Archive | Caja fuerte $80, Archivador $40 | [x] | Enchufar este |
 | Pasillo | Ninguno (g hereda) | [x] | Catwalk + vacío |
 | B Open Office | Monitor $120, Planta $60, Cafetera $90 | [x] | Entregar |
@@ -355,6 +381,8 @@ Eje +Z (metros aprox.): Hub z=-4..4 → Archive 4..16 → Pasillo 16..27 → Off
 | 2026-09-08 | Playtest: usuario agarró y salió de la escena | Fix OOB + gravedad snap + outline + regenerar Setup |
 | 2026-09-08 | Push a GitHub `felnarg/GravityReceipt` (commit proto) | Lanzar Cloud Agent overnight con prompt del plan |
 | 2026-09-09 | Cloud Agent: 2p split + mapa offline + misión/timer/roles/rematch | Playtest humano + vídeo flip; no Unity en el cloud |
+| 2026-09-09 | Pulido overnight: curbs, grab exclusivo, HUD regla/FLIP, FOV+whoosh, valuables home | Playtest Unity local + vídeo 1.11; no online |
+| 2026-09-09 | Emotes 4 + prompt mirada + pulso losa actual + muebles estáticos | Playtest humano; vídeo 1.11 |
 
 ---
 
@@ -385,8 +413,74 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - `MissionPackage`, 3 `ObjectiveTrigger`, `CheckpointSystem`, ping, tutorial Hub.
 - `OfficeFloorFactory`: Hub → Archive → Pasillo vacío → Open Office → Executive.
 - Roles Runner/Anchor stub. Highlight de mayor caída.
-- **No se pudo Play Mode** (sin Editor Unity en Linux). Escena YAML vieja hasta que el usuario pulse Setup.
+- Play en escena vieja ahora **auto-reconstruye** el piso 2p (`OfficeFloorPlayGuard`).
+- Chevrones amarillos de ruta, marcos de puerta, etiquetas `$` en valuables y “PAQUETE”.
+- Cámara lenta al ganar/perder + cursor libre para pulsar R.
+- Luces puntuales por sala.
+- Robustez: `== null` de Unity en managers/paquete/outline; .meta del outline; dents ignorados si el paquete está agarrado.
 - Hard stop programado 08:00 America/Bogota; esta entrega es el avance de código.
+
+### 2026-09-09 — Overnight bloque 2 (feel + bugs 2p)
+- Bordillos del pasillo 0.58 m (stepOffset 0.28): ya no se camina al vacío.
+- Valuables OOB vuelven a casa; volúmenes de sala se solapan en puertas.
+- Grab exclusivo 2p; drop al Warp; Sellar con paquete en manos.
+- HUD splash 9 s + banner ¡FLIP!; carteles de pista en Hub/Archive/Office/Executive.
+- `GravityFlipSfx` whoosh + FOV punch + shake en el motor.
+- Beacon “¡ESTE TIRA DE G!” en el dominante. P2 mira con I/K.
+- FindPlayer ya no atribuye P1 al slot P2 en 1p.
+- Unity fake-null: `== null` en Text/Collider/Renderer/Rigidbody/managers.
+
+### 2026-09-09 — Overnight bloque 3 (siluetas + toast)
+- Valuables: monitor plano, plantas/trofeo cápsula, cafetera cilindro; masa escala con `$`.
+- Paquete no recibe dents de jugadores (caminar/empujar).
+- HUD toast 2.4 s al completar Enchufar/Entregar/Sellar.
+
+### 2026-09-09 — Overnight bloque 4 (regla en el Hub)
+- Taza $15 en Hub para el primer flip local.
+- Props grises (caja/silla/mesa) **sin** `$`: se pueden agarrar pero no tiran de g.
+- `SpawnHome` los devuelve si caen al vacío.
+
+### 2026-09-09 — Overnight bloque 5 (juice)
+- Ding al completar objetivo. HUD muestra cooldown de Anchor.
+- Moment of the Match cuenta flips además de caídas.
+- FOV extra al sprint Runner; cruceta crece al wind-up de agarre.
+- **F9** oculta help/status para grabar el clip 1.11.
+- Soltar un objeto le da un empujón hacia la mirada (menos clip en el jugador).
+- `PlayerInteractor` usa máquina Idle → Winding → Holding.
+- HUD marca pasillo como “g hereda”.
+- Brújula 3D a los pies: apunta a g actual (amarillo en telegráfo).
+- La brújula solo aparece si g no es “abajo” o hay telegráfo.
+- Orden de ejecución: GravityManager → ValuableItem → GravityBody → PlayerMotor → Interactor.
+- `PlayerMotor` distingue Grounded / Airborne.
+- Coyote 0.12 s + jump buffer 0.12 s (pasillo más justo).
+- Valuables y paquete cuelgan del root OfficeFloor (jerarquía limpia).
+- Fog + ambient para que el vacío del pasillo se lea y las salas no queden negras.
+- Cámaras split: fondo = color de fog, far clip 90 m.
+- Franja azul en el suelo original de cada sala (orientación tras un flip).
+- SFX: ding objetivo, fanfarria al ganar, thud al perder.
+
+### 2026-09-09 — Overnight bloque 6 (emotes + HUD objetivo)
+- F6 apaga visualmente la losa completada; la losa **actual** pulsa; las futuras se atenúan.
+- Prompt bajo la cruceta: nombre del objeto + `$` o “(sin $)”.
+- HUD: `[>]` en el objetivo en curso + pista “Siguiente: …”.
+- 4 emotes locales (billboard + beep). P1: 1–4. P2: KP1/2/3/9.
+- Muebles estáticos en Hub/Archive/Office/Executive (no vuelan con g).
+- Paquete con franja verde para distinguirlo de las cajas.
+
+### 2026-09-09 — Overnight bloque 7 (OOB lateral + ping 2p)
+- `VoidKillZone` mata si |x|>9.5 o z fuera del piso (caída con g hacia la pared en el pasillo).
+- Volumen del pasillo más ancho para el HUD “g hereda”.
+- Ping por jugador (ya no se pisan el marcador).
+- Toast “¡PAQUETE ABOLLADO!” + thud al dent.
+
+### 2026-09-09 — Overnight bloque 8 (hit-stop + siluetas)
+- Congela 0.08 s (unscaled) al aplicar g nueva; no pisa el slow-mo de fin de partida.
+- Billboards en espacio local del objeto (tras un flip el `$` queda “arriba” del valuable).
+- Piezas extra en taza / caja fuerte / maletín / trofeo.
+
+### 2026-09-09 — Overnight bloque 9 (2p ocupado + puertas)
+- Mirar un objeto agarrado por el compañero muestra “ocupado”.
+- Sillas con respaldo. Lintel de cada puerta nombra la sala siguiente.
 
 ---
 
@@ -394,8 +488,8 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 
 ```
 Fecha: 2026-09-09
-Enfoque de hoy (1–3 IDs del plan): 1.10 2p, 2.1–2.6 misión, 3.1–3.10 mapa offline
-Hecho: sistemas + factory del piso (ver “Cierre de sesión”)
+Enfoque de hoy (1–3 IDs del plan): pulido 1.10/2.7 (sin Unity) + 5.7 emotes + 6.2 HUD
+Hecho: emotes, prompt mirada, pulso losa, muebles estáticos
 Pendiente al cerrar: playtest Unity local, vídeo 1.11, no online
 Bloqueadores: Unity Editor ausente en el cloud agent
 Actualicé "Estado actual": sí

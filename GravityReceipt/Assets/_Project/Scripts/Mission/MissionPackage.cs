@@ -1,4 +1,5 @@
 using GravityReceipt.Interaction;
+using GravityReceipt.Player;
 using UnityEngine;
 
 namespace GravityReceipt.Mission
@@ -32,7 +33,7 @@ namespace GravityReceipt.Mission
         {
             _body = GetComponent<Rigidbody>();
             _renderer = GetComponent<Renderer>();
-            if (_renderer is not null)
+            if (_renderer != null)
             {
                 _baseColor = _renderer.material.color;
             }
@@ -50,7 +51,17 @@ namespace GravityReceipt.Mission
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision is null || _spawnGrace > 0f)
+            if (_body != null && _body.isKinematic)
+            {
+                return;
+            }
+
+            if (collision == null || collision.collider == null || _spawnGrace > 0f)
+            {
+                return;
+            }
+
+            if (collision.collider.GetComponentInParent<PlayerMotor>() != null)
             {
                 return;
             }
@@ -67,13 +78,15 @@ namespace GravityReceipt.Mission
 
         public void ApplyDamage(int amount)
         {
-            if (MatchDirector.Instance is not { IsPlaying: true })
+            if (MatchDirector.Instance == null || !MatchDirector.Instance.IsPlaying)
             {
                 return;
             }
 
             _lives = Mathf.Max(0, _lives - Mathf.Max(1, amount));
             RefreshTint();
+            MissionSfx.PlayDent();
+            MatchDirector.Instance.NotifyPackageDented();
             if (_lives > 0)
             {
                 return;
@@ -91,11 +104,12 @@ namespace GravityReceipt.Mission
 
         public void Respawn()
         {
-            var point = CheckpointSystem.Instance is { } cp
-                ? cp.PackageSpawn
+            var checkpoints = CheckpointSystem.Instance;
+            var point = checkpoints != null
+                ? checkpoints.PackageSpawn
                 : new Vector3(0f, 1f, 0f);
 
-            if (_body is { })
+            if (_body != null)
             {
                 _body.linearVelocity = Vector3.zero;
                 _body.angularVelocity = Vector3.zero;
@@ -110,7 +124,7 @@ namespace GravityReceipt.Mission
 
         private void RefreshTint()
         {
-            if (_renderer is null)
+            if (_renderer == null)
             {
                 return;
             }

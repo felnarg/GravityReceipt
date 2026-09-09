@@ -25,9 +25,10 @@ namespace GravityReceipt.Player
 
         public RoleKind Role => role;
         public string RoleLabel => role == RoleKind.Runner ? "Runner" : "Anchor";
+        public float AnchorCooldownLeft => Mathf.Max(0f, _anchorReadyAt - Time.time);
 
         public float MoveMultiplier =>
-            role == RoleKind.Runner && _input is { } && _input.SprintHeld()
+            role == RoleKind.Runner && _input != null && _input.SprintHeld()
                 ? runnerSprintMultiplier
                 : 1f;
 
@@ -44,7 +45,7 @@ namespace GravityReceipt.Player
 
         private void Update()
         {
-            if (_input is not { })
+            if (_input == null)
             {
                 return;
             }
@@ -64,12 +65,12 @@ namespace GravityReceipt.Player
                 return;
             }
 
-            if (_motor is not { Gravity: { } gravity })
+            if (_motor == null || _motor.Gravity == null)
             {
                 return;
             }
 
-            gravity.AnchorFor(anchorSeconds);
+            _motor.Gravity.AnchorFor(anchorSeconds);
             _anchorReadyAt = Time.time + anchorCooldown;
         }
     }

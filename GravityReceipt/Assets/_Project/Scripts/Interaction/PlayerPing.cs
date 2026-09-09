@@ -1,4 +1,5 @@
 using GravityReceipt.Player;
+using GravityReceipt.UI;
 using UnityEngine;
 
 namespace GravityReceipt.Interaction
@@ -8,12 +9,12 @@ namespace GravityReceipt.Interaction
     /// </summary>
     public sealed class PlayerPing : MonoBehaviour
     {
-        [SerializeField] private float range = 18f;
+        [SerializeField] private float range = 22f;
         [SerializeField] private float lifetime = 2.2f;
         [SerializeField] private LayerMask mask = ~0;
 
         private LocalPlayerInput _input;
-        private static PingMarker _active;
+        private PingMarker _mine;
 
         private void Awake()
         {
@@ -22,13 +23,13 @@ namespace GravityReceipt.Interaction
 
         private void Update()
         {
-            if (_input is not { } || !_input.PingPressed())
+            if (_input == null || !_input.PingPressed())
             {
                 return;
             }
 
             var cam = _input.PlayerCamera;
-            if (cam is null)
+            if (cam == null)
             {
                 return;
             }
@@ -43,25 +44,33 @@ namespace GravityReceipt.Interaction
             SpawnMarker(point);
         }
 
-        private static void SpawnMarker(Vector3 point)
+        private void SpawnMarker(Vector3 point)
         {
-            if (_active is not null)
+            if (_mine != null)
             {
-                Destroy(_active.gameObject);
+                Destroy(_mine.gameObject);
             }
 
             var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             go.name = "PingMarker";
+            var floor = GameObject.Find("OfficeFloor");
+            if (floor != null)
+            {
+                go.transform.SetParent(floor.transform, true);
+            }
             go.transform.position = point;
             go.transform.localScale = Vector3.one * 0.45f;
             Object.Destroy(go.GetComponent<Collider>());
             var renderer = go.GetComponent<Renderer>();
-            if (renderer is not null)
+            var color = _input != null && _input.Slot == LocalPlayerSlot.Two
+                ? new Color(1f, 0.55f, 0.2f)
+                : new Color(1f, 0.85f, 0.15f);
+            if (renderer != null)
             {
                 var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
-                if (shader is not null)
+                if (shader != null)
                 {
-                    renderer.sharedMaterial = new Material(shader) { color = new Color(1f, 0.85f, 0.15f) };
+                    renderer.sharedMaterial = new Material(shader) { color = color };
                 }
             }
 
@@ -69,15 +78,26 @@ namespace GravityReceipt.Interaction
             labelGo.transform.SetParent(go.transform, false);
             labelGo.transform.localPosition = new Vector3(0f, 0.8f, 0f);
             var tm = labelGo.AddComponent<TextMesh>();
-            tm.text = "¡NO TOQUES ESO!";
+            tm.text = _input != null && _input.Slot == LocalPlayerSlot.Two
+                ? "P2 ¡NO TOQUES ESO!"
+                : "P1 ¡NO TOQUES ESO!";
             tm.characterSize = 0.08f;
             tm.fontSize = 42;
             tm.anchor = TextAnchor.MiddleCenter;
             tm.alignment = TextAlignment.Center;
-            tm.color = new Color(1f, 0.95f, 0.35f);
+            tm.color = color;
 
-            _active = go.AddComponent<PingMarker>();
-            _active.Begin(lifetime);
+            _mine = go.AddComponent<PingMarker>();
+            _mine.Begin(lifetime);
+        }
+
+        private void OnDisable()
+        {
+            if (_mine != null)
+            {
+                Destroy(_mine.gameObject);
+                _mine = null;
+            }
         }
 
         private sealed class PingMarker : MonoBehaviour
@@ -92,11 +112,11 @@ namespace GravityReceipt.Interaction
             private void Update()
             {
                 transform.localScale = Vector3.one * (0.45f + 0.08f * Mathf.Sin(Time.time * 10f));
-                var cam = Camera.main;
-                if (cam is not null)
+                var cam = FollowBillboard.ClosestCamera(transform.position);
+                if (cam != null)
                 {
                     var label = GetComponentInChildren<TextMesh>();
-                    if (label is not null)
+                    if (label != null)
                     {
                         label.transform.rotation = Quaternion.LookRotation(
                             label.transform.position - cam.transform.position);

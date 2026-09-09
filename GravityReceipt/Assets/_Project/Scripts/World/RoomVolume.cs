@@ -14,7 +14,7 @@ namespace GravityReceipt.World
 
         public string RoomId => roomId;
         public GravityManager Gravity => gravityManager;
-        public bool HasOwnGravity => !inheritGravity && gravityManager is not null;
+        public bool HasOwnGravity => !inheritGravity && gravityManager != null;
         public Vector3 Center => transform.position;
 
         public void Configure(string id, GravityManager manager, bool inherit)
@@ -42,12 +42,12 @@ namespace GravityReceipt.World
 
         public bool Contains(Vector3 worldPos)
         {
-            if (_box is null)
+            if (_box == null)
             {
                 _box = GetComponent<BoxCollider>();
             }
 
-            if (_box is null)
+            if (_box == null)
             {
                 return false;
             }

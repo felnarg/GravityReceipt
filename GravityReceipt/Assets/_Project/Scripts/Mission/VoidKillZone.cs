@@ -1,4 +1,6 @@
+using GravityReceipt.Gravity;
 using GravityReceipt.Player;
+using GravityReceipt.World;
 using UnityEngine;
 
 namespace GravityReceipt.Mission
@@ -7,6 +9,7 @@ namespace GravityReceipt.Mission
     /// Si el jugador o un prop se aleja demasiado / cae al vacío, respawnea.
     /// Combina trigger + chequeo por distancia (CharacterController a veces falla triggers).
     /// </summary>
+    [DefaultExecutionOrder(50)]
     public sealed class VoidKillZone : MonoBehaviour
     {
         [SerializeField] private float maxDistanceFromOrigin = 80f;
@@ -17,52 +20,113 @@ namespace GravityReceipt.Mission
             var players = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
             foreach (var motor in players)
             {
-                if (motor is not { })
+                if (motor == null)
                 {
                     continue;
                 }
 
                 var p = motor.transform.position;
-                if (p.y < killY || p.magnitude > maxDistanceFromOrigin)
+                if (IsLost(p))
                 {
                     RespawnPlayer(motor);
                 }
             }
 
             var pkg = FindAnyObjectByType<MissionPackage>();
-            if (pkg is { } && (pkg.transform.position.y < killY || pkg.transform.position.magnitude > maxDistanceFromOrigin))
+            if (pkg != null && IsLost(pkg.transform.position))
             {
                 pkg.Respawn();
             }
+
+            var valuables = FindObjectsByType<ValuableItem>(FindObjectsSortMode.None);
+            foreach (var item in valuables)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+
+                var p = item.transform.position;
+                if (IsLost(p))
+                {
+                    item.ResetToHome();
+                }
+            }
+
+            var homes = FindObjectsByType<SpawnHome>(FindObjectsSortMode.None);
+            foreach (var home in homes)
+            {
+                if (home == null)
+                {
+                    continue;
+                }
+
+                var p = home.transform.position;
+                if (IsLost(p))
+                {
+                    home.ReturnHome();
+                }
+            }
+        }
+
+        private bool IsLost(Vector3 p)
+        {
+            if (p.y < killY || p.y > 16f || p.magnitude > maxDistanceFromOrigin)
+            {
+                return true;
+            }
+
+            if (Mathf.Abs(p.x) > 9.5f || p.z < -12f || p.z > 68f)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other is not { })
+            if (other == null)
             {
                 return;
             }
 
             var motor = other.GetComponentInParent<PlayerMotor>();
-            if (motor is not null)
+            if (motor != null)
             {
                 RespawnPlayer(motor);
                 return;
             }
 
             var pkg = other.GetComponentInParent<MissionPackage>();
-            if (pkg is not null)
+            if (pkg != null)
             {
                 pkg.Respawn();
                 return;
             }
 
-            if (other.attachedRigidbody is { } rb)
+            var valuable = other.GetComponentInParent<ValuableItem>();
+            if (valuable != null)
+            {
+                valuable.ResetToHome();
+                return;
+            }
+
+            var home = other.GetComponentInParent<SpawnHome>();
+            if (home != null)
+            {
+                home.ReturnHome();
+                return;
+            }
+
+            var rb = other.attachedRigidbody;
+            if (rb != null)
             {
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
-                var spawn = CheckpointSystem.Instance is { } cp
-                    ? cp.PackageSpawn
+                var checkpoints = CheckpointSystem.Instance;
+                var spawn = checkpoints != null
+                    ? checkpoints.PackageSpawn
                     : new Vector3(0f, 1f, 0f);
                 rb.position = spawn + Vector3.right * Random.Range(-1.2f, 1.2f);
             }
@@ -71,9 +135,10 @@ namespace GravityReceipt.Mission
         private void RespawnPlayer(PlayerMotor motor)
         {
             var input = motor.GetComponent<LocalPlayerInput>();
-            var slot = input is not null ? input.Slot : LocalPlayerSlot.One;
-            var point = CheckpointSystem.Instance is { } cp
-                ? cp.GetPlayerSpawn(slot)
+            var slot = input != null ? input.Slot : LocalPlayerSlot.One;
+            var checkpoints = CheckpointSystem.Instance;
+            var point = checkpoints != null
+                ? checkpoints.GetPlayerSpawn(slot)
                 : new Vector3(0f, 1f, 0f);
             motor.Warp(point);
         }

@@ -4,6 +4,7 @@ using UnityEngine;
 namespace GravityReceipt.Gravity
 {
     [RequireComponent(typeof(Rigidbody))]
+    [DefaultExecutionOrder(-10)]
     public sealed class ValuableItem : MonoBehaviour
     {
         [SerializeField] private int price = 100;
@@ -12,6 +13,9 @@ namespace GravityReceipt.Gravity
 
         private Rigidbody _body;
         private bool _wasMoving;
+        private Vector3 _homePos;
+        private Quaternion _homeRot;
+        private bool _homeCaptured;
 
         public int Price => price;
         public bool IsActiveValuable => isActiveValuable && isActiveAndEnabled;
@@ -22,6 +26,7 @@ namespace GravityReceipt.Gravity
         {
             price = Mathf.Max(0, newPrice);
             SetGravityManager(manager);
+            CaptureHome();
         }
 
         public void SetGravityManager(GravityManager next)
@@ -31,38 +36,49 @@ namespace GravityReceipt.Gravity
                 return;
             }
 
-            gravityManager?.Unregister(this);
-            gravityManager = next;
-            if (isActiveAndEnabled)
+            if (gravityManager != null)
             {
-                gravityManager?.Register(this);
+                gravityManager.Unregister(this);
+            }
+
+            gravityManager = next;
+            if (isActiveAndEnabled && gravityManager != null)
+            {
+                gravityManager.Register(this);
             }
         }
 
         private void Awake()
         {
             _body = GetComponent<Rigidbody>();
+            CaptureHome();
         }
 
         private void OnEnable()
         {
-            gravityManager?.Register(this);
+            if (gravityManager != null)
+            {
+                gravityManager.Register(this);
+            }
         }
 
         private void OnDisable()
         {
-            gravityManager?.Unregister(this);
+            if (gravityManager != null)
+            {
+                gravityManager.Unregister(this);
+            }
         }
 
         private void FixedUpdate()
         {
             var room = RoomRegistry.FindRoom(transform.position);
-            if (room is { HasOwnGravity: true, Gravity: { } roomGravity })
+            if (room != null && room.HasOwnGravity && room.Gravity != null)
             {
-                SetGravityManager(roomGravity);
+                SetGravityManager(room.Gravity);
             }
 
-            if (IsHeld || _body is not { isKinematic: false })
+            if (IsHeld || _body == null || _body.isKinematic)
             {
                 _wasMoving = false;
                 return;
@@ -70,9 +86,9 @@ namespace GravityReceipt.Gravity
 
             var moving = _body.linearVelocity.sqrMagnitude > 0.05f
                          || (!_body.IsSleeping() && _body.angularVelocity.sqrMagnitude > 0.05f);
-            if (moving && !_wasMoving)
+            if (moving && !_wasMoving && gravityManager != null)
             {
-                gravityManager?.NotifyValuableMoved(this);
+                gravityManager.NotifyValuableMoved(this);
             }
 
             _wasMoving = moving;
@@ -86,13 +102,54 @@ namespace GravityReceipt.Gravity
         public void SetPrice(int newPrice)
         {
             price = Mathf.Max(0, newPrice);
-            gravityManager?.NotifyValuableMoved(this);
+            if (gravityManager != null)
+            {
+                gravityManager.NotifyValuableMoved(this);
+            }
         }
 
         /// <summary>Llamar al soltar el objeto (recalcula dominante + dirección de g).</summary>
         public void MarkMovedByPlayer()
         {
-            gravityManager?.NotifyValuableMoved(this);
+            if (gravityManager != null)
+            {
+                gravityManager.NotifyValuableMoved(this);
+            }
+        }
+
+        public void ResetToHome()
+        {
+            if (IsHeld)
+            {
+                return;
+            }
+
+            CaptureHome();
+            if (_body != null)
+            {
+                _body.linearVelocity = Vector3.zero;
+                _body.angularVelocity = Vector3.zero;
+                _body.position = _homePos;
+                _body.rotation = _homeRot;
+            }
+
+            transform.SetPositionAndRotation(_homePos, _homeRot);
+            if (gravityManager != null)
+            {
+                gravityManager.NotifyValuableMoved(this);
+            }
+        }
+
+        private void CaptureHome()
+        {
+            if (_homeCaptured)
+            {
+                return;
+            }
+
+            _homePos = transform.position;
+            _homeRot = transform.rotation;
+            _homeCaptured = true;
         }
     }
 }
