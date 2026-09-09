@@ -267,7 +267,7 @@ namespace GravityReceipt.World
 
         private static void CreatePathChevrons(Transform parent)
         {
-            var zs = new[] { 2.2f, 5.8f, 15.6f, 21.5f, 27.3f, 34.5f, 43.2f };
+            var zs = new[] { 2.2f, 5.8f, 15.6f, 21.5f, 27.3f, 34.5f, 43.2f, 48.8f, 52.6f };
             foreach (var z in zs)
             {
                 var go = GameObject.CreatePrimitive(PrimitiveType.Cube);

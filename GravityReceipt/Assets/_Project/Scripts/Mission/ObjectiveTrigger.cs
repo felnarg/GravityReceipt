@@ -8,6 +8,7 @@ namespace GravityReceipt.Mission
     /// Objetivo genérico: el paquete (y opcionalmente un jugador) debe permanecer en zona.
     /// </summary>
     [RequireComponent(typeof(BoxCollider))]
+    [DefaultExecutionOrder(40)]
     public sealed class ObjectiveTrigger : MonoBehaviour
     {
         [SerializeField] private int objectiveIndex;
