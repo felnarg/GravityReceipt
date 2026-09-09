@@ -25,7 +25,7 @@ namespace GravityReceipt.Gravity
 
         private void Awake()
         {
-            if (gravityManager is null)
+            if (gravityManager == null)
             {
                 gravityManager = GetComponent<GravityManager>();
             }
@@ -44,25 +44,25 @@ namespace GravityReceipt.Gravity
 
         private void Start()
         {
-            if (gravityManager is { Dominant: { } d })
+            if (gravityManager != null && gravityManager.Dominant != null)
             {
-                SetDominant(d);
+                SetDominant(gravityManager.Dominant);
             }
         }
 
         private void Update()
         {
-            if (gravityManager is { Dominant: { } current } && current != _current)
+            if (gravityManager != null && gravityManager.Dominant != _current)
             {
-                SetDominant(current);
+                SetDominant(gravityManager.Dominant);
             }
 
-            if (_current is null || _renderer is null)
+            if (_current == null || _renderer == null)
             {
                 return;
             }
 
-            if (_current is { IsHeld: true })
+            if (_current.IsHeld)
             {
                 _current.transform.localScale = _baseScale;
                 return;
@@ -74,7 +74,7 @@ namespace GravityReceipt.Gravity
 
         private void Bind()
         {
-            if (gravityManager is not null)
+            if (gravityManager != null)
             {
                 gravityManager.GravityChanged += OnGravityChanged;
             }
@@ -82,7 +82,7 @@ namespace GravityReceipt.Gravity
 
         private void Unbind()
         {
-            if (gravityManager is not null)
+            if (gravityManager != null)
             {
                 gravityManager.GravityChanged -= OnGravityChanged;
             }
@@ -96,7 +96,7 @@ namespace GravityReceipt.Gravity
         private void SetDominant(ValuableItem item)
         {
             Clear();
-            if (item is null)
+            if (item == null)
             {
                 return;
             }
@@ -104,8 +104,9 @@ namespace GravityReceipt.Gravity
             _current = item;
             _baseScale = item.transform.localScale;
             _renderer = item.GetComponent<Renderer>();
-            if (_renderer is not null && _renderer.material is { } mat)
+            if (_renderer != null && _renderer.material != null)
             {
+                var mat = _renderer.material;
                 _baseColor = mat.color;
                 mat.color = dominantColor;
                 if (mat.HasProperty("_EmissionColor"))
@@ -118,13 +119,14 @@ namespace GravityReceipt.Gravity
 
         private void Clear()
         {
-            if (_current is not null)
+            if (_current != null)
             {
                 _current.transform.localScale = _baseScale;
             }
 
-            if (_renderer is not null && _renderer.material is { } mat)
+            if (_renderer != null && _renderer.material != null)
             {
+                var mat = _renderer.material;
                 mat.color = _baseColor;
                 if (mat.HasProperty("_EmissionColor"))
                 {

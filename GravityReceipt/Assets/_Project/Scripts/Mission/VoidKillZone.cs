@@ -44,14 +44,14 @@ namespace GravityReceipt.Mission
             }
 
             var motor = other.GetComponentInParent<PlayerMotor>();
-            if (motor is not null)
+            if (motor != null)
             {
                 RespawnPlayer(motor);
                 return;
             }
 
             var pkg = other.GetComponentInParent<MissionPackage>();
-            if (pkg is not null)
+            if (pkg != null)
             {
                 pkg.Respawn();
                 return;
@@ -71,7 +71,7 @@ namespace GravityReceipt.Mission
         private void RespawnPlayer(PlayerMotor motor)
         {
             var input = motor.GetComponent<LocalPlayerInput>();
-            var slot = input is not null ? input.Slot : LocalPlayerSlot.One;
+            var slot = input != null ? input.Slot : LocalPlayerSlot.One;
             var point = CheckpointSystem.Instance is { } cp
                 ? cp.GetPlayerSpawn(slot)
                 : new Vector3(0f, 1f, 0f);

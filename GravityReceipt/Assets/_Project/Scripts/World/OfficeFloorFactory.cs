@@ -448,7 +448,7 @@ namespace GravityReceipt.World
                 return;
             }
 
-            if (Object.FindAnyObjectByType<MatchDirector>() is not null)
+            if (Object.FindAnyObjectByType<MatchDirector>() != null)
             {
                 return;
             }

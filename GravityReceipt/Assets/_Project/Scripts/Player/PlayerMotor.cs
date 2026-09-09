@@ -62,9 +62,9 @@ namespace GravityReceipt.Player
             _role = GetComponent<PlayerRole>();
             _ownsCursor = _input is not { UsesMouseLook: false };
 
-            if (cameraPivot is null && _input is { PlayerCamera: { } cam })
+            if (cameraPivot == null && _input != null && _input.PlayerCamera != null)
             {
-                cameraPivot = cam.transform;
+                cameraPivot = _input.PlayerCamera.transform;
             }
 
             if (_ownsCursor)
@@ -123,7 +123,7 @@ namespace GravityReceipt.Player
 
         private void Look()
         {
-            if (_input is null)
+            if (_input == null)
             {
                 return;
             }
@@ -138,7 +138,7 @@ namespace GravityReceipt.Player
             var my = look.y * mouseSensitivity;
             transform.Rotate(0f, mx, 0f, Space.Self);
             _pitch = Mathf.Clamp(_pitch - my, -80f, 80f);
-            if (cameraPivot is not null)
+            if (cameraPivot != null)
             {
                 cameraPivot.localEulerAngles = new Vector3(_pitch, 0f, 0f);
             }
@@ -146,8 +146,8 @@ namespace GravityReceipt.Player
 
         private void Move()
         {
-            var gDir = gravityManager is not null ? gravityManager.CurrentDirection : Vector3.down;
-            var gMag = gravityManager is not null ? gravityManager.CurrentGravity.magnitude : 9.81f;
+            var gDir = gravityManager != null ? gravityManager.CurrentDirection : Vector3.down;
+            var gMag = gravityManager != null ? gravityManager.CurrentGravity.magnitude : 9.81f;
 
             if (Vector3.Dot(_lastGravityDir, gDir) < 0.99f)
             {
@@ -161,16 +161,16 @@ namespace GravityReceipt.Player
                 TryUnstuck(gDir);
             }
 
-            var axes = _input is not null ? _input.MoveAxes() : Vector2.zero;
+            var axes = _input != null ? _input.MoveAxes() : Vector2.zero;
             var input = new Vector3(axes.x, 0f, axes.y);
             input = Vector3.ClampMagnitude(input, 1f);
-            var speed = moveSpeed * (_role is not null ? _role.MoveMultiplier : 1f);
+            var speed = moveSpeed * (_role != null ? _role.MoveMultiplier : 1f);
             var wish = transform.TransformDirection(input) * speed;
 
             Grounded = IsGrounded(gDir);
             if (Grounded)
             {
-                if (_airFall > 0.5f && _input is not null)
+                if (_airFall > 0.5f && _input != null)
                 {
                     MatchHighlightRecorder.Instance?.ReportFall(_input.Slot, _airFall);
                 }
@@ -183,7 +183,7 @@ namespace GravityReceipt.Player
                     _velocity -= gDir * intoGround;
                 }
 
-                if (_input is not null && _input.JumpPressed())
+                if (_input != null && _input.JumpPressed())
                 {
                     _velocity += -gDir * jumpSpeed;
                 }
@@ -246,7 +246,7 @@ namespace GravityReceipt.Player
 
         public void Warp(Vector3 position)
         {
-            if (_controller is not null)
+            if (_controller != null)
             {
                 _controller.enabled = false;
             }
@@ -255,7 +255,7 @@ namespace GravityReceipt.Player
             _velocity = Vector3.zero;
             _pitch = 0f;
 
-            if (_controller is not null)
+            if (_controller != null)
             {
                 _controller.enabled = true;
             }
