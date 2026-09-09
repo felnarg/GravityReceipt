@@ -179,6 +179,14 @@ namespace GravityReceipt.World
             DisableCollider(rug);
             var plantPot = CreateStaticCube(root.transform, "Furn_HubPlantPot", new Vector3(-4.35f, 0.22f, -2.4f), new Vector3(0.38f, 0.32f, 0.38f), new Color(0.42f, 0.28f, 0.18f));
             AddLocalVisual(plantPot.transform, PrimitiveType.Sphere, new Vector3(0f, 0.85f, 0f), new Vector3(1.15f, 1.4f, 1.15f), new Color(0.18f, 0.55f, 0.28f));
+            var cork = CreateStaticCube(root.transform, "Furn_Corkboard", new Vector3(6.72f, 2.05f, 7.4f), new Vector3(0.06f, 1.1f, 1.6f), new Color(0.62f, 0.48f, 0.28f));
+            DisableCollider(cork);
+            var noteA = CreateStaticCube(root.transform, "Furn_StickyA", new Vector3(6.66f, 2.25f, 7.1f), new Vector3(0.04f, 0.28f, 0.35f), new Color(1f, 0.92f, 0.45f));
+            DisableCollider(noteA);
+            var noteB = CreateStaticCube(root.transform, "Furn_StickyB", new Vector3(6.66f, 1.85f, 7.7f), new Vector3(0.04f, 0.22f, 0.28f), new Color(0.95f, 0.55f, 0.55f));
+            DisableCollider(noteB);
+            var tray = CreateStaticCube(root.transform, "Furn_Inbox", new Vector3(-5.4f, 0.46f, 34.55f), new Vector3(0.4f, 0.05f, 0.32f), new Color(0.72f, 0.22f, 0.18f));
+            DisableCollider(tray);
 
             var matchGo = new GameObject("MatchDirector");
             matchGo.transform.SetParent(root.transform, false);
