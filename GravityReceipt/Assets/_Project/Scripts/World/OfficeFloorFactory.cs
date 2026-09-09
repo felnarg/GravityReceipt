@@ -269,12 +269,7 @@ namespace GravityReceipt.World
                 go.transform.SetParent(parent, false);
                 go.transform.position = new Vector3(0f, 0.24f, z);
                 go.transform.localScale = new Vector3(0.55f, 0.05f, 0.8f);
-                var col = go.GetComponent<Collider>();
-                if (col != null)
-                {
-                    col.enabled = false;
-                }
-
+                DisableCollider(go);
                 SetColor(go, new Color(1f, 0.85f, 0.2f));
             }
         }

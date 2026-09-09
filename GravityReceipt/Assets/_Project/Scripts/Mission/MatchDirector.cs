@@ -180,6 +180,11 @@ namespace GravityReceipt.Mission
                 2 => "Sellar",
                 _ => "Objetivo"
             });
+
+            if (!IsPlaying)
+            {
+                return;
+            }
             var checkpoints = CheckpointSystem.Instance;
             var motors = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
             foreach (var motor in motors)
