@@ -648,6 +648,9 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 ### 2026-09-09 — Overnight bloque 23 (`$` y emotes)
 - Price tags y emotes usan `GravityUpFollow` (legibles con el objeto tumbado / g de lado).
 
+### 2026-09-09 — Overnight bloque 24 (ping)
+- Texto del ping se coloca en g-up (no en Y mundo).
+
 ---
 
 ## Checklist del día (copiar al empezar una sesión)
