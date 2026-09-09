@@ -148,6 +148,7 @@ namespace GravityReceipt.Player
             _renderer = go.GetComponent<Renderer>();
             if (_renderer != null)
             {
+                _renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
                 if (shader != null)
                 {

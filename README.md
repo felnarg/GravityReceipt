@@ -38,7 +38,7 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 | Warp checkpoint (cheat) | **F4** | **F4** |
 | Respawn paquete (cheat) | **F7** | **F7** |
 
-Cheat de iteración (no sale en el HUD): **F3** desatasca · **F4** teleporta al checkpoint · **F6** completa el siguiente objetivo y teleporta · **F7** respawnea el paquete.
+Cheat de iteración (no sale en el HUD): **F3** desatasca · **F4** teleporta al checkpoint (salta el splash) · **F6** completa el siguiente objetivo y teleporta (salta el splash) · **F7** respawnea el paquete.
 
 ### Qué probar (loop corto)
 
