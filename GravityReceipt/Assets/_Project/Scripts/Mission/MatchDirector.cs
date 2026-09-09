@@ -215,6 +215,7 @@ namespace GravityReceipt.Mission
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             MatchEnded?.Invoke(phase, reason);
+            MissionSfx.PlayEnd(phase == MatchPhase.Won);
         }
     }
 }
