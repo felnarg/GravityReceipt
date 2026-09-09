@@ -168,6 +168,15 @@ namespace GravityReceipt.World
             AddLocalVisual(exeLamp.transform, PrimitiveType.Sphere, new Vector3(0f, 0.62f, 0f), new Vector3(2.4f, 1.1f, 2.4f), new Color(1f, 0.88f, 0.45f));
             var hubPlaque = CreateStaticCube(root.transform, "Furn_HubPlaque", new Vector3(0f, 0.95f, -3.55f), new Vector3(0.9f, 0.28f, 0.06f), new Color(0.12f, 0.22f, 0.24f));
             DisableCollider(hubPlaque);
+            var papers = CreateStaticCube(root.transform, "Furn_DeskPapers", new Vector3(-5.7f, 0.46f, 34.05f), new Vector3(0.35f, 0.02f, 0.28f), new Color(0.92f, 0.9f, 0.82f));
+            DisableCollider(papers);
+            var laptop = CreateStaticCube(root.transform, "Furn_Laptop", new Vector3(-6.55f, 0.5f, 34.15f), new Vector3(0.42f, 0.04f, 0.28f), new Color(0.16f, 0.18f, 0.22f));
+            DisableCollider(laptop);
+            AddLocalVisual(laptop.transform, PrimitiveType.Cube, new Vector3(0f, 2.4f, -0.55f), new Vector3(0.95f, 8.5f, 0.08f), new Color(0.22f, 0.45f, 0.72f));
+            var exePlate = CreateStaticCube(root.transform, "Furn_ExePlate", new Vector3(0f, 0.48f, 50.2f), new Vector3(0.7f, 0.04f, 0.22f), new Color(0.78f, 0.64f, 0.22f));
+            DisableCollider(exePlate);
+            var plantPot = CreateStaticCube(root.transform, "Furn_HubPlantPot", new Vector3(-4.35f, 0.22f, -2.4f), new Vector3(0.38f, 0.32f, 0.38f), new Color(0.42f, 0.28f, 0.18f));
+            AddLocalVisual(plantPot.transform, PrimitiveType.Sphere, new Vector3(0f, 0.85f, 0f), new Vector3(1.15f, 1.4f, 1.15f), new Color(0.18f, 0.55f, 0.28f));
 
             var matchGo = new GameObject("MatchDirector");
             matchGo.transform.SetParent(root.transform, false);
@@ -281,6 +290,21 @@ namespace GravityReceipt.World
             AddWindow(parent, "Win_ArcE", ArcC + new Vector3(ArcS.x * 0.5f - 0.22f, 0.45f, -2f), new Vector3(0.08f, 1.8f, 3.2f), new Color(0.95f, 0.82f, 0.45f));
             AddWindow(parent, "Win_OffW", OffC + new Vector3(-OffS.x * 0.5f + 0.22f, 0.4f, 0f), new Vector3(0.08f, 1.9f, 4.4f), new Color(0.4f, 0.7f, 1f));
             AddWindow(parent, "Win_ExeE", ExeC + new Vector3(ExeS.x * 0.5f - 0.22f, 0.5f, 0f), new Vector3(0.08f, 1.6f, 3.6f), new Color(0.95f, 0.7f, 0.35f));
+
+            CreateFloorStamp(parent, "HUB", new Vector3(0f, 0.24f, 0f), new Color(0.55f, 0.92f, 1f));
+            CreateFloorStamp(parent, "ARCHIVE", new Vector3(0f, 0.24f, 10f), new Color(1f, 0.82f, 0.4f));
+            CreateFloorStamp(parent, "PASILLO", new Vector3(0f, 0.24f, 21.5f), new Color(1f, 0.45f, 0.38f));
+            CreateFloorStamp(parent, "OFFICE", new Vector3(0f, 0.24f, 35f), new Color(0.55f, 0.78f, 1f));
+            CreateFloorStamp(parent, "EXECUTIVE", new Vector3(0f, 0.24f, 50f), new Color(1f, 0.78f, 0.35f));
+        }
+
+        private static void CreateFloorStamp(Transform parent, string text, Vector3 pos, Color color)
+        {
+            var host = new GameObject("Stamp_" + text);
+            host.transform.SetParent(parent, false);
+            host.transform.position = pos;
+            host.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            WorldLabel.Create(host.transform, "Text", text, Vector3.zero, color, 0.16f);
         }
 
         private static void AddCeilingTiles(Transform parent, Vector3 center, Vector3 size, Color color)
@@ -408,6 +432,14 @@ namespace GravityReceipt.World
             CreateCube(root.transform, "Rail_R", new Vector3(size.x * 0.5f, -1.15f, 0f), new Vector3(0.08f, 0.08f, size.z * 0.78f), railColor);
             CreateCube(root.transform, "Rail_L2", new Vector3(-size.x * 0.5f, -0.55f, 0f), new Vector3(0.08f, 0.08f, size.z * 0.78f), railColor);
             CreateCube(root.transform, "Rail_R2", new Vector3(size.x * 0.5f, -0.55f, 0f), new Vector3(0.08f, 0.08f, size.z * 0.78f), railColor);
+
+            var neon = new Color(1f, 0.28f, 0.18f);
+            var curbTop = -size.y * 0.5f + WallT * 0.5f + curbH;
+            CreateUnlitCube(root.transform, "Neon_L", new Vector3(-size.x * 0.5f, curbTop + 0.03f, 0f), new Vector3(0.07f, 0.04f, size.z * 0.92f), neon);
+            CreateUnlitCube(root.transform, "Neon_R", new Vector3(size.x * 0.5f, curbTop + 0.03f, 0f), new Vector3(0.07f, 0.04f, size.z * 0.92f), neon);
+            var voidGlow = new Color(0.55f, 0.08f, 0.06f);
+            CreateUnlitCube(root.transform, "VoidGlow_L", new Vector3(-size.x * 0.5f - 1.15f, -size.y * 0.5f - 0.85f, 0f), new Vector3(1.8f, 0.05f, size.z), voidGlow);
+            CreateUnlitCube(root.transform, "VoidGlow_R", new Vector3(size.x * 0.5f + 1.15f, -size.y * 0.5f - 0.85f, 0f), new Vector3(1.8f, 0.05f, size.z), voidGlow);
         }
 
         private static void CreateWallOnZ(Transform parent, string name, Vector3 localPos, Vector3 roomSize, Color color, bool door)
@@ -547,6 +579,23 @@ namespace GravityReceipt.World
             return go;
         }
 
+        private static GameObject CreateUnlitCube(Transform parent, string name, Vector3 position, Vector3 scale, Color color)
+        {
+            var go = CreateStaticCube(parent, name, position, scale, color);
+            DisableCollider(go);
+            var renderer = go.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
+                if (shader != null)
+                {
+                    renderer.sharedMaterial = new Material(shader) { color = color };
+                }
+            }
+
+            return go;
+        }
+
         private static GameObject CreatePackage(Transform parent, Vector3 position, GravityManager gravity)
         {
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -613,6 +662,8 @@ namespace GravityReceipt.World
             WorldLabel.Create(host.transform, "Text", label.ToUpperInvariant(), Vector3.zero, Color.white, 0.1f);
             var billboard = host.AddComponent<FollowBillboard>();
             billboard.Configure(host.transform, Vector3.zero);
+            var upFollow = host.AddComponent<GravityUpFollow>();
+            upFollow.Configure(go.transform, 1.15f);
         }
 
         private static void CreateSign(

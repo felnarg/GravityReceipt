@@ -1,4 +1,5 @@
 using GravityReceipt.Interaction;
+using GravityReceipt.UI;
 using UnityEngine;
 
 namespace GravityReceipt.Gravity
@@ -136,6 +137,12 @@ namespace GravityReceipt.Gravity
             }
 
             _pad = go.transform;
+
+            var word = new GameObject("DownWord");
+            word.transform.SetParent(_pad, false);
+            word.transform.localPosition = new Vector3(0f, 0f, -0.12f);
+            word.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+            WorldLabel.Create(word.transform, "Text", "ABAJO", Vector3.zero, new Color(0.35f, 0.95f, 1f), 0.13f);
         }
     }
 }

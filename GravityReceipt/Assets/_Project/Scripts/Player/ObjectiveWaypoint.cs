@@ -40,7 +40,7 @@ namespace GravityReceipt.Player
                 return;
             }
 
-            if (!TryPickTarget(match, out var worldPos, out var color))
+            if (!TryPickTarget(match, out var worldPos, out var color, out _))
             {
                 Hide();
                 return;
@@ -68,38 +68,84 @@ namespace GravityReceipt.Player
             }
         }
 
-        private bool TryPickTarget(MatchDirector match, out Vector3 worldPos, out Color color)
+        public static bool TryPeekTarget(PlayerMotor motor, out Vector3 worldPos, out Color color, out string label)
         {
             worldPos = default;
             color = Color.white;
+            label = string.Empty;
+            var match = MatchDirector.Instance;
+            if (motor == null || match == null || !match.IsPlaying)
+            {
+                return false;
+            }
 
-            var held = _interactor != null ? _interactor.HeldValuable : null;
+            var interactor = motor.GetComponent<PlayerInteractor>();
+            return TryPickTarget(
+                match,
+                motor.transform.position,
+                interactor,
+                motor.Gravity,
+                out worldPos,
+                out color,
+                out label);
+        }
+
+        private bool TryPickTarget(MatchDirector match, out Vector3 worldPos, out Color color, out string label)
+        {
+            return TryPickTarget(
+                match,
+                transform.position,
+                _interactor,
+                _motor != null ? _motor.Gravity : null,
+                out worldPos,
+                out color,
+                out label);
+        }
+
+        private static bool TryPickTarget(
+            MatchDirector match,
+            Vector3 from,
+            PlayerInteractor interactor,
+            GravityManager gravity,
+            out Vector3 worldPos,
+            out Color color,
+            out string label)
+        {
+            worldPos = default;
+            color = Color.white;
+            label = string.Empty;
+
+            var held = interactor != null ? interactor.HeldValuable : null;
             if (held != null && held.Manager != null && held.Manager.Dominant == held)
             {
                 return false;
             }
 
+            var gDir = gravity != null ? gravity.CurrentDirection : Vector3.down;
+
             if (match.ObjectivesDone == 0)
             {
                 var mug = FindTutorialMug();
                 var holdingMug = held != null && held == mug;
-                if (mug != null && !holdingMug && transform.position.z < 8f)
+                if (mug != null && !holdingMug && from.z < 8f)
                 {
                     worldPos = mug.transform.position;
                     color = new Color(1f, 0.82f, 0.2f);
+                    label = "TAZA $15";
                     return true;
                 }
             }
 
             var pkg = FindAnyObjectByType<MissionPackage>();
-            var holdingPkg = _interactor != null && _interactor.IsHoldingPackage;
+            var holdingPkg = interactor != null && interactor.IsHoldingPackage;
             if (!holdingPkg && pkg != null)
             {
-                var toPkg = Vector3.ProjectOnPlane(pkg.transform.position - transform.position, CurrentGDir());
+                var toPkg = Vector3.ProjectOnPlane(pkg.transform.position - from, gDir);
                 if (toPkg.sqrMagnitude >= 16f)
                 {
                     worldPos = pkg.transform.position;
                     color = new Color(1f, 0.55f, 0.12f);
+                    label = "PAQUETE";
                     return true;
                 }
             }
@@ -110,7 +156,7 @@ namespace GravityReceipt.Player
                 return false;
             }
 
-            var to = Vector3.ProjectOnPlane(target.transform.position - transform.position, CurrentGDir());
+            var to = Vector3.ProjectOnPlane(target.transform.position - from, gDir);
             if (to.sqrMagnitude < 12.25f)
             {
                 return false;
@@ -122,6 +168,12 @@ namespace GravityReceipt.Player
                 0 => new Color(0.35f, 1f, 0.65f),
                 1 => new Color(0.4f, 0.7f, 1f),
                 _ => new Color(1f, 0.82f, 0.25f)
+            };
+            label = match.CurrentObjectiveIndex switch
+            {
+                0 => "ENCHUFAR",
+                1 => "ENTREGAR",
+                _ => "SELLAR"
             };
             return true;
         }

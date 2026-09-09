@@ -33,8 +33,11 @@ namespace GravityReceipt.UI
         private bool _wasTelegraphing;
         private Text _gChipP1;
         private Text _gChipP2;
+        private Text _wayP1;
+        private Text _wayP2;
         private bool _hallwayWarned;
         private bool _archiveWarned;
+        private bool _flipTaught;
         private MatchDirector _boundMatch;
         private string _toast = string.Empty;
         private float _toastUntil;
@@ -105,6 +108,18 @@ namespace GravityReceipt.UI
             if (_gChipP2 != null)
             {
                 _gChipP2.gameObject.SetActive(false);
+            }
+
+            if (_wayP1 != null)
+            {
+                var rt = _wayP1.rectTransform;
+                rt.anchorMin = new Vector2(0.5f, 0.58f);
+                rt.anchorMax = new Vector2(0.5f, 0.58f);
+            }
+
+            if (_wayP2 != null)
+            {
+                _wayP2.gameObject.SetActive(false);
             }
 
             if (helpText != null)
@@ -183,6 +198,16 @@ namespace GravityReceipt.UI
             if (_gChipP2 != null)
             {
                 _gChipP2.gameObject.SetActive(!_chromeHidden && p2 != null);
+            }
+
+            if (_wayP1 != null)
+            {
+                _wayP1.gameObject.SetActive(!_chromeHidden);
+            }
+
+            if (_wayP2 != null)
+            {
+                _wayP2.gameObject.SetActive(!_chromeHidden && p2 != null);
             }
             var g1 = p1 != null ? p1.Gravity : null;
             var g2 = p2 != null ? p2.Gravity : null;
@@ -289,7 +314,10 @@ namespace GravityReceipt.UI
             UpdateLookPrompt(_promptP2, p2, "RShift");
             UpdateGravityChip(_gChipP1, p1);
             UpdateGravityChip(_gChipP2, p2);
+            UpdateOffscreenHint(_wayP1, p1);
+            UpdateOffscreenHint(_wayP2, p2);
             MaybeWarnHallway(p1, p2, match);
+            MaybeTeachFlip(p1, p2, match);
 
             if (Input.GetKeyDown(KeyCode.F8))
             {
@@ -618,6 +646,127 @@ namespace GravityReceipt.UI
             _toastUntil = Time.unscaledTime + 2.8f;
         }
 
+        private void MaybeTeachFlip(PlayerMotor p1, PlayerMotor p2, MatchDirector match)
+        {
+            if (_flipTaught || match == null || !match.IsPlaying || match.IsInSplash)
+            {
+                return;
+            }
+
+            if (!HasUnusualGravity(p1) && !HasUnusualGravity(p2))
+            {
+                return;
+            }
+
+            _flipTaught = true;
+            _toast = "Cara CIAN = ABAJO · camina sobre ella";
+            _toastUntil = Time.unscaledTime + 3.2f;
+        }
+
+        private static bool HasUnusualGravity(PlayerMotor motor)
+        {
+            if (motor == null)
+            {
+                return false;
+            }
+
+            var g = motor.Gravity;
+            return g != null
+                   && !g.IsTelegraphing
+                   && Vector3.Dot(g.CurrentDirection, Vector3.down) < 0.92f;
+        }
+
+        private static void UpdateOffscreenHint(Text hint, PlayerMotor motor)
+        {
+            if (hint == null)
+            {
+                return;
+            }
+
+            if (motor == null)
+            {
+                hint.text = "";
+                return;
+            }
+
+            if (!ObjectiveWaypoint.TryPeekTarget(motor, out var worldPos, out var color, out var label))
+            {
+                hint.text = "";
+                return;
+            }
+
+            var input = motor.GetComponent<LocalPlayerInput>();
+            var cam = input != null ? input.PlayerCamera : null;
+            if (cam == null)
+            {
+                hint.text = "";
+                return;
+            }
+
+            var vp = cam.WorldToViewportPoint(worldPos);
+            var onScreen = vp.z > 0.2f && vp.x > 0.14f && vp.x < 0.86f && vp.y > 0.14f && vp.y < 0.86f;
+            if (onScreen)
+            {
+                hint.text = "";
+                return;
+            }
+
+            var dir = new Vector2(vp.x - 0.5f, vp.y - 0.5f);
+            if (vp.z < 0f)
+            {
+                dir = -dir;
+            }
+
+            hint.text = $"{ArrowGlyph(dir)}  {label}";
+            hint.color = color;
+        }
+
+        private static string ArrowGlyph(Vector2 dir)
+        {
+            if (dir.sqrMagnitude < 0.0001f)
+            {
+                return "•";
+            }
+
+            var a = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            if (a >= -22.5f && a < 22.5f)
+            {
+                return "→";
+            }
+
+            if (a >= 22.5f && a < 67.5f)
+            {
+                return "↗";
+            }
+
+            if (a >= 67.5f && a < 112.5f)
+            {
+                return "↑";
+            }
+
+            if (a >= 112.5f && a < 157.5f)
+            {
+                return "↖";
+            }
+
+            if (a >= 157.5f || a < -157.5f)
+            {
+                return "←";
+            }
+
+            if (a >= -157.5f && a < -112.5f)
+            {
+                return "↙";
+            }
+
+            if (a >= -112.5f && a < -67.5f)
+            {
+                return "↓";
+            }
+
+            return "↘";
+        }
+
         private static bool IsRoom(PlayerMotor motor, string id)
         {
             if (motor == null)
@@ -890,12 +1039,17 @@ namespace GravityReceipt.UI
             _toastUntil = Time.unscaledTime + 1.8f;
         }
 
-        private void OnObjectiveCompleted(int _, string label)
+        private void OnObjectiveCompleted(int index, string label)
         {
-            _toast = label is { Length: > 0 }
-                ? $"¡{label.ToUpperInvariant()} COMPLETADO!"
-                : "¡OBJETIVO COMPLETADO!";
-            _toastUntil = Time.unscaledTime + 2.4f;
+            _toast = index switch
+            {
+                0 => "¡ENCHUFAR!  Siguiente: PASILLO → losa AZUL",
+                1 => "¡ENTREGAR!  Siguiente: EXECUTIVE → losa DORADA",
+                _ => label is { Length: > 0 }
+                    ? $"¡{label.ToUpperInvariant()} COMPLETADO!"
+                    : "¡OBJETIVO COMPLETADO!"
+            };
+            _toastUntil = Time.unscaledTime + 3.2f;
         }
 
         private void EnsureCanvas()
@@ -936,6 +1090,10 @@ namespace GravityReceipt.UI
             _gChipP1.color = new Color(0.7f, 0.92f, 1f);
             _gChipP2 = MakeText(canvasGo.transform, "GChipP2", new Vector2(0f, 42f), new Vector2(0.5f, 0.25f), new Vector2(420f, 28f), 18, TextAnchor.LowerCenter);
             _gChipP2.color = new Color(1f, 0.82f, 0.55f);
+            _wayP1 = MakeText(canvasGo.transform, "WayP1", new Vector2(0f, 78f), new Vector2(0.5f, 0.75f), new Vector2(480f, 32f), 20, TextAnchor.LowerCenter);
+            _wayP1.color = new Color(1f, 0.9f, 0.4f);
+            _wayP2 = MakeText(canvasGo.transform, "WayP2", new Vector2(0f, 78f), new Vector2(0.5f, 0.25f), new Vector2(480f, 32f), 20, TextAnchor.LowerCenter);
+            _wayP2.color = new Color(1f, 0.9f, 0.4f);
             _splitBar = MakeSplitBar(canvasGo.transform);
         }
 

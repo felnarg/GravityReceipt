@@ -29,7 +29,10 @@ namespace GravityReceipt.UI
                 return;
             }
 
-            transform.position = target.position + target.rotation * worldOffset;
+            if (worldOffset.sqrMagnitude > 0.0001f || target != transform)
+            {
+                transform.position = target.position + target.rotation * worldOffset;
+            }
             if (_renderers == null || _renderers.Length == 0)
             {
                 _renderers = GetComponentsInChildren<Renderer>(true);

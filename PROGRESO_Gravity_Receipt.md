@@ -27,10 +27,10 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla/arte |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~01:45 COT (overnight, factory + juice + teach taza) |
+| **Última actualización** | 2026-09-09 ~02:15 COT (overnight, etiquetas g-up + ABAJO + flecha HUD) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
-| **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F3/F4/F6/F7, OOB AABB, waypoint, beacon paquete, pausa P, linger FLIP, pad cian de “abajo”, burst+flash al flip |
-| **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete (sigue la flecha) + flip con caja dorada a una pared |
+| **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F3/F4/F6/F7, OOB AABB, waypoint, beacon paquete, pausa P, linger FLIP, pad cian **ABAJO**, etiquetas de losa siguen g, flecha HUD si el objetivo está fuera de cámara |
+| **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete (sigue la flecha) + flip con caja dorada a una pared · mira el sello ABAJO y las etiquetas ENCHUFAR/ENTREGAR/SELLAR |
 | **Build jugable** | Sí (Editor Play Mode, 1p o 2p local). **Hay que regenerar la escena con el menú Setup.** |
 | **Online 4p** | No (no empezar hasta que el playtest offline sea sólido) |
 | **Bloqueadores** | Este entorno Linux no tiene Unity Editor: no se pudo Play Mode ni grabar el vídeo 1.11 |
@@ -140,6 +140,12 @@ Documento vivo del prototipo.
 - En el umbral del pasillo se prefiere la sala con g propia (el HUD no salta a “g hereda” un metro antes).
 - Toast al entrar a Archive si aún no flippeaste: “caja $80 a una PARED”.
 - Columna y barra de objetivo siguen el “arriba” de g (tras un flip).
+- Etiquetas ENCHUFAR/ENTREGAR/SELLAR se pegan al “arriba” de g (`GravityUpFollow`).
+- Pad cian lleva la palabra **ABAJO**. Tras el primer flip: toast “Cara CIAN = ABAJO”.
+- HUD: flecha de borde (→ TAZA / PAQUETE / ENCHUFAR…) si el objetivo está fuera de cámara.
+- Toast al completar Enchufar/Entregar apunta al siguiente (pasillo/losa).
+- Sellos de sala en el suelo (HUB / ARCHIVE / PASILLO / OFFICE / EXECUTIVE).
+- Pasillo: neón en bordillos + glow rojo en el vacío. Office: laptop/papeles; Hub: planta.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -160,10 +166,10 @@ Documento vivo del prototipo.
 2. Espera a que compile (scripts nuevos en `Assets/_Project/Scripts/...`).
 3. Opción A (recomendada): menú **GravityReceipt → Setup Office Floor A** → OK.  
    Opción B: pulsa **Play** directo; si la escena es la vieja, se reconstruye sola (2p).
-4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja). Los valuables muestran `$` encima. Splash 9 s: “LA GRAVEDAD SIGUE AL OBJETO MÁS CARO” (puedes pulsar **P** para leerlo). El paquete tiene un orbe naranja. La taza $15 tiene un orbe dorado. En el Hub la flecha apunta a la taza.
+4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja). Los valuables muestran `$` encima. Splash 9 s: “LA GRAVEDAD SIGUE AL OBJETO MÁS CARO” (puedes pulsar **P** para leerlo). El paquete tiene un orbe naranja. La taza $15 tiene un orbe dorado. En el Hub la flecha apunta a la taza. En el suelo lee **HUB**. Si miras al techo, el HUD puede mostrar `↓ TAZA $15`.
 5. **P1:** WASD + ratón. Agarra el cubo naranja (mantener E ~0.4 s).
 6. Entra a Archive (norte). Sigue la flecha / columna verde en la pared este: paquete dentro → objetivo Enchufar.
-7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y llévala a una **pared** (en manos o suelta). Espera ~1 s: banner **¡FLIP ARCHIVE!** (se queda un instante al voltear), whoosh, FOV, flash, chispas, la cámara se inclina, g cambia. Un cuadrado cian marca la nueva “abajo”. El primer flip guarda un PNG solo.
+7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y llévala a una **pared** (en manos o suelta). Espera ~1 s: banner **¡FLIP ARCHIVE!** (se queda un instante al voltear), whoosh, FOV, flash, chispas, la cámara se inclina, g cambia. Un cuadrado cian con **ABAJO** marca la nueva “abajo”; un toast lo dice. La etiqueta ENCHUFAR se queda encima de la zona (no en Y mundo). El primer flip guarda un PNG solo.
 8. Cruza el pasillo (bordillos rojos altos; vacío a los lados). Si caes **o sales volando a los lados** (g heredada), respawneas. Si un valuable cae, vuelve a su sitio.
 9. Losa azul Open Office = Entregar. Losa dorada Executive + paquete en manos o mantener E = Sellar.
 10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre. El cronómetro no baja durante el splash inicial. **P** pausa.
@@ -313,7 +319,7 @@ Documento vivo del prototipo.
 | 5.2 | Medir rematch % | [ ] | Meta ≥ 55% |
 | 5.3 | Medir mareo % | [ ] | Meta < 10% |
 | 5.4 | Medir comprensión de la regla | [ ] | Meta ≥ 80% en 1ª partida |
-| 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + roll + linger + hit-stop + viñeta + 4 ticks + flash + chispas + land dip; falta mareo real |
+| 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + roll + linger + hit-stop + viñeta + 4 ticks + flash + chispas + land dip + toast ABAJO; falta mareo real |
 | 5.6 | Pass siluetas/colores valuables | [~] | Primitivas + piezas (asa, pomo, peana, pico, LEDs, maceta, asas trofeo, pestillos, tapa, hojas); falta arte |
 | 5.7 | Emotes (4) + whoosh final | [x] | Whoosh en cada flip; emotes billboard OK/NO/?/¡AQUÍ! (sin animación de avatar) |
 | 5.8 | Decisión go / no-go | [ ] | Ver métricas abajo |
@@ -329,8 +335,8 @@ Documento vivo del prototipo.
 
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
-| 6.1 | Pass de arte (no final, salir de gris total) | [~] | Ventanas unlit, lámparas (también pasillo), zócalos, cubículos, losas de techo, paletas por sala; falta texturas |
-| 6.2 | Pulido UI mínima | [~] | Splash, FLIP linger, toast, `[>]` objetivo, waypoint 3D, distancias, pausa P, paneles HUD, flash, cruceta dominante, chip g por viewport |
+| 6.1 | Pass de arte (no final, salir de gris total) | [~] | Ventanas unlit, lámparas (también pasillo), zócalos, cubículos, losas de techo, paletas, sellos de suelo, neón de vacío, laptop/planta; falta texturas |
+| 6.2 | Pulido UI mínima | [~] | Splash, FLIP linger, toast, `[>]` objetivo, waypoint 3D, distancias, pausa P, paneles HUD, flash, cruceta dominante, chip g, flecha HUD fuera de cámara, ABAJO en pad |
 | 6.3 | Build Steam o itch privada | [ ] | |
 | 6.4 | Trailer 15–20 s del mejor clip | [ ] | |
 | 6.5 | Lista bugs P0 cerrada | [ ] | Gravedad, softlock, desync |
@@ -394,7 +400,7 @@ Cuando exista el proyecto, marcar `0.5`–`0.7` y pegar aquí la ruta real si ca
 | Paquete de misión | `MissionPackage` | [x] | |
 | Objetivos | `ObjectiveTrigger` | [x] | 3 en el piso |
 | Roles | `PlayerRole` | [x] | Runner / Anchor stub |
-| UI telegráfo / outline | `GravityHud` + `DominantValuableOutline` | [x] | Splash + banner FLIP; beacon “TIRA DE G”; pad cian de abajo |
+| UI telegráfo / outline | `GravityHud` + `DominantValuableOutline` | [x] | Splash + banner FLIP; beacon “TIRA DE G”; pad cian **ABAJO**; flecha HUD offscreen |
 | Moment of the Match | `MatchHighlightRecorder` | [x] | Local |
 | Red (host auth g) | por definir en 4.1 | [ ] | |
 | Player move | `PlayerMotor` + `LocalPlayerInput` | [x] | 2p |
@@ -594,6 +600,14 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Pausa del splash + countdown; mancha de pared prevista; brújula de g prevista.
 - Paneles HUD, viñeta, PNG fin de partida, F9 etiquetas, IgnoreCollision paquete.
 
+### 2026-09-09 — Overnight bloque 15 (etiquetas + ABAJO + HUD)
+- `GravityUpFollow` cableado en las 3 losas: el texto ENCHUFAR/ENTREGAR/SELLAR sigue el arriba de g.
+- `FollowBillboard` no pisa la posición si el offset es 0 (billboard-only).
+- Pad cian pinta **ABAJO**. Primer flip → toast “Cara CIAN = ABAJO · camina sobre ella”.
+- HUD por viewport: flecha de borde si taza/paquete/objetivo está fuera de cámara.
+- Toasts de Enchufar/Entregar dicen el siguiente paso.
+- Sellos de sala en el suelo; neón + glow del vacío en el pasillo; laptop/papeles/planta.
+
 ---
 
 ## Checklist del día (copiar al empezar una sesión)
@@ -601,7 +615,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 ```
 Fecha: 2026-09-09
 Enfoque de hoy (1–3 IDs del plan): pulido 5.5/5.6/6.1/6.2 (sin Unity) + playtest mañana
-Hecho: factory order, pad cian, burst/flash, taza beacon, techos, pasos
+Hecho: factory order, pad cian ABAJO, burst/flash, taza beacon, techos, pasos, GravityUpFollow, flecha HUD
 Pendiente al cerrar: playtest Unity local, vídeo 1.11, no online
 Bloqueadores: Unity Editor ausente en el cloud agent
 Actualicé "Estado actual": sí
