@@ -1,3 +1,4 @@
+using GravityReceipt.Gravity;
 using GravityReceipt.Interaction;
 using GravityReceipt.Player;
 using GravityReceipt.World;
@@ -229,6 +230,11 @@ namespace GravityReceipt.Mission
 
         private void MarkCompleteVisual()
         {
+            if (!_done)
+            {
+                GravityFlipBurst.Spawn(transform.position, -CurrentUp(), 8);
+            }
+
             _done = true;
             if (_renderer != null)
             {

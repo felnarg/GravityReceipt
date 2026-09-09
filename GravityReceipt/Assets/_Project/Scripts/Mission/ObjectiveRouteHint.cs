@@ -1,16 +1,15 @@
 using GravityReceipt.Player;
-using GravityReceipt.World;
 using UnityEngine;
 
 namespace GravityReceipt.Mission
 {
     /// <summary>
-    /// Aro unlit en la puerta hacia el objetivo en curso (Hub→Archive→Pasillo→Office→Executive).
+    /// Marco unlit en la puerta hacia el objetivo (no tapa el hueco).
     /// </summary>
     public sealed class ObjectiveRouteHint : MonoBehaviour
     {
         private Transform _ring;
-        private Renderer _renderer;
+        private Renderer[] _bars;
 
         private void LateUpdate()
         {
@@ -30,24 +29,26 @@ namespace GravityReceipt.Mission
 
             EnsureRing();
             _ring.gameObject.SetActive(true);
-            var pos = new Vector3(0f, 1.7f, zDoor);
-            var up = RoomRegistry.UpAt(pos);
-            var pulse = 0.12f * Mathf.Sin(Time.unscaledTime * 4.2f);
-            _ring.position = pos + up * (0.15f + pulse);
-            _ring.localScale = new Vector3(DoorWFrame(), 3.15f, 0.12f);
-            if (_renderer != null)
+            var pulse = 0.035f * Mathf.Sin(Time.unscaledTime * 4.2f);
+            _ring.position = new Vector3(0f, 1.7f, zDoor);
+            _ring.localScale = Vector3.one * (1f + pulse);
+            if (_bars == null)
             {
-                var t = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 4.2f);
-                _renderer.material.color = Color.Lerp(
-                    new Color(1f, 0.85f, 0.2f),
-                    new Color(1f, 0.55f, 0.12f),
-                    t);
+                return;
             }
-        }
 
-        private static float DoorWFrame()
-        {
-            return 2.7f;
+            var t = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 4.2f);
+            var color = Color.Lerp(
+                new Color(1f, 0.85f, 0.2f),
+                new Color(1f, 0.55f, 0.12f),
+                t);
+            for (var i = 0; i < _bars.Length; i++)
+            {
+                if (_bars[i] != null)
+                {
+                    _bars[i].material.color = color;
+                }
+            }
         }
 
         private static float DoorZ(int objectiveIndex)
@@ -95,27 +96,48 @@ namespace GravityReceipt.Mission
                 return;
             }
 
+            var root = new GameObject("ObjectiveRouteHint");
+            root.transform.SetParent(transform, false);
+            _ring = root.transform;
+            const float w = 2.85f;
+            const float h = 3.2f;
+            const float t = 0.11f;
+            _bars = new[]
+            {
+                AddBar(root.transform, "L", new Vector3(-w * 0.5f, 0f, 0f), new Vector3(t, h, t)),
+                AddBar(root.transform, "R", new Vector3(w * 0.5f, 0f, 0f), new Vector3(t, h, t)),
+                AddBar(root.transform, "T", new Vector3(0f, h * 0.5f, 0f), new Vector3(w + t, t, t)),
+                AddBar(root.transform, "B", new Vector3(0f, -h * 0.5f, 0f), new Vector3(w + t, t, t))
+            };
+        }
+
+        private static Renderer AddBar(Transform parent, string name, Vector3 localPos, Vector3 scale)
+        {
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            go.name = "ObjectiveRouteHint";
-            go.transform.SetParent(transform, false);
+            go.name = "Route_" + name;
+            go.transform.SetParent(parent, false);
+            go.transform.localPosition = localPos;
+            go.transform.localScale = scale;
             var col = go.GetComponent<Collider>();
             if (col != null)
             {
                 col.enabled = false;
             }
 
-            _renderer = go.GetComponent<Renderer>();
-            if (_renderer != null)
+            var rend = go.GetComponent<Renderer>();
+            if (rend == null)
             {
-                _renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
-                if (shader != null)
-                {
-                    _renderer.sharedMaterial = new Material(shader) { color = new Color(1f, 0.8f, 0.2f) };
-                }
+                return null;
             }
 
-            _ring = go.transform;
+            rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
+            if (shader != null)
+            {
+                rend.sharedMaterial = new Material(shader) { color = new Color(1f, 0.8f, 0.2f) };
+            }
+
+            return rend;
         }
     }
 }

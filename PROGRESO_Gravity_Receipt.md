@@ -149,6 +149,7 @@ Documento vivo del prototipo.
 - Orbes de paquete/taza y beacon “¡ESTE TIRA DE G!” usan el arriba de g (no el local del objeto al tumbarse).
 - Mancha de pared prevista dice **GIRA**. Aro naranja en la puerta hacia el objetivo (tras el splash).
 - **F10** comfort: reduce shake, FOV punch, roll, viñeta y flash (para mareo).
+- Paquete se aplasta al dent; aviso a 1 vida y a 30 s. Chispas al completar un objetivo.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -622,6 +623,10 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 ### 2026-09-09 — Overnight bloque 18 (paquete + timer)
 - El paquete se aplasta un instante al abollarse; toast “a 1 vida” cuando queda un corazón.
 - Toast **¡30 SEGUNDOS!** al cronómetro. Alfombra Executive.
+
+### 2026-09-09 — Overnight bloque 19 (objetivo)
+- Chispas al completar Enchufar/Entregar/Sellar.
+- El aro de puerta es un **marco** (no un cubo sólido que tapaba el hueco).
 
 ---
 
