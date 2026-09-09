@@ -102,6 +102,8 @@ Documento vivo del prototipo.
 - **P** pausa (timescale 0; también congela el splash) · **F3** desatasca jugadores.
 - Puertas 2.6 m; ventanas unlit, lámparas de techo, zócalos E/W, cubículos Office, cuadro Executive.
 - Siluetas extra: asas del trofeo, pestillos del maletín, tapa de cafetera, pantalla del monitor, 3.er cajón.
+- Prompt al llevar el dominante: “acércala a una PARED” / “¡FLIP en camino!”.
+- Barandillas en el pasillo (dos alturas) para leer el vacío y frenar un poco con g de lado.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -532,6 +534,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Dress de salas: ventanas, lámparas, zócalos E/W, cubículos, cuadro.
 - Siluetas extra en trofeo / maletín / cafetera / monitor / archivador.
 - Splash 9 s usa `deltaTime` (P lo congela para leer). Flecha naranja al paquete si está lejos.
+- Prompt “acércala a una PARED” al llevar el dominante; barandillas en el pasillo.
 
 ---
 

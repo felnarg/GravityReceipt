@@ -73,12 +73,38 @@ namespace GravityReceipt.Interaction
         private void TickHolding()
         {
             HasLookTarget = false;
-            LookHint = _held != null ? "soltar" : "";
+            LookHint = HoldHint();
             ClearFocus();
             if (_held == null || _input.DropPressed())
             {
                 Drop();
             }
+        }
+
+        private string HoldHint()
+        {
+            if (_held == null)
+            {
+                return "";
+            }
+
+            if (_heldValuable == null)
+            {
+                return "soltar";
+            }
+
+            var g = _heldValuable.Manager;
+            if (g == null || g.Dominant != _heldValuable)
+            {
+                return "soltar";
+            }
+
+            if (g.IsTelegraphing)
+            {
+                return "soltar · ¡FLIP en camino!";
+            }
+
+            return "soltar · acércala a una PARED";
         }
 
         private void TickIdle()

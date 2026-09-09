@@ -330,6 +330,12 @@ namespace GravityReceipt.World
                 CreateCube(root.transform, "Post_L", new Vector3(-size.x * 0.5f, -size.y * 0.15f, z), new Vector3(0.12f, size.y * 0.5f, 0.12f), new Color(0.7f, 0.25f, 0.2f));
                 CreateCube(root.transform, "Post_R", new Vector3(size.x * 0.5f, -size.y * 0.15f, z), new Vector3(0.12f, size.y * 0.5f, 0.12f), new Color(0.7f, 0.25f, 0.2f));
             }
+
+            var railColor = new Color(0.85f, 0.28f, 0.22f);
+            CreateCube(root.transform, "Rail_L", new Vector3(-size.x * 0.5f, -1.15f, 0f), new Vector3(0.08f, 0.08f, size.z * 0.78f), railColor);
+            CreateCube(root.transform, "Rail_R", new Vector3(size.x * 0.5f, -1.15f, 0f), new Vector3(0.08f, 0.08f, size.z * 0.78f), railColor);
+            CreateCube(root.transform, "Rail_L2", new Vector3(-size.x * 0.5f, -0.55f, 0f), new Vector3(0.08f, 0.08f, size.z * 0.78f), railColor);
+            CreateCube(root.transform, "Rail_R2", new Vector3(size.x * 0.5f, -0.55f, 0f), new Vector3(0.08f, 0.08f, size.z * 0.78f), railColor);
         }
 
         private static void CreateWallOnZ(Transform parent, string name, Vector3 localPos, Vector3 roomSize, Color color, bool door)

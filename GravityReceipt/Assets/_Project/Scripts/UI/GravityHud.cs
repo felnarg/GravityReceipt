@@ -469,8 +469,12 @@ namespace GravityReceipt.UI
 
             if (inter.IsHolding)
             {
-                prompt.text = $"{grabKey}  soltar";
-                prompt.color = new Color(1f, 0.75f, 0.35f);
+                prompt.text = inter.LookHint is { Length: > 0 }
+                    ? $"{grabKey}  {inter.LookHint}"
+                    : $"{grabKey}  soltar";
+                prompt.color = inter.LookHint.Contains("PARED") || inter.LookHint.Contains("FLIP")
+                    ? new Color(1f, 0.85f, 0.3f)
+                    : new Color(1f, 0.75f, 0.35f);
                 return;
             }
 
