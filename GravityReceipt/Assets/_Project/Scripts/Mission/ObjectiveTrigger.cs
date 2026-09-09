@@ -190,6 +190,7 @@ namespace GravityReceipt.Mission
                 _beaconRenderer = go.GetComponent<Renderer>();
                 if (_beaconRenderer != null)
                 {
+                    _beaconRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                     var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
                     if (shader != null)
                     {
