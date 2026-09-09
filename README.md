@@ -8,6 +8,15 @@ La gracia no es leer carteles. Es que un compañero lleva el paquete por el pasi
 
 Paquete naranja → zona **VERDE** → losa **AZUL** → losa **DORADA** (mantén E). El `$` más caro es la herramienta (y el caos), no el objetivo.
 
+## Arte (gratis, CC0)
+
+El piso ya no es solo cubos grises:
+
+- **Muebles 3D** (sillas, escritorios, estanterías, sofá, plantas, lámparas): [Kenney Furniture Kit](https://kenney.nl/assets/furniture-kit) (CC0). Se cargan en Play desde `Assets/StreamingAssets/Kenney/` (no hace falta importar FBX en el Editor).
+- **Suelos y paredes** (madera, alfombra, yeso): [ambientCG](https://ambientcg.com) WoodFloor051 / Carpet008 / Plaster001 (CC0), en `StreamingAssets/Textures/`.
+
+Tras **Setup Office Floor A**, Archive se lee de madera, Hub/Office de alfombra, Executive de madera + sofá. El paquete y los `$` siguen siendo siluetas propias (tienen que leerse al vuelo).
+
 ## Requisitos
 
 - Unity **6000.6.0f1**

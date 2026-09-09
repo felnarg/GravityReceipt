@@ -1,0 +1,2 @@
+WoodFloor051, Carpet008, Plaster001 color maps from ambientCG (https://ambientcg.com).
+License: CC0 1.0 Universal.

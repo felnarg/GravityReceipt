@@ -25,12 +25,12 @@ Documento vivo del prototipo.
 
 | Campo | Valor |
 |-------|--------|
-| **Fase** | 1–2 proto + 3–6 mapa + **pass UX** (menos texto, misión visible) |
+| **Fase** | 1–2 proto + 3–6 mapa + UX + **pass arte CC0** |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 15:30 COT — pass UX (feedback: no se entendía el objetivo, HUD saturado) |
-| **En curso ahora** | Playtest humano 2p con HUD limpio + vídeo 1.11 |
-| **Hecho relevante** | Misión en una línea (`PAQUETE → VERDE`); splash 5 s; help solo en pausa; carteles de tutorial recortados |
-| **Siguiente acción concreta** | Unity: Setup Office Floor A → Play → sigue la flecha al paquete naranja → zona verde. No leas el HUD de ayuda (está en **P**). |
+| **Última actualización** | 2026-09-09 17:15 COT — Kenney + ambientCG (menos alfa) |
+| **En curso ahora** | Playtest humano 2p con HUD limpio + oficinas con muebles de verdad |
+| **Hecho relevante** | Misión en una línea; muebles Kenney (CC0); suelos madera/alfombra; paredes yeso |
+| **Siguiente acción concreta** | Unity: Setup Office Floor A → Play. Archive = madera + librería. Hub = alfombra + escritorio/silla. Executive = sofá. |
 | **Build jugable** | Sí (Editor Play Mode). **Regenerar escena con Setup.** |
 | **Online 4p** | No |
 | **Bloqueadores** | Sin Unity Editor en este entorno |
@@ -161,6 +161,7 @@ Documento vivo del prototipo.
 - Primer agarre del paquete: toast **“PAQUETE no tira de g · enchúfalo”**. El prompt al llevarlo: “soltar · enchúfalo (no tira de g)”.
 - Si agarrás `$` y gris/paquete durante el splash, gana el toast de pared (la regla).
 - **Pass UX (post playtest del autor):** se recortó el muro de texto. Misión = una línea. Splash 5 s. Help/controles **solo en pausa (P)**. Flecha al **paquete**, no a la taza. Labels 3D solo en el objetivo actual. Beacon dominante = `$ MÁX`.
+- **Pass arte CC0:** Kenney Furniture (sillas, escritorios, librerías, sofá) + texturas ambientCG en suelos/paredes. Jugadores con cabeza. Ya no es un piso de cubos planos.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -333,7 +334,7 @@ Documento vivo del prototipo.
 | 5.3 | Medir mareo % | [ ] | Meta < 10% |
 | 5.4 | Medir comprensión de la regla | [ ] | Meta ≥ 80% en 1ª partida |
 | 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + roll + linger + hit-stop + viñeta + 4 ticks + flash + chispas + land dip + toast ABAJO + **F10 comfort**; falta mareo real |
-| 5.6 | Pass siluetas/colores valuables | [~] | Primitivas + piezas (asa, pomo, peana, pico, LEDs, maceta, asas trofeo, pestillos, tapa, hojas); falta arte |
+| 5.6 | Pass siluetas/colores valuables | [~] | Siluetas propias + caja con puerta; ambiente Kenney. Falta arte final de los `$` |
 | 5.7 | Emotes (4) + whoosh final | [x] | Whoosh en cada flip; emotes billboard OK/NO/?/¡AQUÍ! (sin animación de avatar) |
 | 5.8 | Decisión go / no-go | [ ] | Ver métricas abajo |
 
@@ -348,7 +349,7 @@ Documento vivo del prototipo.
 
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
-| 6.1 | Pass de arte (no final, salir de gris total) | [~] | Ventanas unlit **con marco**, lámparas, zócalos, cubículos, losas de techo, paletas, sellos de suelo, neón de vacío, laptop/planta/corkboard; falta texturas |
+| 6.1 | Pass de arte (no final, salir de gris total) | [~] | Kenney Furniture (CC0) + texturas ambientCG en suelos/paredes. Sigue siendo low-poly, ya no blockout gris |
 | 6.2 | Pulido UI mínima | [~] | Pass UX 2026-09-09: una línea de misión, splash 5 s, help solo en pausa, menos carteles. Falta playtest |
 | 6.3 | Build Steam o itch privada | [ ] | |
 | 6.4 | Trailer 15–20 s del mejor clip | [ ] | |
@@ -671,6 +672,14 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Fuera: carteles de “ENCHUFA / SUELTA LA CAJA / MANTÉN E”. Labels 3D solo del objetivo actual (`AQUÍ` / `MANTÉN E`).
 - Flecha al paquete (ya no a la taza). Beacon `$ MÁX`. Toasts de gris/paquete/pasillo/Archive apagados.
 - Gate 1–2: simplificar UI, no añadir features.
+
+### 2026-09-09 — Pass arte (menos alfa)
+- Revisados packs gratis: **Kenney Furniture Kit** (CC0, OpenGameArt) y **ambientCG** (CC0). El Asset Store exige Editor/login; estos se bajan en zip y van a `StreamingAssets`.
+- Loader runtime OBJ/MTL (`KenneyProp`) + `SurfaceLook` (JPG sin importar).
+- Salas: madera Archive/Executive, alfombra Hub/Office, yeso en paredes.
+- Muebles con forma: escritorio, silla, librería, sofá, planta, lámparas, pantalla, laptop, papelera, perchero, radio.
+- Jugadores: cabeza + visor (ya no solo cápsula).
+- Asset Store / URP packs de pago: no. Sem 7–8 online: no.
 
 ---
 

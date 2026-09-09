@@ -80,6 +80,7 @@ namespace GravityReceipt.World
 
             var taza = CreateValuable(root.transform, "Valuable_Taza_15", new Vector3(-2.2f, 0.52f, 1.1f), new Vector3(0.36f, 0.28f, 0.36f), 15, hubG, new Color(0.75f, 0.45f, 0.28f), PrimitiveType.Cylinder);
             AddLocalVisual(taza.transform, PrimitiveType.Cube, new Vector3(0.72f, 0f, 0f), new Vector3(0.28f, 0.85f, 0.18f), new Color(0.7f, 0.42f, 0.25f));
+            AddLocalVisual(taza.transform, PrimitiveType.Cylinder, new Vector3(0f, 0.55f, 0f), new Vector3(1.05f, 0.08f, 1.05f), new Color(0.7f, 0.4f, 0.22f));
             taza.AddComponent<TutorialItemBeacon>();
             var arch = CreateValuable(root.transform, "Valuable_Archivador_40", new Vector3(-3.6f, 1.0f, 8.5f), new Vector3(0.8f, 1.6f, 0.5f), 40, arcG, new Color(0.55f, 0.38f, 0.22f), PrimitiveType.Cube);
             AddLocalVisual(arch.transform, PrimitiveType.Cube, new Vector3(0f, 0.18f, 0.52f), new Vector3(0.85f, 0.28f, 0.08f), new Color(0.4f, 0.28f, 0.16f));
@@ -87,6 +88,8 @@ namespace GravityReceipt.World
             AddLocalVisual(arch.transform, PrimitiveType.Cube, new Vector3(0f, -0.48f, 0.52f), new Vector3(0.85f, 0.22f, 0.08f), new Color(0.35f, 0.24f, 0.14f));
             var caja = CreateValuable(root.transform, "Valuable_CajaFuerte_80", new Vector3(3.4f, 0.75f, 12.2f), new Vector3(1.1f, 1.1f, 1.1f), 80, arcG, new Color(0.9f, 0.72f, 0.18f), PrimitiveType.Cube);
             AddLocalVisual(caja.transform, PrimitiveType.Cylinder, new Vector3(0f, 0f, 0.56f), new Vector3(0.22f, 0.08f, 0.22f), new Color(0.35f, 0.32f, 0.28f));
+            AddLocalVisual(caja.transform, PrimitiveType.Cube, new Vector3(0f, 0.02f, 0.52f), new Vector3(0.72f, 0.72f, 0.06f), new Color(0.72f, 0.58f, 0.16f));
+            AddLocalVisual(caja.transform, PrimitiveType.Cube, new Vector3(0.38f, 0.08f, 0.52f), new Vector3(0.08f, 0.18f, 0.08f), new Color(0.2f, 0.18f, 0.16f));
             var monitor = CreateValuable(root.transform, "Valuable_Monitor_120", new Vector3(4.5f, 0.55f, 32f), new Vector3(1.4f, 0.85f, 0.12f), 120, offG, new Color(0.15f, 0.45f, 0.95f), PrimitiveType.Cube);
             AddLocalVisual(monitor.transform, PrimitiveType.Cube, new Vector3(0f, -0.7f, 0.8f), new Vector3(0.18f, 0.55f, 0.7f), new Color(0.12f, 0.12f, 0.16f));
             var monitorScreen = AddLocalVisual(monitor.transform, PrimitiveType.Cube, new Vector3(0f, 0.02f, 0.08f), new Vector3(0.82f, 0.72f, 0.2f), new Color(0.35f, 0.75f, 1f));
@@ -118,27 +121,11 @@ namespace GravityReceipt.World
             pkg.AddComponent<PackageBeacon>();
             AttachPriceTag(pkg.transform, 0, 0.45f, "PAQUETE");
             CreateProp(root.transform, "Prop_CajaGris", new Vector3(2.4f, 0.4f, -1.4f), new Vector3(0.7f, 0.7f, 0.7f), new Color(0.42f, 0.44f, 0.46f), hubG);
-            var silla = CreateProp(root.transform, "Prop_Silla", new Vector3(-3.4f, 0.45f, -1.2f), new Vector3(0.45f, 0.85f, 0.45f), new Color(0.32f, 0.3f, 0.28f), hubG);
-            AddLocalVisual(silla.transform, PrimitiveType.Cube, new Vector3(0f, 0.55f, -0.42f), new Vector3(1f, 0.95f, 0.16f), new Color(0.28f, 0.26f, 0.24f));
-            CreateProp(root.transform, "Prop_Mesa", new Vector3(3.2f, 0.35f, 1.6f), new Vector3(1.4f, 0.12f, 0.8f), new Color(0.38f, 0.28f, 0.2f), hubG);
             CreateProp(root.transform, "Prop_CajaArchive", new Vector3(-5.2f, 0.4f, 11.5f), new Vector3(0.65f, 0.65f, 0.65f), new Color(0.4f, 0.4f, 0.42f), arcG);
-            CreateProp(root.transform, "Prop_Libros", new Vector3(5.2f, 0.35f, 13.5f), new Vector3(0.9f, 0.35f, 0.5f), new Color(0.45f, 0.22f, 0.18f), arcG);
-            CreateProp(root.transform, "Prop_Sillon", new Vector3(-1.8f, 0.45f, 48.2f), new Vector3(1.1f, 0.7f, 0.7f), new Color(0.28f, 0.2f, 0.16f), exeG);
             CreateProp(root.transform, "Prop_Jarron", new Vector3(3.4f, 0.4f, 47.2f), new Vector3(0.28f, 0.55f, 0.28f), new Color(0.38f, 0.36f, 0.4f), exeG);
-            var sillaOff = CreateProp(root.transform, "Prop_SillaOffice", new Vector3(-4.2f, 0.45f, 33.5f), new Vector3(0.5f, 0.85f, 0.5f), new Color(0.3f, 0.34f, 0.4f), offG);
-            AddLocalVisual(sillaOff.transform, PrimitiveType.Cube, new Vector3(0f, 0.55f, -0.42f), new Vector3(1f, 0.95f, 0.16f), new Color(0.22f, 0.26f, 0.32f));
-            CreateProp(root.transform, "Prop_Papelera", new Vector3(5.4f, 0.35f, 33.2f), new Vector3(0.4f, 0.5f, 0.4f), new Color(0.4f, 0.42f, 0.45f), offG);
-
-            CreateStaticCube(root.transform, "Furn_ArchiveShelf", new Vector3(-6.2f, 1.35f, 7.2f), new Vector3(0.35f, 2.6f, 3.4f), new Color(0.42f, 0.32f, 0.22f));
-            CreateStaticCube(root.transform, "Furn_OfficeDesk", new Vector3(-6.2f, 0.38f, 34.2f), new Vector3(2.2f, 0.12f, 1.0f), new Color(0.55f, 0.48f, 0.38f));
-            CreateStaticCube(root.transform, "Furn_OfficeDeskLegL", new Vector3(-7.05f, 0.18f, 34.2f), new Vector3(0.12f, 0.36f, 0.85f), new Color(0.28f, 0.26f, 0.24f));
-            CreateStaticCube(root.transform, "Furn_OfficeDeskLegR", new Vector3(-5.35f, 0.18f, 34.2f), new Vector3(0.12f, 0.36f, 0.85f), new Color(0.28f, 0.26f, 0.24f));
-            CreateStaticCube(root.transform, "Furn_ExeTable", new Vector3(0f, 0.38f, 50.2f), new Vector3(3.6f, 0.12f, 1.6f), new Color(0.28f, 0.16f, 0.1f));
-            CreateStaticCube(root.transform, "Furn_ExeTableLeg1", new Vector3(-1.5f, 0.18f, 49.6f), new Vector3(0.12f, 0.36f, 0.12f), new Color(0.18f, 0.1f, 0.06f));
-            CreateStaticCube(root.transform, "Furn_ExeTableLeg2", new Vector3(1.5f, 0.18f, 49.6f), new Vector3(0.12f, 0.36f, 0.12f), new Color(0.18f, 0.1f, 0.06f));
-            CreateStaticCube(root.transform, "Furn_ExeTableLeg3", new Vector3(-1.5f, 0.18f, 50.8f), new Vector3(0.12f, 0.36f, 0.12f), new Color(0.18f, 0.1f, 0.06f));
-            CreateStaticCube(root.transform, "Furn_ExeTableLeg4", new Vector3(1.5f, 0.18f, 50.8f), new Vector3(0.12f, 0.36f, 0.12f), new Color(0.18f, 0.1f, 0.06f));
-            CreateStaticCube(root.transform, "Furn_HubCounter", new Vector3(0f, 0.42f, -3.45f), new Vector3(3.4f, 0.14f, 0.55f), new Color(0.22f, 0.34f, 0.36f));
+            DressKenneyFurniture(root.transform);
+            var hubCounter = CreateStaticCube(root.transform, "Furn_HubCounter", new Vector3(0f, 0.42f, -3.45f), new Vector3(3.4f, 0.14f, 0.55f), new Color(0.55f, 0.42f, 0.28f));
+            SurfaceLook.Paint(hubCounter, new Color(0.72f, 0.55f, 0.34f), SurfaceKind.Wood, 1.4f);
             var cooler = CreateStaticCube(root.transform, "Furn_WaterCooler", new Vector3(4.4f, 0.7f, -2.6f), new Vector3(0.45f, 1.2f, 0.45f), new Color(0.75f, 0.82f, 0.88f));
             var tank = AddLocalVisual(cooler.transform, PrimitiveType.Cylinder, new Vector3(0f, 0.55f, 0f), new Vector3(0.7f, 0.35f, 0.7f), new Color(0.45f, 0.75f, 0.95f));
             tank.AddComponent<PulseColor>().Configure(new Color(0.45f, 0.75f, 0.95f), new Color(0.25f, 0.55f, 0.85f), 2.4f);
@@ -155,20 +142,10 @@ namespace GravityReceipt.World
             printerLed.AddComponent<PulseColor>().Configure(new Color(0.2f, 1f, 0.35f), new Color(0.05f, 0.25f, 0.1f), 6f);
             var mat = CreateStaticCube(root.transform, "Furn_SpawnMat", new Vector3(0f, 0.03f, -1.8f), new Vector3(3.4f, 0.04f, 1.6f), new Color(0.18f, 0.4f, 0.42f));
             DisableCollider(mat);
-            CreateStaticCube(root.transform, "Furn_ArchiveShelfB", new Vector3(6.2f, 1.35f, 12.6f), new Vector3(0.35f, 2.6f, 2.6f), new Color(0.4f, 0.3f, 0.2f));
             CreateStaticCube(root.transform, "Furn_CubicleL", new Vector3(-5.8f, 0.65f, 35.5f), new Vector3(0.1f, 1.3f, 3.6f), new Color(0.38f, 0.46f, 0.55f));
             CreateStaticCube(root.transform, "Furn_CubicleLFront", new Vector3(-4.2f, 0.65f, 33.75f), new Vector3(3.1f, 1.3f, 0.1f), new Color(0.38f, 0.46f, 0.55f));
             CreateStaticCube(root.transform, "Furn_CubicleR", new Vector3(7.15f, 0.65f, 36.8f), new Vector3(0.1f, 1.3f, 3.2f), new Color(0.38f, 0.46f, 0.55f));
             CreateStaticCube(root.transform, "Furn_ExePainting", new Vector3(5.72f, 2.1f, 50f), new Vector3(0.08f, 1.4f, 1.8f), new Color(0.55f, 0.22f, 0.18f));
-            var shelfBoxA = CreateStaticCube(root.transform, "Furn_ShelfBoxA", new Vector3(-6.0f, 1.85f, 6.4f), new Vector3(0.28f, 0.22f, 0.45f), new Color(0.55f, 0.38f, 0.22f));
-            DisableCollider(shelfBoxA);
-            var shelfBoxB = CreateStaticCube(root.transform, "Furn_ShelfBoxB", new Vector3(-6.0f, 1.15f, 7.6f), new Vector3(0.28f, 0.22f, 0.5f), new Color(0.48f, 0.22f, 0.18f));
-            DisableCollider(shelfBoxB);
-            var keyboard = CreateStaticCube(root.transform, "Furn_Keyboard", new Vector3(-6.2f, 0.48f, 34.2f), new Vector3(0.7f, 0.04f, 0.28f), new Color(0.18f, 0.18f, 0.2f));
-            DisableCollider(keyboard);
-            var exeLamp = CreateStaticCube(root.transform, "Furn_ExeLamp", new Vector3(1.4f, 0.72f, 50.2f), new Vector3(0.12f, 0.55f, 0.12f), new Color(0.72f, 0.62f, 0.28f));
-            DisableCollider(exeLamp);
-            AddLocalVisual(exeLamp.transform, PrimitiveType.Sphere, new Vector3(0f, 0.62f, 0f), new Vector3(2.4f, 1.1f, 2.4f), new Color(1f, 0.88f, 0.45f));
             var hubPlaque = CreateStaticCube(root.transform, "Furn_HubPlaque", new Vector3(0f, 0.95f, -3.55f), new Vector3(0.9f, 0.28f, 0.06f), new Color(0.12f, 0.22f, 0.24f));
             DisableCollider(hubPlaque);
             var plaqueText = new GameObject("Furn_HubPlaque_Text");
@@ -176,11 +153,6 @@ namespace GravityReceipt.World
             plaqueText.transform.position = new Vector3(0f, 0.95f, -3.48f);
             plaqueText.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             WorldLabel.Create(plaqueText.transform, "Text", "RECEPCIÓN", Vector3.zero, new Color(0.75f, 0.95f, 1f), 0.07f);
-            var papers = CreateStaticCube(root.transform, "Furn_DeskPapers", new Vector3(-5.7f, 0.46f, 34.05f), new Vector3(0.35f, 0.02f, 0.28f), new Color(0.92f, 0.9f, 0.82f));
-            DisableCollider(papers);
-            var laptop = CreateStaticCube(root.transform, "Furn_Laptop", new Vector3(-6.55f, 0.5f, 34.15f), new Vector3(0.42f, 0.04f, 0.28f), new Color(0.16f, 0.18f, 0.22f));
-            DisableCollider(laptop);
-            AddLocalVisual(laptop.transform, PrimitiveType.Cube, new Vector3(0f, 2.4f, -0.55f), new Vector3(0.95f, 8.5f, 0.08f), new Color(0.22f, 0.45f, 0.72f));
             var exePlate = CreateStaticCube(root.transform, "Furn_ExePlate", new Vector3(0f, 0.48f, 50.2f), new Vector3(0.7f, 0.04f, 0.22f), new Color(0.78f, 0.64f, 0.22f));
             DisableCollider(exePlate);
             var ceoText = new GameObject("Furn_ExePlate_Text");
@@ -188,10 +160,9 @@ namespace GravityReceipt.World
             ceoText.transform.position = new Vector3(0f, 0.52f, 50.2f);
             ceoText.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             WorldLabel.Create(ceoText.transform, "Text", "CEO", Vector3.zero, new Color(0.2f, 0.1f, 0.05f), 0.08f);
-            var rug = CreateStaticCube(root.transform, "Furn_ExeRug", new Vector3(0f, 0.04f, 50.2f), new Vector3(4.4f, 0.03f, 2.8f), new Color(0.42f, 0.16f, 0.12f));
+            var rug = CreateStaticCube(root.transform, "Furn_ExeRug", new Vector3(0f, 0.04f, 50.2f), new Vector3(4.4f, 0.03f, 2.8f), new Color(0.85f, 0.35f, 0.28f));
             DisableCollider(rug);
-            var plantPot = CreateStaticCube(root.transform, "Furn_HubPlantPot", new Vector3(-4.35f, 0.22f, -2.4f), new Vector3(0.38f, 0.32f, 0.38f), new Color(0.42f, 0.28f, 0.18f));
-            AddLocalVisual(plantPot.transform, PrimitiveType.Sphere, new Vector3(0f, 0.85f, 0f), new Vector3(1.15f, 1.4f, 1.15f), new Color(0.18f, 0.55f, 0.28f));
+            SurfaceLook.Paint(rug, new Color(0.85f, 0.35f, 0.28f), SurfaceKind.Carpet, 2.2f);
             var cork = CreateStaticCube(root.transform, "Furn_Corkboard", new Vector3(6.72f, 2.05f, 7.4f), new Vector3(0.06f, 1.1f, 1.6f), new Color(0.62f, 0.48f, 0.28f));
             DisableCollider(cork);
             var noteA = CreateStaticCube(root.transform, "Furn_StickyA", new Vector3(6.66f, 2.25f, 7.1f), new Vector3(0.04f, 0.28f, 0.35f), new Color(1f, 0.92f, 0.45f));
@@ -412,16 +383,18 @@ namespace GravityReceipt.World
             root.transform.SetParent(parent, false);
             root.transform.position = center;
 
-            CreateCube(root.transform, "Floor", new Vector3(0f, -size.y * 0.5f, 0f), new Vector3(size.x + WallT, WallT, size.z + WallT), floor);
+            var floorKind = name is "Archive" or "Executive" ? SurfaceKind.Wood : SurfaceKind.Carpet;
+            var wallKind = SurfaceKind.Plaster;
+            CreateCube(root.transform, "Floor", new Vector3(0f, -size.y * 0.5f, 0f), new Vector3(size.x + WallT, WallT, size.z + WallT), floor, floorKind, 2.4f);
             var stripe = CreateCube(root.transform, "FloorStripe", new Vector3(0f, -size.y * 0.5f + WallT * 0.5f + 0.02f, 0f), new Vector3(0.28f, 0.03f, size.z * 0.82f), new Color(0.25f, 0.62f, 0.78f));
             DisableCollider(stripe);
-            CreateCube(root.transform, "Ceiling", new Vector3(0f, size.y * 0.5f, 0f), new Vector3(size.x + WallT, WallT, size.z + WallT), wall * 1.15f);
+            CreateCube(root.transform, "Ceiling", new Vector3(0f, size.y * 0.5f, 0f), new Vector3(size.x + WallT, WallT, size.z + WallT), wall * 1.15f, wallKind, 1.8f);
             var ceilStripe = CreateCube(root.transform, "CeilingStripe", new Vector3(0f, size.y * 0.5f - WallT * 0.5f - 0.02f, 0f), new Vector3(0.22f, 0.03f, size.z * 0.82f), new Color(0.95f, 0.45f, 0.2f));
             DisableCollider(ceilStripe);
-            CreateWallOnZ(root.transform, "Wall_N", new Vector3(0f, 0f, size.z * 0.5f), size, wall, northDoor);
-            CreateWallOnZ(root.transform, "Wall_S", new Vector3(0f, 0f, -size.z * 0.5f), size, wall, southDoor);
-            CreateCube(root.transform, "Wall_E", new Vector3(size.x * 0.5f, 0f, 0f), new Vector3(WallT, size.y + WallT, size.z + WallT), wall);
-            CreateCube(root.transform, "Wall_W", new Vector3(-size.x * 0.5f, 0f, 0f), new Vector3(WallT, size.y + WallT, size.z + WallT), wall);
+            CreateWallOnZ(root.transform, "Wall_N", new Vector3(0f, 0f, size.z * 0.5f), size, wall, northDoor, wallKind);
+            CreateWallOnZ(root.transform, "Wall_S", new Vector3(0f, 0f, -size.z * 0.5f), size, wall, southDoor, wallKind);
+            CreateCube(root.transform, "Wall_E", new Vector3(size.x * 0.5f, 0f, 0f), new Vector3(WallT, size.y + WallT, size.z + WallT), wall, wallKind, 2.2f);
+            CreateCube(root.transform, "Wall_W", new Vector3(-size.x * 0.5f, 0f, 0f), new Vector3(WallT, size.y + WallT, size.z + WallT), wall, wallKind, 2.2f);
         }
 
         private static void CreateCatwalk(Transform parent, string name, Vector3 center, Vector3 size, Color floor)
@@ -429,7 +402,7 @@ namespace GravityReceipt.World
             var root = new GameObject("RoomMesh_" + name);
             root.transform.SetParent(parent, false);
             root.transform.position = center;
-            CreateCube(root.transform, "Floor", new Vector3(0f, -size.y * 0.5f, 0f), new Vector3(size.x, WallT, size.z), floor);
+            CreateCube(root.transform, "Floor", new Vector3(0f, -size.y * 0.5f, 0f), new Vector3(size.x, WallT, size.z), floor, SurfaceKind.Wood, 3.2f);
             var stripe = CreateCube(root.transform, "FloorStripe", new Vector3(0f, -size.y * 0.5f + WallT * 0.5f + 0.02f, 0f), new Vector3(0.22f, 0.03f, size.z * 0.9f), new Color(0.25f, 0.62f, 0.78f));
             DisableCollider(stripe);
             var curbH = 0.58f;
@@ -464,20 +437,20 @@ namespace GravityReceipt.World
             CreateUnlitCube(root.transform, "VoidGlow_R", new Vector3(size.x * 0.5f + 1.15f, -size.y * 0.5f - 0.85f, 0f), new Vector3(1.8f, 0.05f, size.z), voidGlow);
         }
 
-        private static void CreateWallOnZ(Transform parent, string name, Vector3 localPos, Vector3 roomSize, Color color, bool door)
+        private static void CreateWallOnZ(Transform parent, string name, Vector3 localPos, Vector3 roomSize, Color color, bool door, SurfaceKind look = SurfaceKind.Plaster)
         {
             var scale = new Vector3(roomSize.x + WallT, roomSize.y + WallT, WallT);
             if (!door)
             {
-                CreateCube(parent, name, localPos, scale, color);
+                CreateCube(parent, name, localPos, scale, color, look, 2.2f);
                 return;
             }
 
             var sideW = (scale.x - DoorW) * 0.5f;
             if (sideW > 0.05f)
             {
-                CreateCube(parent, name + "_L", localPos + new Vector3(-DoorW * 0.5f - sideW * 0.5f, 0f, 0f), new Vector3(sideW, scale.y, scale.z), color);
-                CreateCube(parent, name + "_R", localPos + new Vector3(DoorW * 0.5f + sideW * 0.5f, 0f, 0f), new Vector3(sideW, scale.y, scale.z), color);
+                CreateCube(parent, name + "_L", localPos + new Vector3(-DoorW * 0.5f - sideW * 0.5f, 0f, 0f), new Vector3(sideW, scale.y, scale.z), color, look, 2.2f);
+                CreateCube(parent, name + "_R", localPos + new Vector3(DoorW * 0.5f + sideW * 0.5f, 0f, 0f), new Vector3(sideW, scale.y, scale.z), color, look, 2.2f);
             }
 
             var doorMinY = -roomSize.y * 0.5f - localPos.y;
@@ -487,7 +460,7 @@ namespace GravityReceipt.World
             if (lintelH > 0.05f)
             {
                 var lintelY = doorMaxY + lintelH * 0.5f;
-                CreateCube(parent, name + "_Lint", localPos + new Vector3(0f, lintelY, 0f), new Vector3(DoorW, lintelH, scale.z), color);
+                CreateCube(parent, name + "_Lint", localPos + new Vector3(0f, lintelY, 0f), new Vector3(DoorW, lintelH, scale.z), color, look, 2.2f);
             }
 
             var frame = new Color(1f, 0.82f, 0.2f);
@@ -741,8 +714,23 @@ namespace GravityReceipt.World
             vis.transform.localPosition = new Vector3(0f, 0.9f, 0f);
             Object.DestroyImmediate(vis.GetComponent<CapsuleCollider>());
             SetColor(vis, color);
+            var head = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            head.name = "Head";
+            head.transform.SetParent(player.transform, false);
+            head.transform.localPosition = new Vector3(0f, 1.62f, 0f);
+            head.transform.localScale = new Vector3(0.42f, 0.42f, 0.42f);
+            Object.DestroyImmediate(head.GetComponent<Collider>());
+            SetColor(head, color * 1.08f);
+            var visor = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            visor.name = "Visor";
+            visor.transform.SetParent(head.transform, false);
+            visor.transform.localPosition = new Vector3(0f, 0.02f, 0.42f);
+            visor.transform.localScale = new Vector3(0.72f, 0.22f, 0.18f);
+            Object.DestroyImmediate(visor.GetComponent<Collider>());
+            SetColor(visor, new Color(0.08f, 0.1f, 0.12f));
             var bodyLayer = slot == LocalPlayerSlot.One ? 8 : 9;
             SetLayerRecursively(vis, bodyLayer);
+            SetLayerRecursively(head, bodyLayer);
 
             var cc = player.AddComponent<CharacterController>();
             cc.height = 1.8f;
@@ -847,14 +835,50 @@ namespace GravityReceipt.World
             }
         }
 
-        private static GameObject CreateCube(Transform parent, string name, Vector3 localPos, Vector3 scale, Color color)
+        private static void DressKenneyFurniture(Transform parent)
+        {
+            KenneyProp.Place(parent, "desk", new Vector3(3.1f, 0f, 1.4f), 180f, 0.78f);
+            KenneyProp.Place(parent, "chairDesk", new Vector3(-3.2f, 0f, -1.1f), 20f, 0.95f);
+            KenneyProp.Place(parent, "pottedPlant", new Vector3(-4.4f, 0f, -2.5f), 0f, 0.85f);
+            KenneyProp.Place(parent, "lampRoundTable", new Vector3(3.5f, 0.78f, 1.5f), 0f, 0.42f, false);
+            KenneyProp.Place(parent, "coatRackStanding", new Vector3(4.2f, 0f, -3.1f), -20f, 1.55f);
+            KenneyProp.Place(parent, "bookcaseOpen", new Vector3(-6.15f, 0f, 7.4f), 90f, 2.35f);
+            KenneyProp.Place(parent, "bookcaseOpenLow", new Vector3(6.15f, 0f, 12.4f), -90f, 1.25f);
+            KenneyProp.Place(parent, "books", new Vector3(5.5f, 1.28f, 12.4f), -90f, 0.18f, false);
+            KenneyProp.Place(parent, "cardboardBoxClosed", new Vector3(-5.1f, 0f, 11.6f), 15f, 0.55f);
+            KenneyProp.Place(parent, "desk", new Vector3(-6.0f, 0f, 34.3f), 90f, 0.76f);
+            KenneyProp.Place(parent, "chairDesk", new Vector3(-4.4f, 0f, 33.6f), -70f, 0.95f);
+            KenneyProp.Place(parent, "computerScreen", new Vector3(-6.15f, 0.76f, 34.15f), 90f, 0.42f, false);
+            KenneyProp.Place(parent, "laptop", new Vector3(-5.7f, 0.76f, 34.55f), 80f, 0.08f, false);
+            KenneyProp.Place(parent, "computerKeyboard", new Vector3(-5.85f, 0.76f, 34.2f), 90f, 0.04f, false);
+            KenneyProp.Place(parent, "trashcan", new Vector3(5.5f, 0f, 33.1f), 0f, 0.48f);
+            KenneyProp.Place(parent, "plantSmall1", new Vector3(-6.4f, 0.76f, 35.0f), 0f, 0.28f, false);
+            KenneyProp.Place(parent, "ceilingFan", new Vector3(0f, 4.55f, 35f), 0f, 0.22f, false);
+            KenneyProp.Place(parent, "loungeSofa", new Vector3(-2.2f, 0f, 48.4f), 20f, 0.82f);
+            KenneyProp.Place(parent, "tableCoffee", new Vector3(0f, 0f, 50.2f), 0f, 0.42f);
+            KenneyProp.Place(parent, "sideTable", new Vector3(3.2f, 0f, 47.4f), 0f, 0.55f);
+            KenneyProp.Place(parent, "lampRoundTable", new Vector3(3.2f, 0.55f, 47.4f), 0f, 0.4f, false);
+            KenneyProp.Place(parent, "cabinetTelevision", new Vector3(4.6f, 0f, 54.4f), 180f, 0.85f);
+            KenneyProp.Place(parent, "radio", new Vector3(0.6f, 0.42f, 50.35f), 0f, 0.14f, false);
+            KenneyProp.Place(parent, "pottedPlant", new Vector3(-4.6f, 0f, 46.2f), 40f, 0.9f);
+            KenneyProp.Place(parent, "lampSquareCeiling", new Vector3(0f, 4.72f, 50f), 0f, 0.16f, false);
+        }
+
+        private static GameObject CreateCube(
+            Transform parent,
+            string name,
+            Vector3 localPos,
+            Vector3 scale,
+            Color color,
+            SurfaceKind look = SurfaceKind.Paint,
+            float tile = 1f)
         {
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             go.name = name;
             go.transform.SetParent(parent, false);
             go.transform.localPosition = localPos;
             go.transform.localScale = scale;
-            SetColor(go, color);
+            SetColor(go, color, look, tile);
             return go;
         }
 
@@ -887,23 +911,9 @@ namespace GravityReceipt.World
             }
         }
 
-        private static void SetColor(GameObject go, Color color)
+        private static void SetColor(GameObject go, Color color, SurfaceKind look = SurfaceKind.Paint, float tile = 1f)
         {
-            var renderer = go.GetComponent<Renderer>();
-            if (renderer == null)
-            {
-                return;
-            }
-
-            var shader = Shader.Find("Standard")
-                         ?? Shader.Find("Universal Render Pipeline/Lit")
-                         ?? Shader.Find("Unlit/Color");
-            if (shader == null)
-            {
-                return;
-            }
-
-            renderer.sharedMaterial = new Material(shader) { color = color };
+            SurfaceLook.Paint(go, color, look, tile);
         }
     }
 
