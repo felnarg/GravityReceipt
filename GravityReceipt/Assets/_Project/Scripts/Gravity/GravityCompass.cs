@@ -22,6 +22,11 @@ namespace GravityReceipt.Gravity
         {
             if (_motor == null)
             {
+                _motor = GetComponent<PlayerMotor>();
+            }
+
+            if (_motor == null)
+            {
                 return;
             }
 

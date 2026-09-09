@@ -7,7 +7,7 @@ namespace GravityReceipt.Gravity
     /// </summary>
     public static class GravityFlipBurst
     {
-        public static void Spawn(Vector3 origin, Vector3 newDown)
+        public static void Spawn(Vector3 origin, Vector3 newDown, int count = 12)
         {
             if (newDown.sqrMagnitude < 0.01f)
             {
@@ -23,12 +23,12 @@ namespace GravityReceipt.Gravity
 
             tangent.Normalize();
             var bitangent = Vector3.Cross(newDown, tangent);
-            for (var i = 0; i < 12; i++)
+            for (var i = 0; i < count; i++)
             {
                 var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 go.name = "FlipSpark";
                 go.transform.position = origin + Random.insideUnitSphere * 0.35f;
-                go.transform.localScale = Vector3.one * Random.Range(0.06f, 0.14f);
+                go.transform.localScale = Vector3.one * Random.Range(0.05f, count > 8 ? 0.14f : 0.09f);
                 var col = go.GetComponent<Collider>();
                 if (col != null)
                 {
@@ -42,7 +42,7 @@ namespace GravityReceipt.Gravity
                     var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
                     if (shader != null)
                     {
-                        var t = i / 11f;
+                        var t = count <= 1 ? 1f : i / (float)(count - 1);
                         rend.sharedMaterial = new Material(shader)
                         {
                             color = Color.Lerp(new Color(1f, 0.85f, 0.25f), new Color(1f, 0.35f, 0.08f), t)

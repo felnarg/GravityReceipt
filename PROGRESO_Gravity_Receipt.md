@@ -124,7 +124,7 @@ Documento vivo del prototipo.
 - La cámara de cada jugador no dibuja su propia cápsula ni el tag P1/P2 (el compañero sí te ve).
 - Orbe dorado sobre la taza $15 (se oculta al agarrarla).
 - Cuadrado cian en la cara que es “abajo” cuando g no es suelo (tras un flip).
-- Chispas + flash naranja al aplicar un flip.
+- Chispas + flash naranja al aplicar un flip; polvo al aterrizar de una caída.
 - Pasos procedurales al caminar; click al agarrar; cámara baja un poco al aterrizar duro.
 - Losas de techo (grid) + lámparas en el pasillo; teclado, cajas en estantería, lámpara Executive.
 - Cruceta naranja si miras el dominante.

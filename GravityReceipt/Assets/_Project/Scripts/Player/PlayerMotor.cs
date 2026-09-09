@@ -307,6 +307,7 @@ namespace GravityReceipt.Player
                     _shake = Mathf.Max(_shake, 0.18f);
                     _landDip = Mathf.Max(_landDip, 0.11f);
                     MissionSfx.PlayLand();
+                    GravityFlipBurst.Spawn(transform.position, gDir, 6);
                 }
 
                 _airFall = 0f;
