@@ -77,6 +77,7 @@ Documento vivo del prototipo.
 - Franjas amarillo/negro en el suelo del pasillo.
 - Cámara tiembla durante el telegráfo (más fuerte al acercarse el flip).
 - Ping con cooldown 0.85 s y blip; P1 y P2 no se pisan.
+- El timer 10:00 no corre durante el splash de 9 s (leer la regla).
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -102,7 +103,7 @@ Documento vivo del prototipo.
 7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y déjala pegada a una **pared**. Espera ~1 s: banner **¡FLIP!**, whoosh, FOV, g cambia.
 8. Cruza el pasillo (bordillos rojos altos; vacío a los lados). Si caes **o sales volando a los lados** (g heredada), respawneas. Si un valuable cae, vuelve a su sitio.
 9. Losa azul Open Office = Entregar. Losa dorada Executive + paquete en manos o mantener E = Sellar.
-10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre.
+10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre. El cronómetro no baja durante el splash inicial.
 11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
 12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). **F9** oculta help/status para un clip más limpio. Graba 8–10 s mudos del paso 7, o dispara F8 durante el FLIP.
 13. Cheats playtest: **F4** warp al checkpoint · **F6** skip objetivo + warp · **F7** solo respawnea el paquete.
@@ -210,7 +211,7 @@ Documento vivo del prototipo.
 | 3.3 | Blockout Sala C Executive | [x] | Maletín $200, Trofeo $150, Server $110, Planta oro $95 |
 | 3.4 | Objetivo 2: entregar paquete | [x] | Losa azul Open Office |
 | 3.5 | Objetivo 3: sellar contrato | [x] | Losa dorada + hold E ~1 s |
-| 3.6 | Timer de partida ~10:00 | [x] | `MatchDirector` 600 s |
+| 3.6 | Timer de partida ~10:00 | [x] | `MatchDirector` 600 s; no descuenta durante el splash 9 s |
 | 3.7 | Roles stub: Runner (sprint) / Anchor (fix 3 s) | [x] | P1 Runner / P2 Anchor por defecto |
 | 3.8 | Muerte por vacío + respawn en checkpoint | [x] | `VoidKillZone` multi-jugador + paquete |
 | 3.9 | Moment of the Match (mayor caída) | [x] | Local; se muestra al terminar |

@@ -124,7 +124,7 @@ namespace GravityReceipt.Mission
                 return;
             }
 
-            if (_phase == MatchPhase.Playing)
+            if (_phase == MatchPhase.Playing && Time.timeSinceLevelLoad >= 9f)
             {
                 _remaining -= Time.deltaTime;
                 if (_remaining <= 0f)
