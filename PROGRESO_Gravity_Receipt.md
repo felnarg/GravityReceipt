@@ -56,6 +56,7 @@ Documento vivo del prototipo.
 - Valuables y props que caen al vacío vuelven a su spawn (`SpawnHome`).
 - Losas Entregar/Sellar cubren el paquete agarrado; Sellar también si llevas el paquete.
 - **F5** restart · **F8** PNG · **F9** oculta chrome · **F6** skip objetivo (cheat).
+- Fog + fondo de cámara oscuro; franja azul = suelo original; coyote/jump buffer; SFX win/lose.
 - Menú Setup 2p (default) y 1p.
 
 ### A MEDIAS
