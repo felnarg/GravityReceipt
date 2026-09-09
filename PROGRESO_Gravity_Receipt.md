@@ -548,6 +548,12 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Mancha naranja en la pared prevista; paneles HUD; ding al acabar splash; toast de caída.
 - Jugadores no empujan el paquete.
 - PNG al ganar/perder; F9 oculta etiquetas 3D.
+- Viñeta naranja de telegráfo; countdown del splash.
+
+### 2026-09-09 — Overnight bloque 13 (regla visible)
+- Waypoint paquete/objetivo, beacon, linger FLIP, roll, P/F3, arte de salas.
+- Pausa del splash + countdown; mancha de pared prevista; brújula de g prevista.
+- Paneles HUD, viñeta, PNG fin de partida, F9 etiquetas, IgnoreCollision paquete.
 
 ---
 

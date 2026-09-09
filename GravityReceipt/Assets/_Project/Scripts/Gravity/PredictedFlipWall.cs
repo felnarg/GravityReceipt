@@ -52,18 +52,18 @@ namespace GravityReceipt.Gravity
             _quad.gameObject.SetActive(true);
             var ext = room.WorldExtents;
             var dir = preview.normalized;
-            _quad.position = room.Center + Vector3.Scale(dir, ext) - dir * 0.14f;
+            _quad.position = room.Center + Vector3.Scale(dir, ext) - dir * 0.22f;
             if (Mathf.Abs(dir.x) > 0.5f)
             {
-                _quad.localScale = new Vector3(0.1f, ext.y * 1.55f, ext.z * 1.45f);
+                _quad.localScale = new Vector3(0.08f, 1.9f, 1.9f);
             }
             else if (Mathf.Abs(dir.y) > 0.5f)
             {
-                _quad.localScale = new Vector3(ext.x * 1.45f, 0.1f, ext.z * 1.45f);
+                _quad.localScale = new Vector3(1.9f, 0.08f, 1.9f);
             }
             else
             {
-                _quad.localScale = new Vector3(ext.x * 1.45f, ext.y * 1.55f, 0.1f);
+                _quad.localScale = new Vector3(1.9f, 1.9f, 0.08f);
             }
 
             if (_renderer != null)
