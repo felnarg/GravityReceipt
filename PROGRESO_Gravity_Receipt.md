@@ -27,7 +27,7 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~00:20 COT (overnight, bloque emotes/HUD) |
+| **Última actualización** | 2026-09-09 ~00:30 COT (overnight, bloque barra/cheats) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
 | **Hecho relevante** | Split 2p, g por sala, misión, mapa, HUD regla/FLIP, whoosh, brújula, F6 skip, grab FSM, emotes 1-4, prompt de mirada |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete + flip con caja dorada a una pared |
@@ -74,6 +74,7 @@ Documento vivo del prototipo.
 - Respaldo en sillas; letreros → ARCHIVE / PASILLO / OPEN OFFICE / EXECUTIVE.
 - HUD muestra quién lleva el paquete (`Paquete ♥♥♥ · P1`).
 - Barra 3D de captura sobre la losa mientras enchufas / entregas / sellas.
+- Franjas amarillo/negro en el suelo del pasillo.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.

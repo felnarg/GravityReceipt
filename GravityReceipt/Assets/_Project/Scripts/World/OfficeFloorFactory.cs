@@ -243,6 +243,12 @@ namespace GravityReceipt.World
             var curbY = -size.y * 0.5f + WallT * 0.5f + curbH * 0.5f;
             CreateCube(root.transform, "Curb_L", new Vector3(-size.x * 0.5f, curbY, 0f), new Vector3(0.16f, curbH, size.z), new Color(0.85f, 0.25f, 0.2f));
             CreateCube(root.transform, "Curb_R", new Vector3(size.x * 0.5f, curbY, 0f), new Vector3(0.16f, curbH, size.z), new Color(0.85f, 0.25f, 0.2f));
+            for (var i = -2; i <= 2; i++)
+            {
+                var z = i * 1.8f;
+                var hazard = CreateCube(root.transform, "Hazard", new Vector3(0f, -size.y * 0.5f + WallT * 0.5f + 0.03f, z), new Vector3(size.x * 0.85f, 0.02f, 0.28f), i % 2 == 0 ? new Color(1f, 0.85f, 0.15f) : new Color(0.12f, 0.12f, 0.12f));
+                DisableCollider(hazard);
+            }
             var postZs = new[] { -size.z * 0.35f, 0f, size.z * 0.35f };
             foreach (var z in postZs)
             {
