@@ -254,6 +254,10 @@ namespace GravityReceipt.Player
             transform.SetPositionAndRotation(position, Quaternion.identity);
             _velocity = Vector3.zero;
             _pitch = 0f;
+            if (cameraPivot != null)
+            {
+                cameraPivot.localEulerAngles = Vector3.zero;
+            }
 
             if (_controller != null)
             {
