@@ -260,6 +260,12 @@ namespace GravityReceipt.Player
                     }
                 }
 
+                if (_airFall > 2.2f)
+                {
+                    _fovPunch = Mathf.Max(_fovPunch, 8f);
+                    _shake = Mathf.Max(_shake, 0.18f);
+                }
+
                 _airFall = 0f;
 
                 var intoGround = Vector3.Dot(_velocity, gDir);
