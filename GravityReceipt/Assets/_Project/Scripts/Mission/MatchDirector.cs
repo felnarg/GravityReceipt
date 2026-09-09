@@ -91,6 +91,7 @@ namespace GravityReceipt.Mission
             Application.targetFrameRate = 60;
             Application.runInBackground = true;
             GravityReceipt.Gravity.GravityManager.ResetFlipScreenshotFlag();
+            GravityReceipt.UI.FollowBillboard.Hidden = false;
         }
 
         private void OnDestroy()

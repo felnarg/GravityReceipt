@@ -10,6 +10,8 @@ namespace GravityReceipt.UI
         [SerializeField] private Transform target;
         [SerializeField] private Vector3 worldOffset = Vector3.up;
 
+        public static bool Hidden { get; set; }
+
         public void Configure(Transform follow, Vector3 offset)
         {
             target = follow;
@@ -25,6 +27,15 @@ namespace GravityReceipt.UI
             }
 
             transform.position = target.position + target.rotation * worldOffset;
+            var show = !Hidden;
+            var renderers = GetComponentsInChildren<Renderer>(true);
+            for (var i = 0; i < renderers.Length; i++)
+            {
+                if (renderers[i] != null)
+                {
+                    renderers[i].enabled = show;
+                }
+            }
             var cam = ClosestCamera(transform.position);
             if (cam != null)
             {

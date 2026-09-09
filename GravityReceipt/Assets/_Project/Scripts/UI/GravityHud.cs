@@ -104,6 +104,7 @@ namespace GravityReceipt.UI
             if (Input.GetKeyDown(KeyCode.F9))
             {
                 _chromeHidden = !_chromeHidden;
+                FollowBillboard.Hidden = _chromeHidden;
             }
 
             var p1 = FindPlayer(LocalPlayerSlot.One);
