@@ -34,6 +34,7 @@ namespace GravityReceipt.UI
         private Text _gChipP1;
         private Text _gChipP2;
         private bool _hallwayWarned;
+        private bool _archiveWarned;
         private MatchDirector _boundMatch;
         private string _toast = string.Empty;
         private float _toastUntil;
@@ -594,6 +595,38 @@ namespace GravityReceipt.UI
             }
 
             _hallwayWarned = false;
+
+            if (_archiveWarned || match.ObjectivesDone > 0)
+            {
+                return;
+            }
+
+            if (!IsRoom(p1, "Archive") && !IsRoom(p2, "Archive"))
+            {
+                return;
+            }
+
+            var who = IsRoom(p1, "Archive") ? p1 : p2;
+            var archiveG = who != null ? who.Gravity : null;
+            if (archiveG != null && Vector3.Dot(archiveG.CurrentDirection, Vector3.down) < 0.92f)
+            {
+                return;
+            }
+
+            _archiveWarned = true;
+            _toast = "Archive: caja $80 a una PARED";
+            _toastUntil = Time.unscaledTime + 2.8f;
+        }
+
+        private static bool IsRoom(PlayerMotor motor, string id)
+        {
+            if (motor == null)
+            {
+                return false;
+            }
+
+            var room = RoomRegistry.FindRoom(motor.transform.position);
+            return room != null && room.RoomId == id;
         }
 
         private static bool IsSidewaysHallway(PlayerMotor motor)
