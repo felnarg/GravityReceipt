@@ -86,6 +86,7 @@ Documento vivo del prototipo.
 - Status 2p: g y `$` dominante **por jugador** (Archive de lado / Office normal).
 - Banner ¡FLIP ARCHIVE! (o OFFICE / HUB / EXECUTIVE) para saber qué sala voltea.
 - Carteles sin collider (el “CUIDADO: VACÍO” ya no tapa la puerta del pasillo).
+- Tutorial del Hub subido al dintel: la puerta a Archive queda libre.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
