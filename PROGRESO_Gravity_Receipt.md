@@ -115,6 +115,7 @@ Documento vivo del prototipo.
 - Viñeta naranja que crece con el telegráfo.
 - 4 ticks de audio durante el telegráfo.
 - Tras soltar el paquete se sigue ignorando la colisión con jugadores.
+- 8 s después del splash: toast “taza $15 o caja $80 · a una PARED” si aún no hay objetivo/flip.
 - Barandillas en el pasillo (dos alturas) para leer el vacío y frenar un poco con g de lado.
 
 ### A MEDIAS
