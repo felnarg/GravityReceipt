@@ -306,6 +306,7 @@ Cuando exista el proyecto, marcar `0.5`–`0.7` y pegar aquí la ruta real si ca
 | 2026-09-08 | Carpeta `GravityReceipt`, README, .gitignore, stubs | 0.5c login + 0.5d abrir proyecto + 0.7 escena |
 | 2026-09-08 | Licencia OK; ProjectSettings reparados; escena `Office_Floor_A` creada | Playtest 1p + outline dominante (1.8) + vídeo (1.11) |
 | 2026-09-08 | Playtest: usuario agarró y salió de la escena | Fix OOB + gravedad snap + outline + regenerar Setup |
+| 2026-09-08 | Push a GitHub `felnarg/GravityReceipt` (commit proto) | Lanzar Cloud Agent overnight con prompt del plan |
 
 ---
 
