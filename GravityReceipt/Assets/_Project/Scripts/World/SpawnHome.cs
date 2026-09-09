@@ -45,8 +45,7 @@ namespace GravityReceipt.World
                 _body.rotation = _rot;
             }
 
-                transform.SetPositionAndRotation(_pos, _rot);
-            }
+            transform.SetPositionAndRotation(_pos, _rot);
         }
     }
 }
