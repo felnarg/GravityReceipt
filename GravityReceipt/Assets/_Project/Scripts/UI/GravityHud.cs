@@ -143,6 +143,13 @@ namespace GravityReceipt.UI
             }
             TintCross(_crossP1, p1);
             TintCross(_crossP2, p2);
+
+            if (Input.GetKeyDown(KeyCode.F8))
+            {
+                var name = $"GravityReceipt_{System.DateTime.Now:yyyyMMdd_HHmmss}.png";
+                ScreenCapture.CaptureScreenshot(name);
+                Debug.Log("[GravityReceipt] Screenshot: " + name);
+            }
         }
 
         private static void TintCross(Text cross, PlayerMotor motor)

@@ -74,7 +74,7 @@ Documento vivo del prototipo.
 9. Losa azul Open Office = Entregar. Losa dorada Executive + mantener E = Sellar.
 10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s.
 11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
-12. Para 1.11: graba 8–10 s mudos del paso 7 (caja a la pared → flip).
+12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). Graba 8–10 s mudos del paso 7, o dispara F8 durante el FLIP.
 
 ---
 
