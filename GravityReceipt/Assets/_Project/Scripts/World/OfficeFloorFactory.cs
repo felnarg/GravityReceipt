@@ -81,7 +81,8 @@ namespace GravityReceipt.World
             AddLocalVisual(caja.transform, PrimitiveType.Cylinder, new Vector3(0f, 0f, 0.56f), new Vector3(0.22f, 0.08f, 0.22f), new Color(0.35f, 0.32f, 0.28f));
             var monitor = CreateValuable(root.transform, "Valuable_Monitor_120", new Vector3(4.5f, 0.55f, 32f), new Vector3(1.4f, 0.85f, 0.12f), 120, offG, new Color(0.15f, 0.45f, 0.95f), PrimitiveType.Cube);
             AddLocalVisual(monitor.transform, PrimitiveType.Cube, new Vector3(0f, -0.7f, 0.8f), new Vector3(0.18f, 0.55f, 0.7f), new Color(0.12f, 0.12f, 0.16f));
-            CreateValuable(root.transform, "Valuable_Planta_60", new Vector3(-5.5f, 0.85f, 38f), new Vector3(0.55f, 0.85f, 0.55f), 60, offG, new Color(0.2f, 0.72f, 0.28f), PrimitiveType.Capsule);
+            var planta = CreateValuable(root.transform, "Valuable_Planta_60", new Vector3(-5.5f, 0.85f, 38f), new Vector3(0.55f, 0.85f, 0.55f), 60, offG, new Color(0.2f, 0.72f, 0.28f), PrimitiveType.Capsule);
+            AddLocalVisual(planta.transform, PrimitiveType.Cylinder, new Vector3(0f, -0.55f, 0f), new Vector3(1.15f, 0.28f, 1.15f), new Color(0.45f, 0.28f, 0.16f));
             var cafe = CreateValuable(root.transform, "Valuable_Cafetera_90", new Vector3(6f, 0.55f, 37.5f), new Vector3(0.55f, 0.55f, 0.55f), 90, offG, new Color(0.82f, 0.18f, 0.14f), PrimitiveType.Cylinder);
             AddLocalVisual(cafe.transform, PrimitiveType.Cube, new Vector3(0.7f, 0.15f, 0f), new Vector3(0.45f, 0.18f, 0.18f), new Color(0.2f, 0.2f, 0.22f));
             var maletin = CreateValuable(root.transform, "Valuable_Maletin_200", new Vector3(2.2f, 0.32f, 47.5f), new Vector3(1.05f, 0.28f, 0.7f), 200, exeG, new Color(0.12f, 0.08f, 0.06f), PrimitiveType.Cube);
@@ -91,7 +92,8 @@ namespace GravityReceipt.World
             var server = CreateValuable(root.transform, "Valuable_Server_110", new Vector3(4.2f, 0.95f, 54f), new Vector3(0.7f, 1.7f, 0.55f), 110, exeG, new Color(0.28f, 0.32f, 0.42f), PrimitiveType.Cube);
             AddLocalVisual(server.transform, PrimitiveType.Cube, new Vector3(0.52f, 0.25f, 0f), new Vector3(0.08f, 0.12f, 0.7f), new Color(0.2f, 0.95f, 0.35f));
             AddLocalVisual(server.transform, PrimitiveType.Cube, new Vector3(0.52f, 0.05f, 0f), new Vector3(0.08f, 0.12f, 0.7f), new Color(0.95f, 0.25f, 0.15f));
-            CreateValuable(root.transform, "Valuable_PlantaOro_95", new Vector3(-4.4f, 0.85f, 46.5f), new Vector3(0.6f, 0.9f, 0.6f), 95, exeG, new Color(0.88f, 0.72f, 0.12f), PrimitiveType.Capsule);
+            var plantaOro = CreateValuable(root.transform, "Valuable_PlantaOro_95", new Vector3(-4.4f, 0.85f, 46.5f), new Vector3(0.6f, 0.9f, 0.6f), 95, exeG, new Color(0.88f, 0.72f, 0.12f), PrimitiveType.Capsule);
+            AddLocalVisual(plantaOro.transform, PrimitiveType.Cylinder, new Vector3(0f, -0.55f, 0f), new Vector3(1.15f, 0.28f, 1.15f), new Color(0.55f, 0.42f, 0.12f));
 
             var pkg = CreatePackage(root.transform, new Vector3(0f, 0.45f, 0.6f), hubG);
             AttachPriceTag(pkg.transform, 0, 0.45f, "PAQUETE");
