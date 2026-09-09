@@ -54,6 +54,11 @@ namespace GravityReceipt.UI
             {
                 helpText.gameObject.SetActive(false);
             }
+
+            if (_splitBar is not null)
+            {
+                _splitBar.SetActive(false);
+            }
         }
 
         private void Update()
@@ -232,6 +237,22 @@ namespace GravityReceipt.UI
 
             _crossP1 = MakeCross(canvasGo.transform, "CrossP1", new Vector2(0.5f, 0.75f));
             _crossP2 = MakeCross(canvasGo.transform, "CrossP2", new Vector2(0.5f, 0.25f));
+            _splitBar = MakeSplitBar(canvasGo.transform);
+        }
+
+        private static GameObject MakeSplitBar(Transform parent)
+        {
+            var go = new GameObject("SplitBar");
+            go.transform.SetParent(parent, false);
+            var img = go.AddComponent<Image>();
+            img.color = new Color(0.04f, 0.05f, 0.08f, 1f);
+            var rt = img.rectTransform;
+            rt.anchorMin = new Vector2(0f, 0.5f);
+            rt.anchorMax = new Vector2(1f, 0.5f);
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.sizeDelta = new Vector2(0f, 6f);
+            rt.anchoredPosition = Vector2.zero;
+            return go;
         }
 
         private static Text MakeCross(Transform parent, string name, Vector2 anchor)
