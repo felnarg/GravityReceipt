@@ -114,6 +114,7 @@ Documento vivo del prototipo.
 - PNG automático al **ganar/perder** (además del primer flip).
 - Viñeta naranja que crece con el telegráfo.
 - 4 ticks de audio durante el telegráfo.
+- Tras soltar el paquete se sigue ignorando la colisión con jugadores.
 - Barandillas en el pasillo (dos alturas) para leer el vacío y frenar un poco con g de lado.
 
 ### A MEDIAS
