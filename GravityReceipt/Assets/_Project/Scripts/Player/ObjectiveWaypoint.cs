@@ -1,3 +1,4 @@
+using GravityReceipt.Gravity;
 using GravityReceipt.Interaction;
 using GravityReceipt.Mission;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 namespace GravityReceipt.Player
 {
     /// <summary>
-    /// Flecha a los pies: primero el paquete si está lejos; si no, el objetivo actual.
+    /// Flecha a los pies: taza tutorial en Hub; paquete si está lejos; si no, el objetivo.
     /// </summary>
     public sealed class ObjectiveWaypoint : MonoBehaviour
     {
@@ -25,6 +26,11 @@ namespace GravityReceipt.Player
             if (_interactor == null)
             {
                 _interactor = GetComponent<PlayerInteractor>();
+            }
+
+            if (_motor == null)
+            {
+                _motor = GetComponent<PlayerMotor>();
             }
 
             var match = MatchDirector.Instance;
@@ -69,6 +75,24 @@ namespace GravityReceipt.Player
         {
             worldPos = default;
             color = Color.white;
+
+            var held = _interactor != null ? _interactor.HeldValuable : null;
+            if (held != null && held.Manager != null && held.Manager.Dominant == held)
+            {
+                return false;
+            }
+
+            if (match.ObjectivesDone == 0)
+            {
+                var mug = FindTutorialMug();
+                var holdingMug = held != null && held == mug;
+                if (mug != null && !holdingMug && transform.position.z < 8f)
+                {
+                    worldPos = mug.transform.position;
+                    color = new Color(1f, 0.82f, 0.2f);
+                    return true;
+                }
+            }
 
             var pkg = FindAnyObjectByType<MissionPackage>();
             var holdingPkg = _interactor != null && _interactor.IsHoldingPackage;
@@ -123,6 +147,31 @@ namespace GravityReceipt.Player
                 }
             }
 
+            return null;
+        }
+
+        private static ValuableItem _cachedMug;
+        private static float _mugCacheUntil;
+
+        private static ValuableItem FindTutorialMug()
+        {
+            if (_cachedMug != null && Time.unscaledTime < _mugCacheUntil)
+            {
+                return _cachedMug;
+            }
+
+            _mugCacheUntil = Time.unscaledTime + 0.5f;
+            var items = FindObjectsByType<ValuableItem>(FindObjectsSortMode.None);
+            foreach (var item in items)
+            {
+                if (item != null && item.Price == 15)
+                {
+                    _cachedMug = item;
+                    return item;
+                }
+            }
+
+            _cachedMug = null;
             return null;
         }
 
