@@ -11,6 +11,7 @@ namespace GravityReceipt.Mission
         private static AudioClip _win;
         private static AudioClip _lose;
         private static AudioClip _land;
+        private static AudioClip _tick;
 
         public static void PlayObjective() => Play(_objective ??= MakeClip("ObjectiveDing", 880f, 1320f, 0.22f));
 
@@ -20,6 +21,11 @@ namespace GravityReceipt.Mission
                 : _lose ??= MakeClip("LoseThud", 110f, 73f, 0.4f));
 
         public static void PlayLand() => Play(_land ??= MakeClip("LandThud", 140f, 70f, 0.14f), 0.32f);
+
+        public static void PlayTelegraphTick(float intensity)
+        {
+            Play(_tick ??= MakeClip("TelegraphTick", 640f, 640f, 0.055f), 0.16f + 0.28f * Mathf.Clamp01(intensity));
+        }
 
         private static AudioClip _dent;
         private static AudioClip _ping;

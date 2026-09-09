@@ -29,6 +29,7 @@ namespace GravityReceipt.Gravity
         private float _anchorUntil;
         private Coroutine _hitStop;
         private float _flipBannerUntil;
+        private int _tickBeat;
 
         public Vector3 CurrentGravity => _currentGravityDirection * gravityMagnitude;
         public Vector3 CurrentDirection => _currentGravityDirection;
@@ -101,6 +102,13 @@ namespace GravityReceipt.Gravity
             _telegraphRemaining -= Time.deltaTime;
             if (_telegraphRemaining > 0f)
             {
+                var beat = Mathf.FloorToInt(TelegraphNormalized * 4.01f);
+                if (beat != _tickBeat)
+                {
+                    _tickBeat = beat;
+                    MissionSfx.PlayTelegraphTick(TelegraphNormalized);
+                }
+
                 return;
             }
 
@@ -203,6 +211,7 @@ namespace GravityReceipt.Gravity
             _pendingDirection = direction;
             _telegraphRemaining = telegraphSeconds;
             _isTelegraphing = true;
+            _tickBeat = -1;
         }
 
         private void ApplyGravity(Vector3 direction, ValuableItem dominant)
