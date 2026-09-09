@@ -274,7 +274,7 @@ namespace GravityReceipt.UI
                 {
                     centerText.text = match.IsInSplash
                         ? $"PAUSA — LEE LA REGLA ({Mathf.CeilToInt(match.SplashSecondsLeft)} s)\nLA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nGrises sin $ no cuentan · taza $15 o caja $80 a una PARED\nP continúa"
-                        : "PAUSA\nP continúa · clic para mirar · F5 restart";
+                        : "PAUSA\nP continúa · clic para mirar · F5 restart · F10 comfort";
                     centerText.color = new Color(0.85f, 0.95f, 1f);
                 }
                 else if (TryTelegraphBanner(p1, p2, out var banner, out var bannerColor))

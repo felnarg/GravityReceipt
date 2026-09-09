@@ -27,7 +27,7 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla/arte |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~02:25 COT (overnight, marco de puerta hueco + chispas objetivo) |
+| **Última actualización** | 2026-09-09 ~02:30 COT (overnight, trigger g-up + pasillo no tira + marcos) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
 | **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F3/F4/F6/F7, OOB AABB, waypoint, beacon paquete, pausa P, linger FLIP, pad cian **ABAJO**, etiquetas de losa siguen g, flecha HUD si el objetivo está fuera de cámara |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete (sigue la flecha) + flip con caja dorada a una pared · mira el sello ABAJO y las etiquetas ENCHUFAR/ENTREGAR/SELLAR |
