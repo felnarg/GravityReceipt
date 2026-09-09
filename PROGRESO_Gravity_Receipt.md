@@ -27,7 +27,7 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~00:40 COT (overnight, feel + cheats playtest) |
+| **Última actualización** | 2026-09-09 ~00:45 COT (overnight, puertas/2p/HUD) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
 | **Hecho relevante** | Split 2p, g por sala, misión, mapa, HUD regla/FLIP, whoosh, brújula, F6 skip, grab FSM, emotes 1-4, prompt de mirada |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete + flip con caja dorada a una pared |
@@ -502,6 +502,11 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 ### 2026-09-09 — Overnight bloque 10 (barra de captura)
 - Cubo amarillo sobre la losa actual que crece con el progreso de Enchufar/Entregar/Sellar.
 - Monitor con peana y cafetera con pico.
+
+### 2026-09-09 — Overnight bloque 11 (puertas + compile + 2p pasillo)
+- Carteles sin collider; CUIDADO y slogan del Hub en dinteles.
+- `SpawnHome` compilaba mal (llave de más).
+- `Physics.IgnoreCollision` entre CharacterControllers.
 
 ---
 
