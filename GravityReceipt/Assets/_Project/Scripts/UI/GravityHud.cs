@@ -27,6 +27,7 @@ namespace GravityReceipt.UI
         private Image _centerPanel;
         private Image _statusPanel;
         private Image _matchPanel;
+        private Image _vignette;
         private MatchDirector _boundMatch;
         private string _toast = string.Empty;
         private float _toastUntil;
@@ -258,6 +259,13 @@ namespace GravityReceipt.UI
                 var name = $"GravityReceipt_{System.DateTime.Now:yyyyMMdd_HHmmss}.png";
                 ScreenCapture.CaptureScreenshot(name);
                 Debug.Log("[GravityReceipt] Screenshot: " + name);
+            }
+
+            if (_vignette != null)
+            {
+                var g = FirstTelegraph(p1, p2);
+                var a = g != null && g.IsTelegraphing ? 0.28f * g.TelegraphNormalized : 0f;
+                _vignette.color = new Color(0.15f, 0.04f, 0f, a);
             }
         }
 
@@ -678,6 +686,7 @@ namespace GravityReceipt.UI
             _statusPanel = MakePanel(canvasGo.transform, "StatusPanel", new Vector2(0.5f, 0.5f), new Vector2(0f, 18f), new Vector2(1680f, 40f));
             _matchPanel = MakePanel(canvasGo.transform, "MatchPanel", new Vector2(0.5f, 0.5f), new Vector2(0f, -28f), new Vector2(1680f, 86f));
             _centerPanel = MakePanel(canvasGo.transform, "CenterPanel", new Vector2(0.5f, 0.5f), new Vector2(0f, 80f), new Vector2(920f, 250f));
+            _vignette = MakeVignette(canvasGo.transform);
 
             statusText = MakeText(canvasGo.transform, "Status", new Vector2(0f, 18f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 36f), 20, TextAnchor.MiddleCenter);
             matchText = MakeText(canvasGo.transform, "Match", new Vector2(0f, -28f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 78f), 18, TextAnchor.MiddleCenter);
@@ -724,6 +733,22 @@ namespace GravityReceipt.UI
             rt.pivot = new Vector2(0.5f, 0.5f);
             rt.anchoredPosition = anchored;
             rt.sizeDelta = size;
+            return img;
+        }
+
+        private static Image MakeVignette(Transform parent)
+        {
+            var go = new GameObject("Vignette");
+            go.transform.SetParent(parent, false);
+            go.transform.SetAsFirstSibling();
+            var img = go.AddComponent<Image>();
+            img.color = new Color(0.15f, 0.04f, 0f, 0f);
+            img.raycastTarget = false;
+            var rt = img.rectTransform;
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
             return img;
         }
 
