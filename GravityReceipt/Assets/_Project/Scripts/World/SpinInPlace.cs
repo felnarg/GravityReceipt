@@ -18,7 +18,7 @@ namespace GravityReceipt.World
 
         private void Update()
         {
-            transform.Rotate(axis, degreesPerSecond * Time.deltaTime, Space.Self);
+            transform.Rotate(axis, degreesPerSecond * Time.unscaledDeltaTime, Space.Self);
         }
     }
 }
