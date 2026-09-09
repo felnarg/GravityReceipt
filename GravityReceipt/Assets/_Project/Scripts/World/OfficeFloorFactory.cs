@@ -370,10 +370,6 @@ namespace GravityReceipt.World
             cc.skinWidth = 0.08f;
             cc.minMoveDistance = 0f;
 
-            var hold = new GameObject("HoldPoint");
-            hold.transform.SetParent(player.transform, false);
-            hold.transform.localPosition = new Vector3(0.4f, 1.2f, 1.0f);
-
             var camGo = new GameObject(name + "_Camera");
             camGo.transform.SetParent(player.transform, false);
             camGo.transform.localPosition = new Vector3(0f, 1.6f, 0f);
@@ -382,6 +378,10 @@ namespace GravityReceipt.World
             {
                 camGo.tag = "MainCamera";
             }
+
+            var hold = new GameObject("HoldPoint");
+            hold.transform.SetParent(camGo.transform, false);
+            hold.transform.localPosition = new Vector3(0.35f, -0.2f, 1.15f);
 
             var cam = camGo.AddComponent<Camera>();
             cam.nearClipPlane = 0.08f;
