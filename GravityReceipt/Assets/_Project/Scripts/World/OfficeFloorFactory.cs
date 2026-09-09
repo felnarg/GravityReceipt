@@ -214,6 +214,12 @@ namespace GravityReceipt.World
             root.transform.SetParent(parent, false);
             root.transform.position = center;
             CreateCube(root.transform, "Floor", new Vector3(0f, -size.y * 0.5f, 0f), new Vector3(size.x, WallT, size.z), floor);
+            var stripe = CreateCube(root.transform, "FloorStripe", new Vector3(0f, -size.y * 0.5f + WallT * 0.5f + 0.02f, 0f), new Vector3(0.22f, 0.03f, size.z * 0.9f), new Color(0.25f, 0.62f, 0.78f));
+            var stripeCol = stripe.GetComponent<Collider>();
+            if (stripeCol != null)
+            {
+                stripeCol.enabled = false;
+            }
             var curbH = 0.58f;
             var curbY = -size.y * 0.5f + WallT * 0.5f + curbH * 0.5f;
             CreateCube(root.transform, "Curb_L", new Vector3(-size.x * 0.5f, curbY, 0f), new Vector3(0.16f, curbH, size.z), new Color(0.85f, 0.25f, 0.2f));
