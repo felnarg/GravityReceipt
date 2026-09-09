@@ -170,7 +170,8 @@ namespace GravityReceipt.World
             root.transform.SetParent(parent, false);
             root.transform.position = center;
             CreateCube(root.transform, "Floor", new Vector3(0f, -size.y * 0.5f, 0f), new Vector3(size.x, WallT, size.z), floor);
-            // Postes visuales, sin tapar el vacío lateral.
+            CreateCube(root.transform, "Curb_L", new Vector3(-size.x * 0.5f, -size.y * 0.5f + 0.22f, 0f), new Vector3(0.12f, 0.18f, size.z), new Color(0.85f, 0.25f, 0.2f));
+            CreateCube(root.transform, "Curb_R", new Vector3(size.x * 0.5f, -size.y * 0.5f + 0.22f, 0f), new Vector3(0.12f, 0.18f, size.z), new Color(0.85f, 0.25f, 0.2f));
             CreateCube(root.transform, "Post_L", new Vector3(-size.x * 0.5f, -size.y * 0.15f, 0f), new Vector3(0.12f, size.y * 0.5f, 0.12f), new Color(0.7f, 0.25f, 0.2f));
             CreateCube(root.transform, "Post_R", new Vector3(size.x * 0.5f, -size.y * 0.15f, 0f), new Vector3(0.12f, size.y * 0.5f, 0.12f), new Color(0.7f, 0.25f, 0.2f));
         }
