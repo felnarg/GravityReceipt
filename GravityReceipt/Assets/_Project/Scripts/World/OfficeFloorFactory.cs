@@ -137,7 +137,8 @@ namespace GravityReceipt.World
             CreateStaticCube(root.transform, "Furn_ExeTableLeg4", new Vector3(1.5f, 0.18f, 50.8f), new Vector3(0.12f, 0.36f, 0.12f), new Color(0.18f, 0.1f, 0.06f));
             CreateStaticCube(root.transform, "Furn_HubCounter", new Vector3(0f, 0.42f, -3.45f), new Vector3(3.4f, 0.14f, 0.55f), new Color(0.22f, 0.34f, 0.36f));
             var cooler = CreateStaticCube(root.transform, "Furn_WaterCooler", new Vector3(4.4f, 0.7f, -2.6f), new Vector3(0.45f, 1.2f, 0.45f), new Color(0.75f, 0.82f, 0.88f));
-            AddLocalVisual(cooler.transform, PrimitiveType.Cylinder, new Vector3(0f, 0.55f, 0f), new Vector3(0.7f, 0.35f, 0.7f), new Color(0.45f, 0.75f, 0.95f));
+            var tank = AddLocalVisual(cooler.transform, PrimitiveType.Cylinder, new Vector3(0f, 0.55f, 0f), new Vector3(0.7f, 0.35f, 0.7f), new Color(0.45f, 0.75f, 0.95f));
+            tank.AddComponent<PulseColor>().Configure(new Color(0.45f, 0.75f, 0.95f), new Color(0.25f, 0.55f, 0.85f), 2.4f);
             var clock = CreateStaticCube(root.transform, "Furn_HubClock", new Vector3(0f, 3.35f, -3.72f), new Vector3(0.7f, 0.7f, 0.08f), new Color(0.92f, 0.92f, 0.9f));
             DisableCollider(clock);
             var hour = CreateStaticCube(root.transform, "Furn_ClockHour", new Vector3(0f, 3.35f, -3.66f), new Vector3(0.045f, 0.22f, 0.03f), new Color(0.12f, 0.12f, 0.14f));
