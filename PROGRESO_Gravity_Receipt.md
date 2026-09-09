@@ -75,6 +75,7 @@ Documento vivo del prototipo.
 - HUD muestra quién lleva el paquete (`Paquete ♥♥♥ · P1`).
 - Barra 3D de captura sobre la losa mientras enchufas / entregas / sellas.
 - Franjas amarillo/negro en el suelo del pasillo.
+- Cámara tiembla durante el telegráfo (más fuerte al acercarse el flip).
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -247,7 +248,7 @@ Documento vivo del prototipo.
 | 5.2 | Medir rematch % | [ ] | Meta ≥ 55% |
 | 5.3 | Medir mareo % | [ ] | Meta < 10% |
 | 5.4 | Medir comprensión de la regla | [ ] | Meta ≥ 80% en 1ª partida |
-| 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + banner + hit-stop 80 ms; falta ajustar con mareo real |
+| 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake creciente en telegráfo + banner + hit-stop 80 ms; falta mareo real |
 | 5.6 | Pass siluetas/colores valuables | [~] | Primitivas distintas (caja/cápsula/cilindro) + masa por precio; falta arte |
 | 5.7 | Emotes (4) + whoosh final | [x] | Whoosh en cada flip; emotes billboard OK/NO/?/¡AQUÍ! (sin animación de avatar) |
 | 5.8 | Decisión go / no-go | [ ] | Ver métricas abajo |

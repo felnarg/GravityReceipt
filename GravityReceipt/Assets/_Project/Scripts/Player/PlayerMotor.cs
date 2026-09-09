@@ -178,6 +178,10 @@ namespace GravityReceipt.Player
 
             _fovPunch = Mathf.MoveTowards(_fovPunch, 0f, Time.deltaTime * 38f);
             _shake = Mathf.MoveTowards(_shake, 0f, Time.deltaTime * 1.1f);
+            if (gravityManager != null && gravityManager.IsTelegraphing)
+            {
+                _shake = Mathf.Max(_shake, 0.06f + 0.16f * gravityManager.TelegraphNormalized);
+            }
             var sprintTarget = _role != null && _role.MoveMultiplier > 1.05f ? 7f : 0f;
             _sprintFov = Mathf.MoveTowards(_sprintFov, sprintTarget, Time.deltaTime * 36f);
             if (_cam != null)
