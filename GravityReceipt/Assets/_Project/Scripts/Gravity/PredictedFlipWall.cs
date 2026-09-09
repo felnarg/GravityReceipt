@@ -23,6 +23,11 @@ namespace GravityReceipt.Gravity
 
         private void LateUpdate()
         {
+            if (_interactor == null)
+            {
+                _interactor = GetComponent<PlayerInteractor>();
+            }
+
             var g = _motor != null ? _motor.Gravity : null;
             var holdingDom = _interactor != null
                              && _interactor.HeldValuable != null

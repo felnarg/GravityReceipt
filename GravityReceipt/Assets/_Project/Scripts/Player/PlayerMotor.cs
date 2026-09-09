@@ -168,6 +168,16 @@ namespace GravityReceipt.Player
             }
 
             Look();
+            if (_role == null)
+            {
+                _role = GetComponent<PlayerRole>();
+            }
+
+            if (_interactor == null)
+            {
+                _interactor = GetComponent<PlayerInteractor>();
+            }
+
             ApplyFlipFeel();
             Move();
         }
@@ -255,6 +265,11 @@ namespace GravityReceipt.Player
             if (_interactor == null)
             {
                 _interactor = GetComponent<PlayerInteractor>();
+            }
+
+            if (_role == null)
+            {
+                _role = GetComponent<PlayerRole>();
             }
 
             if (_interactor != null && _interactor.HeldValuable != null && _interactor.HeldValuable.Price >= 80)

@@ -22,6 +22,11 @@ namespace GravityReceipt.Player
 
         private void LateUpdate()
         {
+            if (_interactor == null)
+            {
+                _interactor = GetComponent<PlayerInteractor>();
+            }
+
             var match = MatchDirector.Instance;
             if (match == null || !match.IsPlaying)
             {
