@@ -437,6 +437,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - `PlayerMotor` distingue Grounded / Airborne.
 - Valuables y paquete cuelgan del root OfficeFloor (jerarquía limpia).
 - Fog + ambient para que el vacío del pasillo se lea y las salas no queden negras.
+- Cámaras split: fondo = color de fog, far clip 90 m.
 
 ---
 

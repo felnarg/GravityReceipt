@@ -125,6 +125,10 @@ namespace GravityReceipt.Gravity
         {
             ClearBeacon();
             _beacon = new GameObject("DominantBeacon");
+            if (item.transform.root != null)
+            {
+                _beacon.transform.SetParent(item.transform.root, true);
+            }
             var follow = _beacon.AddComponent<FollowBillboard>();
             var height = _baseScale.y * 0.5f + 0.55f;
             follow.Configure(item.transform, Vector3.up * height);
