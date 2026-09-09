@@ -137,8 +137,8 @@ namespace GravityReceipt.World
                 "LA GRAVEDAD SIGUE LO MÁS CARO", new Vector3(0f, 1.65f, 3.55f), Quaternion.Euler(0f, 180f, 0f), new Color(0.08f, 0.1f, 0.12f), new Color(1f, 0.92f, 0.35f));
             CreateSign(root.transform, "Sign_HintPared", new Vector3(-4.72f, 1.7f, 0f), new Vector3(0.1f, 1.1f, 3.6f),
                 "SIN $ NO TIRA · CAJA $80 SÍ", new Vector3(-4.45f, 1.7f, 0f), Quaternion.Euler(0f, 90f, 0f), new Color(0.12f, 0.1f, 0.04f), new Color(1f, 0.85f, 0.35f));
-            CreateSign(root.transform, "Sign_Pasillo", new Vector3(0f, 2.3f, 16.15f), new Vector3(3.2f, 0.55f, 0.1f),
-                "CUIDADO: VACÍO", new Vector3(0f, 2.3f, 16.0f), Quaternion.Euler(0f, 180f, 0f), new Color(0.18f, 0.06f, 0.06f), new Color(1f, 0.5f, 0.45f));
+            CreateSign(root.transform, "Sign_Pasillo", new Vector3(0f, 3.05f, 16.15f), new Vector3(3.2f, 0.45f, 0.1f),
+                "CUIDADO: VACÍO", new Vector3(0f, 3.05f, 16.0f), Quaternion.Euler(0f, 180f, 0f), new Color(0.18f, 0.06f, 0.06f), new Color(1f, 0.5f, 0.45f));
             CreateSign(root.transform, "Sign_Socket", new Vector3(6.72f, 2.35f, 10f), new Vector3(0.1f, 0.55f, 2.6f),
                 "ENCHUFA EL PAQUETE", new Vector3(6.4f, 2.35f, 10f), Quaternion.Euler(0f, -90f, 0f), new Color(0.08f, 0.2f, 0.14f), new Color(0.55f, 1f, 0.75f));
             CreateSign(root.transform, "Sign_ArchivePared", new Vector3(-6.72f, 2.2f, 10f), new Vector3(0.1f, 0.7f, 3.4f),
@@ -484,6 +484,7 @@ namespace GravityReceipt.World
             go.transform.position = platePos;
             go.transform.localScale = plateScale;
             SetColor(go, plate);
+            DisableCollider(go);
 
             var host = new GameObject(name + "_Label");
             host.transform.SetParent(parent, false);
