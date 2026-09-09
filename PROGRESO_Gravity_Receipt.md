@@ -113,6 +113,7 @@ Documento vivo del prototipo.
 - **F9** oculta también las etiquetas 3D (`$`, PAQUETE, carteles billboard) para el clip 1.11.
 - PNG automático al **ganar/perder** (además del primer flip).
 - Viñeta naranja que crece con el telegráfo.
+- 4 ticks de audio durante el telegráfo.
 - Barandillas en el pasillo (dos alturas) para leer el vacío y frenar un poco con g de lado.
 
 ### A MEDIAS
