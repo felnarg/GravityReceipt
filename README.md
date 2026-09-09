@@ -46,6 +46,13 @@ Cheat de iteración (no sale en el HUD): **F6** completa el siguiente objetivo y
 7. Timer 10:00. 3 destrucciones del paquete (impactos fuertes) = derrota. **R** recarga la escena.
 8. **Gravedad por sala:** Archive puede estar “de lado” mientras Office sigue normal.
 
+### Si algo falla
+- **No hay split / mapa viejo:** menú Setup Office Floor A y guarda la escena.
+- **P2 no mira con numpad:** NumLock ON, o usa J/L + I/K.
+- **P2 no aparece:** Setup 2p (no el ítem “1 jugador”).
+- **Caes al vacío andando:** los bordillos son de 0.58 m; hay que saltar o un flip. **F5** si te atascas.
+- **Quieres saltar objetivos:** **F6** (cheat).
+
 ## Seguimiento
 Ver [`PROGRESO_Gravity_Receipt.md`](PROGRESO_Gravity_Receipt.md)
 
