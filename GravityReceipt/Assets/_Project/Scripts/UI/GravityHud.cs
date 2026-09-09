@@ -104,6 +104,9 @@ namespace GravityReceipt.UI
                 var o1 = Mark(match.IsObjectiveComplete(0));
                 var o2 = match.IsObjectiveComplete(0) ? Mark(match.IsObjectiveComplete(1)) : "[-]";
                 var o3 = match.IsObjectiveComplete(1) ? Mark(match.IsObjectiveComplete(2)) : "[-]";
+                matchText.color = t <= 60
+                    ? new Color(1f, 0.45f, 0.4f)
+                    : Color.white;
                 matchText.text =
                     $"⏱ {mm:00}:{ss:00}   Paquete {hearts}  dest {(pkg != null ? pkg.Destructions : 0)}/{(pkg != null ? pkg.MaxDestructions : 3)}\n" +
                     $"{o1} Enchufar   {o2} Entregar   {o3} Sellar   ({match.ObjectivesDone}/{match.ObjectivesToWin})" +
