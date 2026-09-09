@@ -141,6 +141,22 @@ namespace GravityReceipt.UI
             }
         }
 
+        private static string ObjectiveProgressSuffix()
+        {
+            var triggers = FindObjectsByType<ObjectiveTrigger>(FindObjectsSortMode.None);
+            foreach (var t in triggers)
+            {
+                if (t is not { IsDone: false, ProgressNormalized: > 0.02f })
+                {
+                    continue;
+                }
+
+                return $"\n{t.Label}… {t.ProgressNormalized:0%}";
+            }
+
+            return string.Empty;
+        }
+
         private static string DirName(Vector3 d)
         {
             if (Vector3.Dot(d, Vector3.down) > 0.9f) return "abajo";
