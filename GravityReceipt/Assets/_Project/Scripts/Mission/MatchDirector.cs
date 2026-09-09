@@ -129,11 +129,14 @@ namespace GravityReceipt.Mission
                 checkpoints.Advance(index);
             }
             ObjectiveCompleted?.Invoke(index, label);
-            MissionSfx.PlayObjective();
 
             if (ObjectivesDone >= objectivesToWin)
             {
                 End(MatchPhase.Won, "Objetivos completados");
+            }
+            else
+            {
+                MissionSfx.PlayObjective();
             }
         }
 
