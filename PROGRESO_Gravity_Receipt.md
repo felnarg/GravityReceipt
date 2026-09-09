@@ -645,6 +645,9 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 ### 2026-09-09 — Overnight bloque 22 (objetivos tras flip)
 - `ObjectiveTrigger.Contains` usa radio + altura según el arriba de g (no una AABB mundo que fallaba de lado).
 
+### 2026-09-09 — Overnight bloque 23 (`$` y emotes)
+- Price tags y emotes usan `GravityUpFollow` (legibles con el objeto tumbado / g de lado).
+
 ---
 
 ## Checklist del día (copiar al empezar una sesión)
