@@ -290,6 +290,8 @@ namespace GravityReceipt.World
             rb.useGravity = false;
             rb.sleepThreshold = 0.12f;
             rb.maxAngularVelocity = 14f;
+            rb.linearDamping = 0.25f;
+            rb.angularDamping = 0.4f;
 
             go.AddComponent<Grabbable>();
             var body = go.AddComponent<GravityBody>();
@@ -328,6 +330,8 @@ namespace GravityReceipt.World
             rb.useGravity = false;
             rb.sleepThreshold = 0.12f;
             rb.maxAngularVelocity = 14f;
+            rb.linearDamping = 0.25f;
+            rb.angularDamping = 0.4f;
 
             go.AddComponent<Grabbable>();
             var body = go.AddComponent<GravityBody>();
@@ -352,6 +356,8 @@ namespace GravityReceipt.World
             rb.useGravity = false;
             rb.sleepThreshold = 0.12f;
             rb.maxAngularVelocity = 14f;
+            rb.linearDamping = 0.25f;
+            rb.angularDamping = 0.4f;
 
             go.AddComponent<Grabbable>();
             var body = go.AddComponent<GravityBody>();
