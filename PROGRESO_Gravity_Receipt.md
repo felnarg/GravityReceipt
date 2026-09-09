@@ -50,7 +50,7 @@ Documento vivo del prototipo.
 - Menú Setup 2p (default) y 1p.
 
 ### A MEDIAS
-- Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. Hay que pulsar Setup en el Editor para generar el piso nuevo (el factory vive en código).
+- Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
 - 1.10 / 2.7 playtest: código listo, **cero playtests reales** (no hay Unity aquí).
 - Outline dominante sigue siendo pulso de escala + tint, no un outline URP de verdad.
 
@@ -64,8 +64,9 @@ Documento vivo del prototipo.
 
 1. Abre Unity Hub → proyecto **GravityReceipt** con Editor **6000.6.0f1**.
 2. Espera a que compile (scripts nuevos en `Assets/_Project/Scripts/...`).
-3. Menú **GravityReceipt → Setup Office Floor A** → OK. (Esto **borra y recrea** la escena.)
-4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja).
+3. Opción A (recomendada): menú **GravityReceipt → Setup Office Floor A** → OK.  
+   Opción B: pulsa **Play** directo; si la escena es la vieja, se reconstruye sola (2p).
+4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja). Los valuables muestran `$` encima.
 5. **P1:** WASD + ratón. Agarra el cubo naranja (mantener E ~0.4 s).
 6. Entra a Archive (norte). Zona verde en la pared este: suelta el paquete dentro → objetivo Enchufar.
 7. Agarra la **caja dorada** y déjala pegada a una pared. Espera ~1 s: HUD dice FLIP y g cambia.
@@ -74,8 +75,6 @@ Documento vivo del prototipo.
 10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s.
 11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
 12. Para 1.11: graba 8–10 s mudos del paso 7 (caja a la pared → flip).
-
-Si la consola dice que falta `MatchDirector`, no corriste el paso 3.
 
 ---
 
@@ -385,7 +384,8 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - `MissionPackage`, 3 `ObjectiveTrigger`, `CheckpointSystem`, ping, tutorial Hub.
 - `OfficeFloorFactory`: Hub → Archive → Pasillo vacío → Open Office → Executive.
 - Roles Runner/Anchor stub. Highlight de mayor caída.
-- **No se pudo Play Mode** (sin Editor Unity en Linux). Escena YAML vieja hasta que el usuario pulse Setup.
+- Play en escena vieja ahora **auto-reconstruye** el piso 2p (`OfficeFloorPlayGuard`).
+- Chevrones amarillos de ruta, marcos de puerta, etiquetas `$` en valuables y “PAQUETE”.
 - Hard stop programado 08:00 America/Bogota; esta entrega es el avance de código.
 
 ---

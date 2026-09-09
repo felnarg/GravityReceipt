@@ -9,14 +9,12 @@ Prototipo coop PC: la gravedad sigue al objeto más caro de **la sala**.
 
 ## Abrir y jugar (obligatorio regenerar escena)
 
-La escena commiteada puede estar **desactualizada**. Siempre:
+La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no hay `MatchDirector` el piso se reconstruye solo (2p). Aun así, lo limpio es:
 
 1. Abre el proyecto `GravityReceipt` en Unity.
-2. Menú **GravityReceipt → Setup Office Floor A** (2 jugadores split).  
+2. Menú **GravityReceipt → Setup Office Floor A** (2 jugadores split) y guarda.  
    1P: **GravityReceipt → Setup Office Floor A (1 jugador)**
 3. Pulsa **Play**
-
-Si ves un error en consola de `MatchDirector`, no corriste el Setup.
 
 ### Controles
 

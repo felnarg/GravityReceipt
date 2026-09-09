@@ -23,7 +23,7 @@ namespace GravityReceipt.World
         private static readonly Vector3 ArcC = new(0f, 2.5f, 10f);
         private static readonly Vector3 ArcS = new(14f, 5f, 12f);
         private static readonly Vector3 CorC = new(0f, 2.5f, 21.5f);
-        private static readonly Vector3 CorS = new(3.2f, 5f, 11f);
+        private static readonly Vector3 CorS = new(3.6f, 5f, 11f);
         private static readonly Vector3 OffC = new(0f, 2.5f, 35f);
         private static readonly Vector3 OffS = new(16f, 5f, 16f);
         private static readonly Vector3 ExeC = new(0f, 2.5f, 50f);
@@ -73,6 +73,7 @@ namespace GravityReceipt.World
             CreateValuable("Valuable_PlantaOro_95", new Vector3(-4.4f, 0.7f, 46.5f), new Vector3(0.7f, 1.2f, 0.7f), 95, exeG, new Color(0.82f, 0.7f, 0.2f));
 
             var pkg = CreatePackage(new Vector3(0f, 0.45f, 0.6f));
+            AttachPriceTag(pkg.transform, 0, 0.45f, "PAQUETE");
 
             var matchGo = new GameObject("MatchDirector");
             matchGo.transform.SetParent(root.transform, false);
@@ -97,6 +98,8 @@ namespace GravityReceipt.World
                 "CUIDADO: VACÍO", new Vector3(0f, 2.3f, 16.0f), Quaternion.Euler(0f, 180f, 0f), new Color(0.18f, 0.06f, 0.06f), new Color(1f, 0.5f, 0.45f));
             CreateSign(root.transform, "Sign_Socket", new Vector3(6.72f, 2.35f, 10f), new Vector3(0.1f, 0.55f, 2.6f),
                 "ENCHUFA EL PAQUETE", new Vector3(6.4f, 2.35f, 10f), Quaternion.Euler(0f, -90f, 0f), new Color(0.08f, 0.2f, 0.14f), new Color(0.55f, 1f, 0.75f));
+
+            CreatePathChevrons(root.transform);
 
             var pit = GameObject.CreatePrimitive(PrimitiveType.Cube);
             pit.name = "VoidPit";
@@ -196,6 +199,32 @@ namespace GravityReceipt.World
                 var lintelY = doorMaxY + lintelH * 0.5f;
                 CreateCube(parent, name + "_Lint", localPos + new Vector3(0f, lintelY, 0f), new Vector3(DoorW, lintelH, scale.z), color);
             }
+
+            var frame = new Color(1f, 0.82f, 0.2f);
+            var doorCenterY = doorMinY + DoorH * 0.5f;
+            CreateCube(parent, name + "_FrameL", localPos + new Vector3(-DoorW * 0.5f, doorCenterY, 0f), new Vector3(0.14f, DoorH, scale.z + 0.08f), frame);
+            CreateCube(parent, name + "_FrameR", localPos + new Vector3(DoorW * 0.5f, doorCenterY, 0f), new Vector3(0.14f, DoorH, scale.z + 0.08f), frame);
+            CreateCube(parent, name + "_FrameT", localPos + new Vector3(0f, doorMaxY, 0f), new Vector3(DoorW + 0.14f, 0.14f, scale.z + 0.08f), frame);
+        }
+
+        private static void CreatePathChevrons(Transform parent)
+        {
+            var zs = new[] { 2.2f, 5.8f, 15.6f, 21.5f, 27.3f, 34.5f, 43.2f };
+            foreach (var z in zs)
+            {
+                var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                go.name = "PathChevron";
+                go.transform.SetParent(parent, false);
+                go.transform.position = new Vector3(0f, 0.24f, z);
+                go.transform.localScale = new Vector3(0.55f, 0.05f, 0.8f);
+                var col = go.GetComponent<Collider>();
+                if (col is not null)
+                {
+                    col.enabled = false;
+                }
+
+                SetColor(go, new Color(1f, 0.85f, 0.2f));
+            }
         }
 
         private static GameObject CreateValuable(string name, Vector3 position, Vector3 scale, int price, GravityManager gravity, Color color)
@@ -217,7 +246,16 @@ namespace GravityReceipt.World
             body.SetManager(gravity);
             var valuable = go.AddComponent<ValuableItem>();
             valuable.Configure(price, gravity);
+            AttachPriceTag(go.transform, price, scale.y, "$" + price);
             return go;
+        }
+
+        private static void AttachPriceTag(Transform target, int price, float height, string text = null)
+        {
+            var host = new GameObject(target.name + "_Price");
+            var follow = host.AddComponent<FollowBillboard>();
+            follow.Configure(target, Vector3.up * (height * 0.5f + 0.28f));
+            WorldLabel.Create(host.transform, "Text", text ?? ("$" + price), Vector3.zero, new Color(1f, 0.92f, 0.3f), 0.1f);
         }
 
         private static GameObject CreatePackage(Vector3 position)
@@ -401,16 +439,23 @@ namespace GravityReceipt.World
     public static class OfficeFloorPlayGuard
     {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        private static void WarnIfStaleScene()
+        private static void EnsureFloor()
         {
             if (Object.FindAnyObjectByType<MatchDirector>() is not null)
             {
                 return;
             }
 
-            Debug.LogError(
-                "[GravityReceipt] Esta escena no tiene MatchDirector. " +
-                "Menú GravityReceipt → Setup Office Floor A y vuelve a pulsar Play.");
+            Debug.LogWarning(
+                "[GravityReceipt] Escena sin MatchDirector. Reconstruyendo Office Floor A (2p) en Play Mode.");
+
+            var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            foreach (var go in scene.GetRootGameObjects())
+            {
+                Object.DestroyImmediate(go);
+            }
+
+            OfficeFloorFactory.Build(2);
         }
     }
 }
