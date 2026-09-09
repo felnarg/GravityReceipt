@@ -46,8 +46,8 @@ namespace GravityReceipt.Player
                 return;
             }
 
-            var to = worldPos - transform.position;
-            to.y = 0f;
+            var gDir = CurrentGDir();
+            var to = Vector3.ProjectOnPlane(worldPos - transform.position, gDir);
             if (to.sqrMagnitude < 0.04f)
             {
                 Hide();
@@ -57,9 +57,6 @@ namespace GravityReceipt.Player
             EnsureArrow();
             _arrow.gameObject.SetActive(true);
             var dir = to.normalized;
-            var gDir = _motor != null && _motor.Gravity != null
-                ? _motor.Gravity.CurrentDirection
-                : Vector3.down;
             _arrow.position = transform.position + (-gDir) * 0.12f + dir * 0.85f;
             var up = Mathf.Abs(Vector3.Dot(dir, Vector3.up)) > 0.95f ? Vector3.forward : Vector3.up;
             _arrow.rotation = Quaternion.LookRotation(dir, up);
@@ -98,8 +95,7 @@ namespace GravityReceipt.Player
             var holdingPkg = _interactor != null && _interactor.IsHoldingPackage;
             if (!holdingPkg && pkg != null)
             {
-                var toPkg = pkg.transform.position - transform.position;
-                toPkg.y = 0f;
+                var toPkg = Vector3.ProjectOnPlane(pkg.transform.position - transform.position, CurrentGDir());
                 if (toPkg.sqrMagnitude >= 16f)
                 {
                     worldPos = pkg.transform.position;
@@ -114,8 +110,7 @@ namespace GravityReceipt.Player
                 return false;
             }
 
-            var to = target.transform.position - transform.position;
-            to.y = 0f;
+            var to = Vector3.ProjectOnPlane(target.transform.position - transform.position, CurrentGDir());
             if (to.sqrMagnitude < 12.25f)
             {
                 return false;
@@ -129,6 +124,13 @@ namespace GravityReceipt.Player
                 _ => new Color(1f, 0.82f, 0.25f)
             };
             return true;
+        }
+
+        private Vector3 CurrentGDir()
+        {
+            return _motor != null && _motor.Gravity != null
+                ? _motor.Gravity.CurrentDirection
+                : Vector3.down;
         }
 
         private static ObjectiveTrigger FindCurrentObjective(int index)
