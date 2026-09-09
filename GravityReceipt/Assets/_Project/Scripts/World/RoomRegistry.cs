@@ -24,8 +24,10 @@ namespace GravityReceipt.World
 
         public static RoomVolume FindRoom(Vector3 worldPos)
         {
-            RoomVolume best = null;
-            var bestSqr = float.MaxValue;
+            RoomVolume bestOwn = null;
+            var bestOwnSqr = float.MaxValue;
+            RoomVolume bestAny = null;
+            var bestAnySqr = float.MaxValue;
             for (var i = Rooms.Count - 1; i >= 0; i--)
             {
                 var room = Rooms[i];
@@ -41,16 +43,20 @@ namespace GravityReceipt.World
                 }
 
                 var d = (worldPos - room.Center).sqrMagnitude;
-                if (d >= bestSqr)
+                if (d < bestAnySqr)
                 {
-                    continue;
+                    bestAnySqr = d;
+                    bestAny = room;
                 }
 
-                bestSqr = d;
-                best = room;
+                if (room.HasOwnGravity && d < bestOwnSqr)
+                {
+                    bestOwnSqr = d;
+                    bestOwn = room;
+                }
             }
 
-            return best;
+            return bestOwn != null ? bestOwn : bestAny;
         }
 
         public static void Clear()
