@@ -73,6 +73,7 @@ Documento vivo del prototipo.
 - Prompt “ocupado” si el otro jugador ya lleva el objeto.
 - Respaldo en sillas; letreros → ARCHIVE / PASILLO / OPEN OFFICE / EXECUTIVE.
 - HUD muestra quién lleva el paquete (`Paquete ♥♥♥ · P1`).
+- Barra 3D de captura sobre la losa mientras enchufas / entregas / sellas.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -482,6 +483,10 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 ### 2026-09-09 — Overnight bloque 9 (2p ocupado + puertas)
 - Mirar un objeto agarrado por el compañero muestra “ocupado”.
 - Sillas con respaldo. Lintel de cada puerta nombra la sala siguiente.
+
+### 2026-09-09 — Overnight bloque 10 (barra de captura)
+- Cubo amarillo sobre la losa actual que crece con el progreso de Enchufar/Entregar/Sellar.
+- Monitor con peana y cafetera con pico.
 
 ---
 

@@ -79,9 +79,11 @@ namespace GravityReceipt.World
             CreateValuable(root.transform, "Valuable_Archivador_40", new Vector3(-3.6f, 1.0f, 8.5f), new Vector3(0.8f, 1.6f, 0.5f), 40, arcG, new Color(0.55f, 0.38f, 0.22f), PrimitiveType.Cube);
             var caja = CreateValuable(root.transform, "Valuable_CajaFuerte_80", new Vector3(3.4f, 0.75f, 12.2f), new Vector3(1.1f, 1.1f, 1.1f), 80, arcG, new Color(0.9f, 0.72f, 0.18f), PrimitiveType.Cube);
             AddLocalVisual(caja.transform, PrimitiveType.Cylinder, new Vector3(0f, 0f, 0.56f), new Vector3(0.22f, 0.08f, 0.22f), new Color(0.35f, 0.32f, 0.28f));
-            CreateValuable(root.transform, "Valuable_Monitor_120", new Vector3(4.5f, 0.55f, 32f), new Vector3(1.4f, 0.85f, 0.12f), 120, offG, new Color(0.15f, 0.45f, 0.95f), PrimitiveType.Cube);
+            var monitor = CreateValuable(root.transform, "Valuable_Monitor_120", new Vector3(4.5f, 0.55f, 32f), new Vector3(1.4f, 0.85f, 0.12f), 120, offG, new Color(0.15f, 0.45f, 0.95f), PrimitiveType.Cube);
+            AddLocalVisual(monitor.transform, PrimitiveType.Cube, new Vector3(0f, -0.7f, 0.8f), new Vector3(0.18f, 0.55f, 0.7f), new Color(0.12f, 0.12f, 0.16f));
             CreateValuable(root.transform, "Valuable_Planta_60", new Vector3(-5.5f, 0.85f, 38f), new Vector3(0.55f, 0.85f, 0.55f), 60, offG, new Color(0.2f, 0.72f, 0.28f), PrimitiveType.Capsule);
-            CreateValuable(root.transform, "Valuable_Cafetera_90", new Vector3(6f, 0.55f, 37.5f), new Vector3(0.55f, 0.55f, 0.55f), 90, offG, new Color(0.82f, 0.18f, 0.14f), PrimitiveType.Cylinder);
+            var cafe = CreateValuable(root.transform, "Valuable_Cafetera_90", new Vector3(6f, 0.55f, 37.5f), new Vector3(0.55f, 0.55f, 0.55f), 90, offG, new Color(0.82f, 0.18f, 0.14f), PrimitiveType.Cylinder);
+            AddLocalVisual(cafe.transform, PrimitiveType.Cube, new Vector3(0.7f, 0.15f, 0f), new Vector3(0.45f, 0.18f, 0.18f), new Color(0.2f, 0.2f, 0.22f));
             var maletin = CreateValuable(root.transform, "Valuable_Maletin_200", new Vector3(2.2f, 0.32f, 47.5f), new Vector3(1.05f, 0.28f, 0.7f), 200, exeG, new Color(0.12f, 0.08f, 0.06f), PrimitiveType.Cube);
             AddLocalVisual(maletin.transform, PrimitiveType.Cube, new Vector3(0f, 0.7f, 0f), new Vector3(0.28f, 0.55f, 0.16f), new Color(0.78f, 0.64f, 0.18f));
             var trophy = CreateValuable(root.transform, "Valuable_Trofeo_150", new Vector3(-3.2f, 0.85f, 52.5f), new Vector3(0.35f, 0.85f, 0.35f), 150, exeG, new Color(0.98f, 0.82f, 0.18f), PrimitiveType.Capsule);

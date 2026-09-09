@@ -23,6 +23,7 @@ namespace GravityReceipt.Mission
         private bool _done;
         private Renderer _renderer;
         private Color _baseColor;
+        private Transform _progressBar;
 
         public int Index => objectiveIndex;
         public string Label => objectiveLabel;
@@ -98,6 +99,7 @@ namespace GravityReceipt.Mission
             if (_done || (MatchDirector.Instance != null && MatchDirector.Instance.IsObjectiveComplete(objectiveIndex)))
             {
                 MarkCompleteVisual();
+                SetProgressBar(0f);
                 return;
             }
 
@@ -107,10 +109,54 @@ namespace GravityReceipt.Mission
             {
                 var pulse = 0.5f + 0.5f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 3.2f));
                 _renderer.material.color = Color.Lerp(_baseColor, Color.white, pulse * 0.5f);
+                SetProgressBar(_progress);
                 return;
             }
 
             _renderer.material.color = Color.Lerp(_baseColor, new Color(0.12f, 0.12f, 0.14f), 0.45f);
+            SetProgressBar(0f);
+        }
+
+        private void SetProgressBar(float progressSeconds)
+        {
+            var shown = requiredSeconds > 0f ? Mathf.Clamp01(progressSeconds / requiredSeconds) : 0f;
+            if (shown <= 0.02f)
+            {
+                if (_progressBar != null)
+                {
+                    _progressBar.gameObject.SetActive(false);
+                }
+
+                return;
+            }
+
+            if (_progressBar == null)
+            {
+                var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                go.name = "ObjectiveProgress";
+                go.transform.SetParent(transform.root, true);
+                var col = go.GetComponent<Collider>();
+                if (col != null)
+                {
+                    col.enabled = false;
+                }
+
+                var rend = go.GetComponent<Renderer>();
+                if (rend != null)
+                {
+                    var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
+                    if (shader != null)
+                    {
+                        rend.sharedMaterial = new Material(shader) { color = new Color(1f, 0.92f, 0.35f) };
+                    }
+                }
+
+                _progressBar = go.transform;
+            }
+
+            _progressBar.gameObject.SetActive(true);
+            _progressBar.position = transform.position + Vector3.up * 0.45f;
+            _progressBar.localScale = new Vector3(Mathf.Max(0.15f, shown * 2.2f), 0.09f, 0.09f);
         }
 
         private void MarkCompleteVisual()
@@ -119,6 +165,15 @@ namespace GravityReceipt.Mission
             if (_renderer != null)
             {
                 _renderer.material.color = Color.Lerp(_baseColor, new Color(0.15f, 0.15f, 0.15f), 0.65f);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (_progressBar != null)
+            {
+                Destroy(_progressBar.gameObject);
+                _progressBar = null;
             }
         }
 
