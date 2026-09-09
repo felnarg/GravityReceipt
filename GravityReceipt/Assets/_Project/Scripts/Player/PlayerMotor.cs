@@ -106,8 +106,12 @@ namespace GravityReceipt.Player
 
                 if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked)
                 {
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
+                    var match = MatchDirector.Instance;
+                    if (match == null || match.IsPlaying)
+                    {
+                        Cursor.lockState = CursorLockMode.Locked;
+                        Cursor.visible = false;
+                    }
                 }
             }
 
