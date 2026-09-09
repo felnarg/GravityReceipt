@@ -108,6 +108,7 @@ Documento vivo del prototipo.
 - Toast “Caíste · checkpoint” al respawnear por vacío.
 - Ding al terminar el splash de 9 s (el timer 10:00 arranca).
 - Paneles oscuros detrás del HUD (status, objetivos, splash/FLIP) para contraste.
+- Hub: dispensador de agua, reloj, alfombra de spawn; Office: impresora.
 - Barandillas en el pasillo (dos alturas) para leer el vacío y frenar un poco con g de lado.
 
 ### A MEDIAS
