@@ -607,6 +607,7 @@ namespace GravityReceipt.UI
             {
                 _boundMatch.ObjectiveCompleted += OnObjectiveCompleted;
                 _boundMatch.PackageDented += OnPackageDented;
+                _boundMatch.PlayerRespawned += OnPlayerRespawned;
             }
         }
 
@@ -616,6 +617,7 @@ namespace GravityReceipt.UI
             {
                 _boundMatch.ObjectiveCompleted -= OnObjectiveCompleted;
                 _boundMatch.PackageDented -= OnPackageDented;
+                _boundMatch.PlayerRespawned -= OnPlayerRespawned;
             }
 
             _boundMatch = null;
@@ -625,6 +627,12 @@ namespace GravityReceipt.UI
         {
             _toast = "¡PAQUETE ABOLLADO!";
             _toastUntil = Time.unscaledTime + 1.6f;
+        }
+
+        private void OnPlayerRespawned()
+        {
+            _toast = "Caíste · checkpoint";
+            _toastUntil = Time.unscaledTime + 1.8f;
         }
 
         private void OnObjectiveCompleted(int _, string label)

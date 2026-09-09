@@ -16,6 +16,7 @@ namespace GravityReceipt.Mission
         public event Action<int, string> ObjectiveCompleted;
         public event Action<MatchPhase, string> MatchEnded;
         public event Action PackageDented;
+        public event Action PlayerRespawned;
 
         [SerializeField] private float matchSeconds = 600f;
         [SerializeField] private int objectivesToWin = 3;
@@ -210,6 +211,11 @@ namespace GravityReceipt.Mission
         public void NotifyPackageDented()
         {
             PackageDented?.Invoke();
+        }
+
+        public void NotifyPlayerRespawned()
+        {
+            PlayerRespawned?.Invoke();
         }
 
         public void Rematch()

@@ -141,6 +141,10 @@ namespace GravityReceipt.Mission
                 ? checkpoints.GetPlayerSpawn(slot)
                 : new Vector3(0f, 1f, 0f);
             motor.Warp(point);
+            if (MatchDirector.Instance != null)
+            {
+                MatchDirector.Instance.NotifyPlayerRespawned();
+            }
         }
     }
 }
