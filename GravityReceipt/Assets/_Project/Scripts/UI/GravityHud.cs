@@ -169,7 +169,7 @@ namespace GravityReceipt.UI
                     ? new Color(1f, 0.45f, 0.4f)
                     : Color.white;
                 matchText.text =
-                    $"⏱ {mm:00}:{ss:00}   Paquete {hearts}  dest {(pkg != null ? pkg.Destructions : 0)}/{(pkg != null ? pkg.MaxDestructions : 3)}\n" +
+                    $"⏱ {mm:00}:{ss:00}   Paquete {hearts}{PackageHolderSuffix()}  dest {(pkg != null ? pkg.Destructions : 0)}/{(pkg != null ? pkg.MaxDestructions : 3)}\n" +
                     $"{ObjMark(match, 0)} Enchufar   {ObjMark(match, 1)} Entregar   {ObjMark(match, 2)} Sellar   ({match.ObjectivesDone}/{match.ObjectivesToWin})" +
                     NextObjectiveHint(match) +
                     ObjectiveProgressSuffix();
@@ -287,6 +287,24 @@ namespace GravityReceipt.UI
             if (Vector3.Dot(d, Vector3.forward) > 0.9f) return "norte";
             if (Vector3.Dot(d, Vector3.back) > 0.9f) return "sur";
             return d.ToString();
+        }
+
+        private static string PackageHolderSuffix()
+        {
+            var inters = FindObjectsByType<PlayerInteractor>(FindObjectsSortMode.None);
+            foreach (var inter in inters)
+            {
+                if (inter == null || !inter.IsHoldingPackage)
+                {
+                    continue;
+                }
+
+                var input = inter.GetComponent<LocalPlayerInput>();
+                var who = input != null && input.Slot == LocalPlayerSlot.Two ? "P2" : "P1";
+                return $" · {who}";
+            }
+
+            return string.Empty;
         }
 
         private static string Hearts(MissionPackage pkg)

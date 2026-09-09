@@ -104,6 +104,15 @@ namespace GravityReceipt.Mission
 
         public void Respawn()
         {
+            var holders = FindObjectsByType<PlayerInteractor>(FindObjectsSortMode.None);
+            foreach (var inter in holders)
+            {
+                if (inter != null && inter.IsHoldingPackage)
+                {
+                    inter.Drop();
+                }
+            }
+
             var checkpoints = CheckpointSystem.Instance;
             var point = checkpoints != null
                 ? checkpoints.PackageSpawn

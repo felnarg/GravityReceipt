@@ -105,6 +105,18 @@ namespace GravityReceipt.Mission
                 return;
             }
 
+            if (Input.GetKeyDown(KeyCode.F7) && IsPlaying)
+            {
+                var pkg = FindAnyObjectByType<MissionPackage>();
+                if (pkg != null)
+                {
+                    pkg.Respawn();
+                    Debug.Log("[GravityReceipt] F7 respawn paquete");
+                }
+
+                return;
+            }
+
             if (_phase == MatchPhase.Playing)
             {
                 _remaining -= Time.deltaTime;

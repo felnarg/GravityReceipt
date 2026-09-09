@@ -55,7 +55,7 @@ Documento vivo del prototipo.
 - Pasillo: bordillos 0.58 m (ya no se camina al vacío sin querer).
 - Valuables y props que caen al vacío vuelven a su spawn (`SpawnHome`).
 - Losas Entregar/Sellar cubren el paquete agarrado; Sellar también si llevas el paquete.
-- **F5** restart · **F8** PNG · **F9** oculta chrome · **F6** skip objetivo (cheat).
+- **F5** restart · **F8** PNG · **F9** oculta chrome · **F6** skip objetivo · **F7** respawn paquete.
 - Fog + fondo de cámara oscuro; franja azul = suelo original; coyote/jump buffer; SFX win/lose.
 - Franja naranja en techos (si g apunta arriba, estás en el techo).
 - Damping en props para que se asienten tras un flip.
@@ -72,6 +72,7 @@ Documento vivo del prototipo.
 - Siluetas: asa en la taza, pomo en la caja, asa en el maletín, bola en el trofeo.
 - Prompt “ocupado” si el otro jugador ya lleva el objeto.
 - Respaldo en sillas; letreros → ARCHIVE / PASILLO / OPEN OFFICE / EXECUTIVE.
+- HUD muestra quién lleva el paquete (`Paquete ♥♥♥ · P1`).
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -100,7 +101,7 @@ Documento vivo del prototipo.
 10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre.
 11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
 12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). **F9** oculta help/status para un clip más limpio. Graba 8–10 s mudos del paso 7, o dispara F8 durante el FLIP.
-13. Cheat playtest: **F6** completa el siguiente objetivo y teletea al checkpoint (no está en el HUD a propósito).
+13. Cheat playtest: **F6** completa el siguiente objetivo y teletea al checkpoint (no está en el HUD a propósito). **F7** solo respawnea el paquete.
 14. Emotes: P1 teclas **1–4**, P2 **KP1 / KP2 / KP3 / KP9**. Apunta a un cubo gris: el prompt debe decir “(sin $)”.
 
 ---
