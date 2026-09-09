@@ -93,7 +93,9 @@ namespace GravityReceipt.Interaction
 
             if (_heldValuable == null)
             {
-                return "soltar";
+                return _held.GetComponent<MissionPackage>() != null
+                    ? "soltar · enchúfalo (no tira de g)"
+                    : "soltar · sin $ · no tira de g";
             }
 
             var g = _heldValuable.Manager;
@@ -304,13 +306,23 @@ namespace GravityReceipt.Interaction
             _windUp = 0f;
             ClearFocus();
             MissionSfx.PlayGrab();
+            var match = MatchDirector.Instance;
+            if (match == null)
+            {
+                return;
+            }
+
             if (_heldValuable != null)
             {
-                var match = MatchDirector.Instance;
-                if (match != null)
-                {
-                    match.NotifyFirstValuableGrab();
-                }
+                match.NotifyFirstValuableGrab();
+            }
+            else if (body.GetComponent<MissionPackage>() != null)
+            {
+                match.NotifyFirstPackageGrab();
+            }
+            else
+            {
+                match.NotifyFirstGrayGrab();
             }
         }
 
