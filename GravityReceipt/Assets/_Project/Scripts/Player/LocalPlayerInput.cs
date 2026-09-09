@@ -59,7 +59,9 @@ namespace GravityReceipt.Player
             var pitch = 0f;
             if (slot == LocalPlayerSlot.Two)
             {
-                yaw = KeyAxis(KeyCode.Keypad4, KeyCode.Keypad6) + KeyAxis(KeyCode.U, KeyCode.O);
+                yaw = KeyAxis(KeyCode.Keypad4, KeyCode.Keypad6)
+                      + KeyAxis(KeyCode.U, KeyCode.O)
+                      + KeyAxis(KeyCode.J, KeyCode.L);
                 pitch = KeyAxis(KeyCode.Keypad5, KeyCode.Keypad8) + KeyAxis(KeyCode.H, KeyCode.Y);
                 yaw += SafeAxis("P2LookX");
                 pitch += SafeAxis("P2LookY");

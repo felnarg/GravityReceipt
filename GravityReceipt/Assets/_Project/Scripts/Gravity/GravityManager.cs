@@ -48,7 +48,7 @@ namespace GravityReceipt.Gravity
 
         public void Register(ValuableItem item)
         {
-            if (item is not { } || _valuables.Contains(item))
+            if (item == null || _valuables.Contains(item))
             {
                 return;
             }
@@ -74,7 +74,7 @@ namespace GravityReceipt.Gravity
 
         public void NotifyValuableMoved(ValuableItem item)
         {
-            if (item is not { })
+            if (item == null)
             {
                 return;
             }
@@ -109,9 +109,16 @@ namespace GravityReceipt.Gravity
             ValuableItem best = null;
             var bestPrice = int.MinValue;
 
-            foreach (var v in _valuables)
+            for (var i = _valuables.Count - 1; i >= 0; i--)
             {
-                if (v is not { IsActiveValuable: true })
+                var v = _valuables[i];
+                if (v == null)
+                {
+                    _valuables.RemoveAt(i);
+                    continue;
+                }
+
+                if (!v.IsActiveValuable)
                 {
                     continue;
                 }
@@ -127,7 +134,7 @@ namespace GravityReceipt.Gravity
                 }
             }
 
-            if (best is null)
+            if (best == null)
             {
                 ScheduleOrApply(defaultDown, null, immediate);
                 return;

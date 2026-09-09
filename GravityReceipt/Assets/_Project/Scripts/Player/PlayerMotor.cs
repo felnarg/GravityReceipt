@@ -42,13 +42,13 @@ namespace GravityReceipt.Player
                 return;
             }
 
-            if (gravityManager is not null)
+            if (gravityManager != null)
             {
                 gravityManager.GravityChanged -= OnGravityChanged;
             }
 
             gravityManager = next;
-            if (gravityManager is not null)
+            if (gravityManager != null)
             {
                 gravityManager.GravityChanged += OnGravityChanged;
                 _lastGravityDir = gravityManager.CurrentDirection;
@@ -73,7 +73,7 @@ namespace GravityReceipt.Player
                 Cursor.visible = false;
             }
 
-            if (gravityManager is not null)
+            if (gravityManager != null)
             {
                 gravityManager.GravityChanged += OnGravityChanged;
                 _lastGravityDir = gravityManager.CurrentDirection;
@@ -82,7 +82,7 @@ namespace GravityReceipt.Player
 
         private void OnDestroy()
         {
-            if (gravityManager is not null)
+            if (gravityManager != null)
             {
                 gravityManager.GravityChanged -= OnGravityChanged;
             }
