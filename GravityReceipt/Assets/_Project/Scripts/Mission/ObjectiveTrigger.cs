@@ -48,6 +48,12 @@ namespace GravityReceipt.Mission
                 return;
             }
 
+            if (objectiveIndex > 0 && !MatchDirector.Instance.IsObjectiveComplete(objectiveIndex - 1))
+            {
+                _progress = 0f;
+                return;
+            }
+
             if (!ConditionsMet())
             {
                 _progress = 0f;
