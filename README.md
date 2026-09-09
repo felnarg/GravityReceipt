@@ -37,10 +37,11 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 1. Cartel del Hub: **LA GRAVEDAD SIGUE LO MÁS CARO**.
 2. Agarra el paquete **naranja**. En Archive, llévalo a la zona verde **ENCHUFA EL PAQUETE** (pared este).
 3. Caja fuerte **dorada $80**: llévala cerca de una **pared** y suéltala. Tras ~1 s la gravedad de Archive tira hacia esa pared.
-4. Cruza el pasillo (vacío a los lados). Si caes, respawneas en el último checkpoint.
+4. Cruza el pasillo (vacío a los lados; bordillos rojos). Si caes, respawneas en el último checkpoint.
 5. Open Office: deja el paquete en la losa azul **ENTREGAR**.
 6. Executive: paquete + jugador en la losa dorada, mantén agarrar para **SELLAR**.
 7. Timer 10:00. 3 destrucciones del paquete (impactos fuertes) = derrota. **R** recarga la escena.
+8. **Gravedad por sala:** Archive puede estar “de lado” mientras Office sigue normal.
 
 ## Seguimiento
 Ver [`PROGRESO_Gravity_Receipt.md`](PROGRESO_Gravity_Receipt.md)
