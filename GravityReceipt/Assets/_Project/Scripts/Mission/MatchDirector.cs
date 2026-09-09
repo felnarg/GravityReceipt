@@ -58,6 +58,7 @@ namespace GravityReceipt.Mission
             _phase = MatchPhase.Playing;
             _remaining = matchSeconds;
             Physics.gravity = Vector3.zero;
+            GravityReceipt.Gravity.GravityManager.ResetFlipScreenshotFlag();
         }
 
         private void OnDestroy()

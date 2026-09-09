@@ -97,6 +97,7 @@ namespace GravityReceipt.Gravity
 
             ApplyGravity(_pendingDirection, _dominant);
             _isTelegraphing = false;
+            CaptureFirstFlip();
         }
 
         private void RecalculateDominant(bool immediate, ValuableItem movedHint = null)
@@ -197,7 +198,28 @@ namespace GravityReceipt.Gravity
             if (Vector3.Dot(previous, _currentGravityDirection) < 0.99f)
             {
                 GravityChanged?.Invoke(CurrentGravity, dominant);
+                CaptureFirstFlip();
             }
+        }
+
+        public static void ResetFlipScreenshotFlag()
+        {
+            _flipShotTaken = false;
+        }
+
+        private static bool _flipShotTaken;
+
+        private static void CaptureFirstFlip()
+        {
+            if (_flipShotTaken)
+            {
+                return;
+            }
+
+            _flipShotTaken = true;
+            var name = $"GravityReceipt_flip_{System.DateTime.Now:HHmmss}.png";
+            ScreenCapture.CaptureScreenshot(name);
+            Debug.Log("[GravityReceipt] Primer flip capturado: " + name);
         }
     }
 }

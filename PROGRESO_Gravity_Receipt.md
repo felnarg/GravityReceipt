@@ -143,7 +143,7 @@ Documento vivo del prototipo.
 | 1.8 | Outline del valuable dominante | [x] | Pulso/color (no outline URP) |
 | 1.9 | Escena mínima: 1 sala + 2 valuables | [x] | Archive sigue existiendo dentro del piso |
 | 1.10 | Playtest local 2p (misma máquina o builds) | [~] | Split-screen implementado; falta que 2 personas lo jueguen |
-| 1.11 | Vídeo mudo 8–10 s del flip | [ ] | Requiere grabar en Unity local |
+| 1.11 | Vídeo mudo 8–10 s del flip | [~] | F8 screenshot + auto PNG en el **primer** flip; falta vídeo humano |
 
 **Gate 1–2:** si no se entiende en 30 s → simplificar UI, no añadir features.
 
