@@ -213,7 +213,7 @@ namespace GravityReceipt.UI
                 else if (match.IsPaused)
                 {
                     centerText.text = match.IsInSplash
-                        ? "PAUSA — LEE LA REGLA\nLA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nGrises sin $ no cuentan · taza $15 o caja $80 a una PARED\nP continúa"
+                        ? $"PAUSA — LEE LA REGLA ({Mathf.CeilToInt(match.SplashSecondsLeft)} s)\nLA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nGrises sin $ no cuentan · taza $15 o caja $80 a una PARED\nP continúa"
                         : "PAUSA\nP continúa · clic para mirar · F5 restart";
                     centerText.color = new Color(0.85f, 0.95f, 1f);
                 }
@@ -229,7 +229,7 @@ namespace GravityReceipt.UI
                 }
                 else if (match.IsInSplash)
                 {
-                    centerText.text = "LA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nGrises sin $ no cuentan · taza $15 o caja $80 a una PARED\nSigue la flecha · P pausa para leer";
+                    centerText.text = "LA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nGrises sin $ no cuentan · taza $15 o caja $80 a una PARED\nSigue la flecha · P pausa para leer\n" + Mathf.CeilToInt(match.SplashSecondsLeft) + " s";
                     centerText.color = new Color(1f, 0.92f, 0.4f);
                 }
                 else if (CursorUnlockedHint(p1))

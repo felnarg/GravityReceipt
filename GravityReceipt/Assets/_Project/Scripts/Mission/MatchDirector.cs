@@ -34,6 +34,7 @@ namespace GravityReceipt.Mission
         public float RemainingSeconds => Mathf.Max(0f, _remaining);
         public bool IsPaused => _paused;
         public bool IsInSplash => _splashLeft > 0f;
+        public float SplashSecondsLeft => Mathf.Max(0f, _splashLeft);
         public int ObjectivesDone
         {
             get
