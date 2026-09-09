@@ -1,4 +1,5 @@
 using GravityReceipt.Gravity;
+using GravityReceipt.World;
 using UnityEngine;
 
 namespace GravityReceipt.Mission
@@ -29,7 +30,7 @@ namespace GravityReceipt.Mission
 
             var pulse = 0.18f + 0.07f * (0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 6.2f));
             _orb.localScale = Vector3.one * pulse;
-            _orb.position = transform.position + transform.up * 0.62f;
+            _orb.position = transform.position + RoomRegistry.UpAt(transform.position) * 0.62f;
             if (_renderer != null)
             {
                 var t = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 6.2f);

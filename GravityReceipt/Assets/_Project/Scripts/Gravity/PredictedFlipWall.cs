@@ -1,5 +1,6 @@
 using GravityReceipt.Interaction;
 using GravityReceipt.Player;
+using GravityReceipt.UI;
 using GravityReceipt.World;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace GravityReceipt.Gravity
         private PlayerInteractor _interactor;
         private Transform _quad;
         private Renderer _renderer;
+        private Transform _word;
 
         private void Awake()
         {
@@ -84,6 +86,10 @@ namespace GravityReceipt.Gravity
                     new Color(1f, 0.4f, 0.1f),
                     pulse);
             }
+
+            EnsureWord();
+            _word.gameObject.SetActive(true);
+            _word.position = _quad.position - dir * 0.45f;
         }
 
         private void Hide()
@@ -91,6 +97,11 @@ namespace GravityReceipt.Gravity
             if (_quad != null)
             {
                 _quad.gameObject.SetActive(false);
+            }
+
+            if (_word != null)
+            {
+                _word.gameObject.SetActive(false);
             }
         }
 
@@ -128,11 +139,36 @@ namespace GravityReceipt.Gravity
             _quad = go.transform;
         }
 
+        private void EnsureWord()
+        {
+            if (_word != null)
+            {
+                return;
+            }
+
+            var host = new GameObject("PredictedFlipWord");
+            var floor = GameObject.Find("OfficeFloor");
+            if (floor != null)
+            {
+                host.transform.SetParent(floor.transform, true);
+            }
+
+            WorldLabel.Create(host.transform, "Text", "GIRA", Vector3.zero, new Color(1f, 0.75f, 0.2f), 0.14f);
+            var billboard = host.AddComponent<FollowBillboard>();
+            billboard.Configure(host.transform, Vector3.zero);
+            _word = host.transform;
+        }
+
         private void OnDestroy()
         {
             if (_quad != null)
             {
                 Destroy(_quad.gameObject);
+            }
+
+            if (_word != null)
+            {
+                Destroy(_word.gameObject);
             }
         }
     }

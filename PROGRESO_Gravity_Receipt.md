@@ -27,7 +27,7 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla/arte |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~02:15 COT (overnight, etiquetas g-up + ABAJO + flecha HUD) |
+| **Última actualización** | 2026-09-09 ~02:20 COT (overnight, ruta de puertas + orbes en g-up) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
 | **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F3/F4/F6/F7, OOB AABB, waypoint, beacon paquete, pausa P, linger FLIP, pad cian **ABAJO**, etiquetas de losa siguen g, flecha HUD si el objetivo está fuera de cámara |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete (sigue la flecha) + flip con caja dorada a una pared · mira el sello ABAJO y las etiquetas ENCHUFAR/ENTREGAR/SELLAR |
@@ -146,6 +146,8 @@ Documento vivo del prototipo.
 - Toast al completar Enchufar/Entregar apunta al siguiente (pasillo/losa).
 - Sellos de sala en el suelo (HUB / ARCHIVE / PASILLO / OFFICE / EXECUTIVE).
 - Pasillo: neón en bordillos + glow rojo en el vacío. Office: laptop/papeles; Hub: planta.
+- Orbes de paquete/taza y beacon “¡ESTE TIRA DE G!” usan el arriba de g (no el local del objeto al tumbarse).
+- Mancha de pared prevista dice **GIRA**. Aro naranja en la puerta hacia el objetivo (tras el splash).
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -168,7 +170,7 @@ Documento vivo del prototipo.
    Opción B: pulsa **Play** directo; si la escena es la vieja, se reconstruye sola (2p).
 4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja). Los valuables muestran `$` encima. Splash 9 s: “LA GRAVEDAD SIGUE AL OBJETO MÁS CARO” (puedes pulsar **P** para leerlo). El paquete tiene un orbe naranja. La taza $15 tiene un orbe dorado. En el Hub la flecha apunta a la taza. En el suelo lee **HUB**. Si miras al techo, el HUD puede mostrar `↓ TAZA $15`.
 5. **P1:** WASD + ratón. Agarra el cubo naranja (mantener E ~0.4 s).
-6. Entra a Archive (norte). Sigue la flecha / columna verde en la pared este: paquete dentro → objetivo Enchufar.
+6. Entra a Archive (norte). El aro naranja de la puerta te guía si aún no cruzaste. Sigue la flecha / columna verde en la pared este: paquete dentro → objetivo Enchufar.
 7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y llévala a una **pared** (en manos o suelta). Espera ~1 s: banner **¡FLIP ARCHIVE!** (se queda un instante al voltear), whoosh, FOV, flash, chispas, la cámara se inclina, g cambia. Un cuadrado cian con **ABAJO** marca la nueva “abajo”; un toast lo dice. La etiqueta ENCHUFAR se queda encima de la zona (no en Y mundo). El primer flip guarda un PNG solo.
 8. Cruza el pasillo (bordillos rojos altos; vacío a los lados). Si caes **o sales volando a los lados** (g heredada), respawneas. Si un valuable cae, vuelve a su sitio.
 9. Losa azul Open Office = Entregar. Losa dorada Executive + paquete en manos o mantener E = Sellar.
@@ -607,6 +609,11 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - HUD por viewport: flecha de borde si taza/paquete/objetivo está fuera de cámara.
 - Toasts de Enchufar/Entregar dicen el siguiente paso.
 - Sellos de sala en el suelo; neón + glow del vacío en el pasillo; laptop/papeles/planta.
+
+### 2026-09-09 — Overnight bloque 16 (orbes g-up + puerta)
+- `RoomRegistry.UpAt` unifica el “arriba” de g.
+- Orbes paquete/taza y “¡ESTE TIRA DE G!” flotan en g-up.
+- Pared prevista: texto **GIRA**. `ObjectiveRouteHint`: aro en la puerta al siguiente cuarto.
 
 ---
 

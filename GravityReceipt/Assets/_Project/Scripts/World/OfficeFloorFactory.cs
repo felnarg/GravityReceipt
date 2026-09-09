@@ -183,6 +183,7 @@ namespace GravityReceipt.World
             var match = matchGo.AddComponent<MatchDirector>();
             match.Configure(MatchSeconds, 3);
             matchGo.AddComponent<MatchHighlightRecorder>();
+            matchGo.AddComponent<ObjectiveRouteHint>();
             var checkpoints = matchGo.AddComponent<CheckpointSystem>();
             var p1Spawn = new Vector3(-1.4f, 0.3f, -1.8f);
             var p2Spawn = new Vector3(1.4f, 0.3f, -1.8f);

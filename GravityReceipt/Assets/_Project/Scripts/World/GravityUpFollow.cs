@@ -26,17 +26,7 @@ namespace GravityReceipt.World
                 return;
             }
 
-            var up = Vector3.up;
-            var room = RoomRegistry.FindRoom(target.position);
-            if (room != null && room.Gravity != null)
-            {
-                var g = room.Gravity.CurrentDirection;
-                if (g.sqrMagnitude > 0.01f)
-                {
-                    up = -g;
-                }
-            }
-
+            var up = RoomRegistry.UpAt(target.position);
             transform.position = target.position + up * height;
         }
     }

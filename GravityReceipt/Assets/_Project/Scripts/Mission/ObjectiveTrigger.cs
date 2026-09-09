@@ -224,17 +224,7 @@ namespace GravityReceipt.Mission
 
         private Vector3 CurrentUp()
         {
-            var room = RoomRegistry.FindRoom(transform.position);
-            if (room != null && room.Gravity != null)
-            {
-                var g = room.Gravity.CurrentDirection;
-                if (g.sqrMagnitude > 0.01f)
-                {
-                    return -g;
-                }
-            }
-
-            return Vector3.up;
+            return RoomRegistry.UpAt(transform.position);
         }
 
         private void MarkCompleteVisual()

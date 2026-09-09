@@ -44,7 +44,7 @@ Cheat de iteración (no sale en el HUD): **F3** desatasca · **F4** teleporta al
 
 1. Cartel del Hub: **LA GRAVEDAD SIGUE LO MÁS CARO**. Cubos grises **no** tienen `$` (no tiran de g). Taza `$15` sí (orbe dorado encima). La flecha a los pies apunta a la taza mientras estás en el Hub. El paquete lleva un orbe naranja. Tras un flip, un cuadrado cian con **ABAJO** marca la cara que ahora es “abajo”. Si el objetivo queda fuera de cámara, el HUD muestra una flecha (→ TAZA / PAQUETE / ENCHUFAR).
 2. Agarra la taza o el paquete **naranja**. Tras el primer `$`, un toast dice “Llévalo a una PARED”. En Archive, llévalo a la zona verde **ENCHUFA EL PAQUETE** (pared este).
-3. Caja fuerte **dorada $80**: llévala a una **pared** (puedes **mantenerla en las manos**). El prompt dice “acércala a una PARED”; la pared se pinta naranja; oirás 4 ticks. Tras ~1 s la gravedad de Archive tira hacia esa pared (flash + chispas).
+3. Caja fuerte **dorada $80**: llévala a una **pared** (puedes **mantenerla en las manos**). El prompt dice “acércala a una PARED”; la pared se pinta naranja con **GIRA**; oirás 4 ticks. Tras ~1 s la gravedad de Archive tira hacia esa pared (flash + chispas). El pad cian dice **ABAJO**.
 4. Cruza el pasillo (vacío a los lados; bordillos rojos). Si caes, respawneas en el último checkpoint.
 5. Open Office: deja el paquete en la losa azul **ENTREGAR** (también cuenta si lo llevas en las manos sobre la losa).
 6. Executive: paquete + jugador en la losa dorada. Mantén **E** **o** quédate encima con el paquete agarrado = **SELLAR**.

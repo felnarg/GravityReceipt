@@ -59,6 +59,21 @@ namespace GravityReceipt.World
             return bestOwn != null ? bestOwn : bestAny;
         }
 
+        public static Vector3 UpAt(Vector3 worldPos)
+        {
+            var room = FindRoom(worldPos);
+            if (room != null && room.Gravity != null)
+            {
+                var g = room.Gravity.CurrentDirection;
+                if (g.sqrMagnitude > 0.01f)
+                {
+                    return -g;
+                }
+            }
+
+            return Vector3.up;
+        }
+
         public static void Clear()
         {
             Rooms.Clear();
