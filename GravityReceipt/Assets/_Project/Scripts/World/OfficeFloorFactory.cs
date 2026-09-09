@@ -196,18 +196,10 @@ namespace GravityReceipt.World
 
             CreateCube(root.transform, "Floor", new Vector3(0f, -size.y * 0.5f, 0f), new Vector3(size.x + WallT, WallT, size.z + WallT), floor);
             var stripe = CreateCube(root.transform, "FloorStripe", new Vector3(0f, -size.y * 0.5f + WallT * 0.5f + 0.02f, 0f), new Vector3(0.28f, 0.03f, size.z * 0.82f), new Color(0.25f, 0.62f, 0.78f));
-            var stripeCol = stripe.GetComponent<Collider>();
-            if (stripeCol != null)
-            {
-                stripeCol.enabled = false;
-            }
+            DisableCollider(stripe);
             CreateCube(root.transform, "Ceiling", new Vector3(0f, size.y * 0.5f, 0f), new Vector3(size.x + WallT, WallT, size.z + WallT), wall * 1.15f);
             var ceilStripe = CreateCube(root.transform, "CeilingStripe", new Vector3(0f, size.y * 0.5f - WallT * 0.5f - 0.02f, 0f), new Vector3(0.22f, 0.03f, size.z * 0.82f), new Color(0.95f, 0.45f, 0.2f));
-            var ceilCol = ceilStripe.GetComponent<Collider>();
-            if (ceilCol != null)
-            {
-                ceilCol.enabled = false;
-            }
+            DisableCollider(ceilStripe);
             CreateWallOnZ(root.transform, "Wall_N", new Vector3(0f, 0f, size.z * 0.5f), size, wall, northDoor);
             CreateWallOnZ(root.transform, "Wall_S", new Vector3(0f, 0f, -size.z * 0.5f), size, wall, southDoor);
             CreateCube(root.transform, "Wall_E", new Vector3(size.x * 0.5f, 0f, 0f), new Vector3(WallT, size.y + WallT, size.z + WallT), wall);
@@ -221,11 +213,7 @@ namespace GravityReceipt.World
             root.transform.position = center;
             CreateCube(root.transform, "Floor", new Vector3(0f, -size.y * 0.5f, 0f), new Vector3(size.x, WallT, size.z), floor);
             var stripe = CreateCube(root.transform, "FloorStripe", new Vector3(0f, -size.y * 0.5f + WallT * 0.5f + 0.02f, 0f), new Vector3(0.22f, 0.03f, size.z * 0.9f), new Color(0.25f, 0.62f, 0.78f));
-            var stripeCol = stripe.GetComponent<Collider>();
-            if (stripeCol != null)
-            {
-                stripeCol.enabled = false;
-            }
+            DisableCollider(stripe);
             var curbH = 0.58f;
             var curbY = -size.y * 0.5f + WallT * 0.5f + curbH * 0.5f;
             CreateCube(root.transform, "Curb_L", new Vector3(-size.x * 0.5f, curbY, 0f), new Vector3(0.16f, curbH, size.z), new Color(0.85f, 0.25f, 0.2f));
@@ -529,6 +517,20 @@ namespace GravityReceipt.World
             go.transform.localScale = scale;
             SetColor(go, color);
             return go;
+        }
+
+        private static void DisableCollider(GameObject go)
+        {
+            if (go == null)
+            {
+                return;
+            }
+
+            var col = go.GetComponent<Collider>();
+            if (col != null)
+            {
+                col.enabled = false;
+            }
         }
 
         private static void SetColor(GameObject go, Color color)

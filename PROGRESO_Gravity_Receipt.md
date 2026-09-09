@@ -57,6 +57,7 @@ Documento vivo del prototipo.
 - Losas Entregar/Sellar cubren el paquete agarrado; Sellar también si llevas el paquete.
 - **F5** restart · **F8** PNG · **F9** oculta chrome · **F6** skip objetivo (cheat).
 - Fog + fondo de cámara oscuro; franja azul = suelo original; coyote/jump buffer; SFX win/lose.
+- Franja naranja en techos (si g apunta arriba, estás en el techo).
 - Menú Setup 2p (default) y 1p.
 
 ### A MEDIAS
