@@ -24,6 +24,9 @@ namespace GravityReceipt.UI
         private Text _promptP1;
         private Text _promptP2;
         private GameObject _splitBar;
+        private Image _centerPanel;
+        private Image _statusPanel;
+        private Image _matchPanel;
         private MatchDirector _boundMatch;
         private string _toast = string.Empty;
         private float _toastUntil;
@@ -111,6 +114,11 @@ namespace GravityReceipt.UI
                 statusText.gameObject.SetActive(!_chromeHidden);
             }
 
+            if (_statusPanel != null)
+            {
+                _statusPanel.enabled = !_chromeHidden;
+            }
+
             if (helpP1Text != null)
             {
                 helpP1Text.gameObject.SetActive(!_chromeHidden);
@@ -124,6 +132,11 @@ namespace GravityReceipt.UI
             if (matchText != null)
             {
                 matchText.gameObject.SetActive(!_chromeHidden && (match == null || !match.IsInSplash));
+            }
+
+            if (_matchPanel != null)
+            {
+                _matchPanel.enabled = !_chromeHidden && (match == null || !match.IsInSplash);
             }
 
             if (_promptP1 != null)
@@ -226,6 +239,13 @@ namespace GravityReceipt.UI
                 {
                     centerText.text = string.Empty;
                 }
+            }
+
+            if (_centerPanel != null)
+            {
+                _centerPanel.enabled = !_chromeHidden
+                    && centerText != null
+                    && centerText.text is { Length: > 0 };
             }
             TintCross(_crossP1, p1);
             TintCross(_crossP2, p2);
@@ -654,6 +674,10 @@ namespace GravityReceipt.UI
             scaler.referenceResolution = new Vector2(1920f, 1080f);
             canvasGo.AddComponent<GraphicRaycaster>();
 
+            _statusPanel = MakePanel(canvasGo.transform, "StatusPanel", new Vector2(0.5f, 0.5f), new Vector2(0f, 18f), new Vector2(1680f, 40f));
+            _matchPanel = MakePanel(canvasGo.transform, "MatchPanel", new Vector2(0.5f, 0.5f), new Vector2(0f, -28f), new Vector2(1680f, 86f));
+            _centerPanel = MakePanel(canvasGo.transform, "CenterPanel", new Vector2(0.5f, 0.5f), new Vector2(0f, 80f), new Vector2(920f, 250f));
+
             statusText = MakeText(canvasGo.transform, "Status", new Vector2(0f, 18f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 36f), 20, TextAnchor.MiddleCenter);
             matchText = MakeText(canvasGo.transform, "Match", new Vector2(0f, -28f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 78f), 18, TextAnchor.MiddleCenter);
             helpP1Text = MakeText(canvasGo.transform, "HelpP1", new Vector2(16f, -10f), new Vector2(0f, 1f), new Vector2(1600f, 28f), 16, TextAnchor.UpperLeft);
@@ -685,6 +709,21 @@ namespace GravityReceipt.UI
             rt.sizeDelta = new Vector2(0f, 6f);
             rt.anchoredPosition = Vector2.zero;
             return go;
+        }
+
+        private static Image MakePanel(Transform parent, string name, Vector2 anchor, Vector2 anchored, Vector2 size)
+        {
+            var go = new GameObject(name);
+            go.transform.SetParent(parent, false);
+            var img = go.AddComponent<Image>();
+            img.color = new Color(0.03f, 0.04f, 0.07f, 0.72f);
+            var rt = img.rectTransform;
+            rt.anchorMin = anchor;
+            rt.anchorMax = anchor;
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = anchored;
+            rt.sizeDelta = size;
+            return img;
         }
 
         private static Text MakeCross(Transform parent, string name, Vector2 anchor)
