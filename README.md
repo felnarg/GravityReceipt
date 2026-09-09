@@ -29,7 +29,7 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 | Sprint (Runner) | Left Shift | Right Alt |
 | Ancla g 3 s (Anchor) | **F** | Keypad 0 |
 | Cambiar rol | Tab | Keypad 7 |
-| Rematch | **R** (al ganar/perder) | **R** |
+| Rematch | **R** al terminar / **F5** siempre | igual |
 | Screenshot PNG | **F8** | **F8** |
 
 ### Qué probar (loop corto)

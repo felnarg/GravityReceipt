@@ -72,6 +72,12 @@ namespace GravityReceipt.Mission
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.F5))
+            {
+                Rematch();
+                return;
+            }
+
             if (_phase == MatchPhase.Playing)
             {
                 _remaining -= Time.deltaTime;
