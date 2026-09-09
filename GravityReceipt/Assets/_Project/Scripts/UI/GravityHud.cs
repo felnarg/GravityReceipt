@@ -134,7 +134,7 @@ namespace GravityReceipt.UI
                 else
                 {
                     var title = match.Phase == MatchPhase.Won ? "GANASTE" : "PERDISTE";
-                    var moment = rec is not null ? rec.Summary : "—";
+                    var moment = rec != null ? rec.Summary : "—";
                     centerText.text = $"{title}\n{match.EndReason}\nMomento del partido: {moment}\nPulsa R para rematch";
                     centerText.color = match.Phase == MatchPhase.Won
                         ? new Color(0.45f, 1f, 0.55f)
