@@ -43,10 +43,10 @@ namespace GravityReceipt.Gravity
                 dir = Vector3.down;
             }
 
-            _arrow.position = transform.position - dir * 0.55f;
+            _arrow.position = transform.position + (-dir) * 1.05f + transform.forward * 0.45f;
             var up = Mathf.Abs(Vector3.Dot(dir, Vector3.up)) > 0.95f ? Vector3.forward : Vector3.up;
             _arrow.rotation = Quaternion.LookRotation(dir, up);
-            _arrow.localScale = new Vector3(0.18f, 0.18f, 0.7f);
+            _arrow.localScale = new Vector3(0.12f, 0.12f, 0.42f);
             if (_renderer != null)
             {
                 _renderer.material.color = g.IsTelegraphing
