@@ -33,6 +33,10 @@ namespace GravityReceipt.Mission
         private bool _ruleNudgeSent;
         private bool _carryHintSent;
         private bool _pendingCarryHint;
+        private bool _grayHintSent;
+        private bool _pendingGrayHint;
+        private bool _packageHintSent;
+        private bool _pendingPackageHint;
 
         public MatchPhase Phase => _phase;
         public float RemainingSeconds => Mathf.Max(0f, _remaining);
@@ -94,6 +98,10 @@ namespace GravityReceipt.Mission
             _ruleNudgeSent = false;
             _carryHintSent = false;
             _pendingCarryHint = false;
+            _grayHintSent = false;
+            _pendingGrayHint = false;
+            _packageHintSent = false;
+            _pendingPackageHint = false;
             Physics.gravity = Vector3.zero;
             Physics.defaultSolverIterations = 10;
             Physics.defaultSolverVelocityIterations = 4;
@@ -180,7 +188,7 @@ namespace GravityReceipt.Mission
                     {
                         _splashEnded = true;
                         MissionSfx.PlayObjective();
-                        FlushCarryHint();
+                        FlushPendingHints();
                     }
 
                     if (!_ruleNudgeSent && matchSeconds - _remaining >= 8f)
@@ -220,7 +228,7 @@ namespace GravityReceipt.Mission
             if (!_splashEnded)
             {
                 _splashEnded = true;
-                FlushCarryHint();
+                FlushPendingHints();
             }
         }
 
@@ -329,15 +337,66 @@ namespace GravityReceipt.Mission
             PushHint("Llévalo a una PARED · espera 1 s");
         }
 
-        private void FlushCarryHint()
+        public void NotifyFirstGrayGrab()
         {
-            if (!_pendingCarryHint)
+            if (_grayHintSent)
             {
                 return;
             }
 
-            _pendingCarryHint = false;
-            PushHint("Llévalo a una PARED · espera 1 s");
+            _grayHintSent = true;
+            if (IsInSplash)
+            {
+                _pendingGrayHint = true;
+                return;
+            }
+
+            PushHint("Sin $ · no tira de g");
+        }
+
+        public void NotifyFirstPackageGrab()
+        {
+            if (_packageHintSent)
+            {
+                return;
+            }
+
+            _packageHintSent = true;
+            if (IsInSplash)
+            {
+                _pendingPackageHint = true;
+                return;
+            }
+
+            PushHint("PAQUETE no tira de g · enchúfalo");
+        }
+
+        private void FlushPendingHints()
+        {
+            if (_pendingCarryHint)
+            {
+                _pendingCarryHint = false;
+                _pendingGrayHint = false;
+                _pendingPackageHint = false;
+                PushHint("Llévalo a una PARED · espera 1 s");
+                return;
+            }
+
+            if (_pendingPackageHint)
+            {
+                _pendingPackageHint = false;
+                _pendingGrayHint = false;
+                PushHint("PAQUETE no tira de g · enchúfalo");
+                return;
+            }
+
+            if (!_pendingGrayHint)
+            {
+                return;
+            }
+
+            _pendingGrayHint = false;
+            PushHint("Sin $ · no tira de g");
         }
 
         public void Rematch()

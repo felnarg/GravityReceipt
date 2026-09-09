@@ -27,10 +27,10 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla/arte |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~02:30 COT (overnight, trigger g-up + pasillo no tira + marcos) |
-| **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
-| **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F3/F4/F6/F7, OOB AABB, waypoint, beacon paquete, pausa P, linger FLIP, pad cian **ABAJO**, etiquetas de losa siguen g, flecha HUD si el objetivo está fuera de cámara |
-| **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete (sigue la flecha) + flip con caja dorada a una pared · mira el sello ABAJO y las etiquetas ENCHUFAR/ENTREGAR/SELLAR |
+| **Última actualización** | 2026-09-09 07:55 COT — HARD STOP WIND-DOWN (para 08:00 COT) |
+| **En curso ahora** | Parada overnight. Siguiente: playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
+| **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F3–F10, OOB, waypoint, beacon, pausa P, pad **ABAJO**, toasts primer `$` / gris / paquete, pasillo no tira, objetivos en eje de g |
+| **Siguiente acción concreta** | Unity local: GravityReceipt → Setup Office Floor A → Play → agarrar cubo gris (toast “Sin $”) + paquete (toast “no tira”) + taza/caja a una PARED |
 | **Build jugable** | Sí (Editor Play Mode, 1p o 2p local). **Hay que regenerar la escena con el menú Setup.** |
 | **Online 4p** | No (no empezar hasta que el playtest offline sea sólido) |
 | **Bloqueadores** | Este entorno Linux no tiene Unity Editor: no se pudo Play Mode ni grabar el vídeo 1.11 |
@@ -157,6 +157,9 @@ Documento vivo del prototipo.
 - Rigidbodies despiertan al flippear g (no se quedan dormidos en el suelo viejo).
 - Un `$` en el pasillo **ya no tira** de la g de la sala anterior (se desregistra; al volver a una sala se vuelve a listar).
 - Zonas Enchufar/Entregar/Sellar se miden en el eje de g (tras un flip la losa sigue sirviendo).
+- Primer agarre de un gris: toast **“Sin $ · no tira de g”** (si es durante el splash, sale al terminar). El prompt al llevarlo dice lo mismo.
+- Primer agarre del paquete: toast **“PAQUETE no tira de g · enchúfalo”**. El prompt al llevarlo: “soltar · enchúfalo (no tira de g)”.
+- Si agarrás `$` y gris/paquete durante el splash, gana el toast de pared (la regla).
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -164,6 +167,8 @@ Documento vivo del prototipo.
 - Outline dominante sigue siendo pulso de escala + tint, no un outline URP de verdad.
 - Whoosh de flip listo; emotes son billboard (sin animación de avatar).
 - Arte de salas: primitivas de color (ventanas/lámparas/cubículos/losas de techo), no texturas.
+- Etiquetas 3D **“sin $”** sobre props grises: planeadas, **no arrancadas** (el toast + prompt cubren la enseñanza).
+- Toasts al entrar a Office/Executive (“g de ESTA sala”): planeados, **no arrancados** (corte 07:50 COT).
 
 ### FALTA
 - 1.11 Vídeo mudo 8–10 s del flip (grabar en Unity local).
@@ -178,7 +183,7 @@ Documento vivo del prototipo.
 3. Opción A (recomendada): menú **GravityReceipt → Setup Office Floor A** → OK.  
    Opción B: pulsa **Play** directo; si la escena es la vieja, se reconstruye sola (2p).
 4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja). Los valuables muestran `$` encima. Splash 9 s: “LA GRAVEDAD SIGUE AL OBJETO MÁS CARO” (puedes pulsar **P** para leerlo). El paquete tiene un orbe naranja. La taza $15 tiene un orbe dorado. En el Hub la flecha apunta a la taza. En el suelo lee **HUB**. Si miras al techo, el HUD puede mostrar `↓ TAZA $15`.
-5. **P1:** WASD + ratón. Agarra el cubo naranja (mantener E ~0.4 s).
+5. **P1:** WASD + ratón. Agarra un cubo **gris** (toast “Sin $ · no tira de g”). Suéltalo. Agarra el cubo naranja / paquete (mantener E ~0.4 s; toast “PAQUETE no tira de g · enchúfalo”).
 6. Entra a Archive (norte). El aro naranja de la puerta te guía si aún no cruzaste. Sigue la flecha / columna verde en la pared este: paquete dentro → objetivo Enchufar.
 7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y llévala a una **pared** (en manos o suelta). Espera ~1 s: banner **¡FLIP ARCHIVE!** (se queda un instante al voltear), whoosh, FOV, flash, chispas, la cámara se inclina, g cambia. Un cuadrado cian con **ABAJO** marca la nueva “abajo”; un toast lo dice. La etiqueta ENCHUFAR se queda encima de la zona (no en Y mundo). El primer flip guarda un PNG solo.
 8. Cruza el pasillo (bordillos rojos altos; vacío a los lados). Si caes **o sales volando a los lados** (g heredada), respawneas. Si un valuable cae, vuelve a su sitio.
@@ -347,7 +352,7 @@ Documento vivo del prototipo.
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
 | 6.1 | Pass de arte (no final, salir de gris total) | [~] | Ventanas unlit **con marco**, lámparas, zócalos, cubículos, losas de techo, paletas, sellos de suelo, neón de vacío, laptop/planta/corkboard; falta texturas |
-| 6.2 | Pulido UI mínima | [~] | Splash, FLIP linger, toast, `[>]` objetivo, waypoint 3D, distancias, pausa P, paneles HUD, flash, cruceta dominante, chip g, flecha HUD fuera de cámara, ABAJO en pad |
+| 6.2 | Pulido UI mínima | [~] | Splash, FLIP linger, toast `$`/gris/paquete, `[>]` objetivo, waypoint 3D, distancias, pausa P, paneles HUD, flash, cruceta dominante, chip g, flecha HUD fuera de cámara, ABAJO en pad |
 | 6.3 | Build Steam o itch privada | [ ] | |
 | 6.4 | Trailer 15–20 s del mejor clip | [ ] | |
 | 6.5 | Lista bugs P0 cerrada | [ ] | Gravedad, softlock, desync |
@@ -656,6 +661,13 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 ### 2026-09-09 — Overnight bloque 24 (ping)
 - Texto del ping se coloca en g-up (no en Y mundo).
 
+### 2026-09-09 — Overnight bloque 25 (wind-down 07:50 COT)
+- HARD STOP WIND-DOWN. No se arrancaron features nuevas (tags 3D “sin $”, toasts Office/Executive).
+- Se **cerró** el toast a medias: `NotifyFirstGrayGrab` + `NotifyFirstPackageGrab` (compilaba a medias: el Interactor ya llamaba un método que no existía).
+- Primer gris → “Sin $ · no tira de g”. Primer paquete → “PAQUETE no tira de g · enchúfalo”. Pending durante splash; al terminar gana el toast de `$` si también lo agarraste.
+- Prompt al llevar gris/paquete aclara que no tiran de g.
+- Parada completa 08:00 COT. Playtest humano y vídeo 1.11 siguen pendientes (sin Unity en este entorno).
+
 ---
 
 ## Checklist del día (copiar al empezar una sesión)
@@ -663,8 +675,8 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 ```
 Fecha: 2026-09-09
 Enfoque de hoy (1–3 IDs del plan): pulido 5.5/5.6/6.1/6.2 (sin Unity) + playtest mañana
-Hecho: factory order, pad cian ABAJO, burst/flash, taza beacon, techos, pasos, GravityUpFollow, flecha HUD
+Hecho: factory order, pad cian ABAJO, burst/flash, GravityUpFollow, flecha HUD, toast gris/paquete
 Pendiente al cerrar: playtest Unity local, vídeo 1.11, no online
 Bloqueadores: Unity Editor ausente en el cloud agent
-Actualicé "Estado actual": sí
+Actualicé "Estado actual": sí (wind-down 07:55 COT)
 ```
