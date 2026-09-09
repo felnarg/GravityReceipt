@@ -38,6 +38,7 @@ namespace GravityReceipt.UI
         private bool _hallwayWarned;
         private bool _archiveWarned;
         private bool _flipTaught;
+        private bool _timeWarned;
         private MatchDirector _boundMatch;
         private string _toast = string.Empty;
         private float _toastUntil;
@@ -254,7 +255,7 @@ namespace GravityReceipt.UI
             {
                 var r2 = RoleOf(LocalPlayerSlot.Two);
                 helpText.text = p2 != null
-                    ? $"P2 [{r2}] flechas  J/L+I/K mirar  RShift agarrar  / ping  KP1-3/9 emote  Alt sprint  KP0 ancla  KP7 rol  P pausa"
+                    ? $"P2 [{r2}] flechas  J/L+I/K mirar  RShift agarrar  / ping  KP1-3/9 emote  Alt sprint  KP0 ancla  KP7 rol  P pausa  F10 comfort"
                     : $"P1 [{RoleOf(LocalPlayerSlot.One)}] WASD+ratón  E agarrar  Q ping  1-4 emote  Shift sprint  F ancla";
             }
 
@@ -318,6 +319,7 @@ namespace GravityReceipt.UI
             UpdateOffscreenHint(_wayP2, p2);
             MaybeWarnHallway(p1, p2, match);
             MaybeTeachFlip(p1, p2, match);
+            MaybeWarnTime(match);
 
             if (Input.GetKeyDown(KeyCode.F8))
             {
@@ -648,6 +650,23 @@ namespace GravityReceipt.UI
             _archiveWarned = true;
             _toast = "Archive: caja $80 a una PARED";
             _toastUntil = Time.unscaledTime + 2.8f;
+        }
+
+        private void MaybeWarnTime(MatchDirector match)
+        {
+            if (_timeWarned || match == null || !match.IsPlaying || match.IsInSplash)
+            {
+                return;
+            }
+
+            if (match.RemainingSeconds > 30f)
+            {
+                return;
+            }
+
+            _timeWarned = true;
+            _toast = "¡30 SEGUNDOS!";
+            _toastUntil = Time.unscaledTime + 2.4f;
         }
 
         private void MaybeTeachFlip(PlayerMotor p1, PlayerMotor p2, MatchDirector match)
@@ -1022,8 +1041,11 @@ namespace GravityReceipt.UI
 
         private void OnPackageDented()
         {
-            _toast = "¡PAQUETE ABOLLADO!";
-            _toastUntil = Time.unscaledTime + 1.6f;
+            var pkg = _cachedPkg;
+            _toast = pkg != null && pkg.Lives == 1
+                ? "¡PAQUETE a 1 vida!"
+                : "¡PAQUETE ABOLLADO!";
+            _toastUntil = Time.unscaledTime + 1.8f;
         }
 
         private void OnHint(string message)

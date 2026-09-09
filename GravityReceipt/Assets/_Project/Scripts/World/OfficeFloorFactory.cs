@@ -175,6 +175,8 @@ namespace GravityReceipt.World
             AddLocalVisual(laptop.transform, PrimitiveType.Cube, new Vector3(0f, 2.4f, -0.55f), new Vector3(0.95f, 8.5f, 0.08f), new Color(0.22f, 0.45f, 0.72f));
             var exePlate = CreateStaticCube(root.transform, "Furn_ExePlate", new Vector3(0f, 0.48f, 50.2f), new Vector3(0.7f, 0.04f, 0.22f), new Color(0.78f, 0.64f, 0.22f));
             DisableCollider(exePlate);
+            var rug = CreateStaticCube(root.transform, "Furn_ExeRug", new Vector3(0f, 0.04f, 50.2f), new Vector3(4.4f, 0.03f, 2.8f), new Color(0.42f, 0.16f, 0.12f));
+            DisableCollider(rug);
             var plantPot = CreateStaticCube(root.transform, "Furn_HubPlantPot", new Vector3(-4.35f, 0.22f, -2.4f), new Vector3(0.38f, 0.32f, 0.38f), new Color(0.42f, 0.28f, 0.18f));
             AddLocalVisual(plantPot.transform, PrimitiveType.Sphere, new Vector3(0f, 0.85f, 0f), new Vector3(1.15f, 1.4f, 1.15f), new Color(0.18f, 0.55f, 0.28f));
 
