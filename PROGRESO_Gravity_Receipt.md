@@ -117,6 +117,8 @@ Documento vivo del prototipo.
 - Tras soltar el paquete se sigue ignorando la colisión con jugadores.
 - 8 s después del splash: toast “taza $15 o caja $80 · a una PARED” si aún no hay objetivo/flip.
 - Luces en las 3 losas de objetivo; taza $15 más grande; reach de agarre 3.8 m.
+- Bind lazy de Interactor/Role/waypoint/pared prevista (el factory los añade después del Awake).
+- Caminar un poco más lento con un valuable ≥ $80.
 - Barandillas en el pasillo (dos alturas) para leer el vacío y frenar un poco con g de lado.
 
 ### A MEDIAS
