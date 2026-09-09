@@ -27,7 +27,7 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla/arte |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~01:08 COT (overnight, waypoints/pared prevista/HUD) |
+| **Última actualización** | 2026-09-09 ~01:22 COT (overnight, regla visible + juice) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
 | **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F3/F4/F6/F7, OOB AABB, waypoint objetivo, beacon paquete, pausa P, linger FLIP, roll de cámara |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete (sigue la flecha) + flip con caja dorada a una pared |
