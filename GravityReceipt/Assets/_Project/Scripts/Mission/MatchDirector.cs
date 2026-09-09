@@ -58,6 +58,8 @@ namespace GravityReceipt.Mission
             _phase = MatchPhase.Playing;
             _remaining = matchSeconds;
             Physics.gravity = Vector3.zero;
+            Physics.defaultSolverIterations = 10;
+            Physics.defaultSolverVelocityIterations = 4;
             Time.timeScale = 1f;
             GravityReceipt.Gravity.GravityManager.ResetFlipScreenshotFlag();
         }

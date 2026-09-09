@@ -173,6 +173,16 @@ namespace GravityReceipt.Interaction
                 _heldGrab.EndGrab();
             }
 
+            var cam = _input != null && _input.PlayerCamera != null ? _input.PlayerCamera : Camera.main;
+            if (cam != null)
+            {
+                var motor = GetComponent<PlayerMotor>();
+                var up = motor != null && motor.Gravity != null
+                    ? -motor.Gravity.CurrentDirection
+                    : Vector3.up;
+                _held.linearVelocity = cam.transform.forward * 2.4f + up * 0.55f;
+            }
+
             _held = null;
             _heldValuable = null;
             _heldGrab = null;
