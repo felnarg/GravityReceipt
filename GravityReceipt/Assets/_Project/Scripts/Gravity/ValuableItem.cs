@@ -4,6 +4,7 @@ using UnityEngine;
 namespace GravityReceipt.Gravity
 {
     [RequireComponent(typeof(Rigidbody))]
+    [DefaultExecutionOrder(-10)]
     public sealed class ValuableItem : MonoBehaviour
     {
         [SerializeField] private int price = 100;

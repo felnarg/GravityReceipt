@@ -7,6 +7,7 @@ using UnityEngine;
 namespace GravityReceipt.Player
 {
     [RequireComponent(typeof(CharacterController))]
+    [DefaultExecutionOrder(20)]
     public sealed class PlayerMotor : MonoBehaviour
     {
         [SerializeField] private float moveSpeed = 6f;

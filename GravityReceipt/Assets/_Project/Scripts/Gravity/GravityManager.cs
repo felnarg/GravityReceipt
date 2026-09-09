@@ -8,6 +8,7 @@ namespace GravityReceipt.Gravity
     /// Por sala: la gravedad se alinea al eje dominante hacia el valuable más caro.
     /// Empate de precio → gana el último movido.
     /// </summary>
+    [DefaultExecutionOrder(-20)]
     public sealed class GravityManager : MonoBehaviour
     {
         public event Action<Vector3, ValuableItem> GravityChanged;

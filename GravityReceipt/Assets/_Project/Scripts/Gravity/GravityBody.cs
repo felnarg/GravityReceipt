@@ -7,6 +7,7 @@ namespace GravityReceipt.Gravity
     /// Aplica la gravedad de la sala actual (Physics.gravity se deja en cero).
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
+    [DefaultExecutionOrder(10)]
     public sealed class GravityBody : MonoBehaviour
     {
         [SerializeField] private GravityManager gravityManager;
