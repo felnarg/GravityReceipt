@@ -100,7 +100,7 @@ Documento vivo del prototipo.
 - Cámara se inclina (roll) hacia la g pendiente durante el telegráfo.
 - Thud al aterrizar de una caída > 2.2 m.
 - **P** pausa (timescale 0; también congela el splash) · **F3** desatasca jugadores.
-- Puertas 2.6 m; ventanas unlit, lámparas de techo, zócalos E/W, cubículos Office, cuadro Executive.
+- Puertas 2.9 × 3.4 m (antes 2.6); ventanas unlit, lámparas de techo, zócalos E/W, cubículos Office, cuadro Executive.
 - Siluetas extra: asas del trofeo, pestillos del maletín, tapa de cafetera, pantalla del monitor, 3.er cajón.
 - Prompt al llevar el dominante: “acércala a una PARED” / “¡FLIP en camino!”.
 - Brújula dorada mientras llevas el dominante: apunta a la g **prevista** (abajo en el centro, a la pared al acercarte).
@@ -563,7 +563,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Columna en la losa actual + orbe sobre el paquete.
 - Banner ¡FLIP! permanece 0.85 s; PNG del primer flip espera 0.16 s.
 - Roll de cámara hacia la g pendiente; thud al aterrizar.
-- **P** pausa · **F3** unstuck. Puertas 2.6 m.
+- **P** pausa · **F3** unstuck. Puertas 2.9 × 3.4 m.
 - Dress de salas: ventanas, lámparas, zócalos E/W, cubículos, cuadro.
 - Siluetas extra en trofeo / maletín / cafetera / monitor / archivador.
 - Splash 9 s usa `deltaTime` (P lo congela para leer). Flecha naranja al paquete si está lejos.
