@@ -102,8 +102,8 @@ namespace GravityReceipt.UI
                 var ss = t % 60;
                 var hearts = Hearts(pkg);
                 var o1 = Mark(match.IsObjectiveComplete(0));
-                var o2 = Mark(match.IsObjectiveComplete(1));
-                var o3 = Mark(match.IsObjectiveComplete(2));
+                var o2 = match.IsObjectiveComplete(0) ? Mark(match.IsObjectiveComplete(1)) : "[-]";
+                var o3 = match.IsObjectiveComplete(1) ? Mark(match.IsObjectiveComplete(2)) : "[-]";
                 matchText.text =
                     $"⏱ {mm:00}:{ss:00}   Paquete {hearts}  dest {(pkg != null ? pkg.Destructions : 0)}/{(pkg != null ? pkg.MaxDestructions : 3)}\n" +
                     $"{o1} Enchufar   {o2} Entregar   {o3} Sellar   ({match.ObjectivesDone}/{match.ObjectivesToWin})" +
