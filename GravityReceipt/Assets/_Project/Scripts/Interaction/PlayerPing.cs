@@ -1,6 +1,7 @@
 using GravityReceipt.Mission;
 using GravityReceipt.Player;
 using GravityReceipt.UI;
+using GravityReceipt.World;
 using UnityEngine;
 
 namespace GravityReceipt.Interaction
@@ -93,18 +94,17 @@ namespace GravityReceipt.Interaction
                 }
             }
 
-            var labelGo = new GameObject("PingLabel");
-            labelGo.transform.SetParent(go.transform, false);
-            labelGo.transform.localPosition = new Vector3(0f, 0.8f, 0f);
-            var tm = labelGo.AddComponent<TextMesh>();
-            tm.text = _input != null && _input.Slot == LocalPlayerSlot.Two
-                ? "P2 ¡NO TOQUES ESO!"
-                : "P1 ¡NO TOQUES ESO!";
-            tm.characterSize = 0.08f;
-            tm.fontSize = 42;
-            tm.anchor = TextAnchor.MiddleCenter;
-            tm.alignment = TextAlignment.Center;
-            tm.color = color;
+            var host = new GameObject("PingLabel");
+            host.transform.SetParent(go.transform, false);
+            var follow = host.AddComponent<FollowBillboard>();
+            follow.Configure(host.transform, Vector3.zero);
+            var upFollow = host.AddComponent<GravityUpFollow>();
+            upFollow.Configure(go.transform, 0.85f);
+            WorldLabel.Create(host.transform, "Text",
+                _input != null && _input.Slot == LocalPlayerSlot.Two
+                    ? "P2 ¡NO TOQUES ESO!"
+                    : "P1 ¡NO TOQUES ESO!",
+                Vector3.zero, color, 0.08f);
 
             _mine = go.AddComponent<PingMarker>();
             _mine.Begin(lifetime);
