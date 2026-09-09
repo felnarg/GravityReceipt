@@ -21,6 +21,8 @@ namespace GravityReceipt.Mission
         private BoxCollider _box;
         private float _progress;
         private bool _done;
+        private Renderer _renderer;
+        private Color _baseColor;
 
         public int Index => objectiveIndex;
         public string Label => objectiveLabel;
