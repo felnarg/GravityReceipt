@@ -25,15 +25,57 @@ Documento vivo del prototipo.
 
 | Campo | Valor |
 |-------|--------|
-| **Fase** | 1 — Proto: una sala, una regla |
-| **Semana del plan** | 1–2 (en curso) |
-| **Última actualización** | 2026-09-08 |
-| **En curso ahora** | Usuario debe regenerar escena y re-playtestear flip |
-| **Hecho relevante** | Fix OOB + gravedad por eje + outline + sala sellada |
-| **Siguiente acción concreta** | Menú GravityReceipt → Setup Office Floor A → Play → llevar caja a una pared |
-| **Build jugable** | Sí (Editor Play Mode, 1p local) |
-| **Online 4p** | No |
-| **Bloqueadores** | Ninguno |
+| **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline implementado |
+| **Semana del plan** | 3–6 (código listo; falta playtest humano) |
+| **Última actualización** | 2026-09-09 (sesión overnight Cloud Agent) |
+| **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
+| **Hecho relevante** | Split 2p, gravedad por sala, paquete/objetivos/timer, mapa Hub→Executive, rematch R |
+| **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete + flip con caja dorada a una pared |
+| **Build jugable** | Sí (Editor Play Mode, 1p o 2p local). **Hay que regenerar la escena con el menú Setup.** |
+| **Online 4p** | No (no empezar hasta que el playtest offline sea sólido) |
+| **Bloqueadores** | Este entorno Linux no tiene Unity Editor: no se pudo Play Mode ni grabar el vídeo 1.11 |
+
+---
+
+## Cierre de sesión (2026-09-09 overnight)
+
+### HECHO
+- Input por jugador + split-screen 2p (P1 WASD+ratón, P2 flechas+numpad/pad).
+- `Grabbable`, ping radial Q / `/`.
+- Gravedad **por sala** (`RoomVolume` + `GravityBody`; `Physics.gravity = 0`).
+- `MissionPackage` (3 vidas / 3 destrucciones), 3 objetivos, checkpoints, timer 10:00.
+- Roles stub Runner (sprint) / Anchor (fija g 3 s). Tab / KP7 para cambiar.
+- Mapa: Hub → Archive → Pasillo con vacío → Open Office → Executive.
+- Tutorial en pared del Hub. HUD de partida + rematch con **R**. Moment of the Match local (mayor caída).
+- Menú Setup 2p (default) y 1p.
+
+### A MEDIAS
+- Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. Hay que pulsar Setup en el Editor para generar el piso nuevo (el factory vive en código).
+- 1.10 / 2.7 playtest: código listo, **cero playtests reales** (no hay Unity aquí).
+- Outline dominante sigue siendo pulso de escala + tint, no un outline URP de verdad.
+
+### FALTA
+- 1.11 Vídeo mudo 8–10 s del flip (grabar en Unity local).
+- Playtest 2 personas: comprensión ≤30 s, OOB, pasillo, 3 objetivos, rematch.
+- Ajustes de feel según ese playtest (telegráfo, mareo, tamaño de puertas, catwalk).
+- Sem 7–8 online: **no tocar** hasta que el offline esté sólido.
+
+### Cómo probar mañana en Unity local (pasos exactos)
+
+1. Abre Unity Hub → proyecto **GravityReceipt** con Editor **6000.6.0f1**.
+2. Espera a que compile (scripts nuevos en `Assets/_Project/Scripts/...`).
+3. Menú **GravityReceipt → Setup Office Floor A** → OK. (Esto **borra y recrea** la escena.)
+4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja).
+5. **P1:** WASD + ratón. Agarra el cubo naranja (mantener E ~0.4 s).
+6. Entra a Archive (norte). Zona verde en la pared este: suelta el paquete dentro → objetivo Enchufar.
+7. Agarra la **caja dorada** y déjala pegada a una pared. Espera ~1 s: HUD dice FLIP y g cambia.
+8. Cruza el pasillo estrecho (si caes al vacío, respawneas).
+9. Losa azul Open Office = Entregar. Losa dorada Executive + mantener E = Sellar.
+10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s.
+11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
+12. Para 1.11: graba 8–10 s mudos del paso 7 (caja a la pared → flip).
+
+Si la consola dice que falta `MatchDirector`, no corriste el paso 3.
 
 ---
 
@@ -80,9 +122,9 @@ Documento vivo del prototipo.
 | 0.5c | Activar licencia Personal (login Hub) | [x] | Usuario confirmó |
 | 0.5d | Abrir/validar proyecto en Editor | [x] | ProjectSettings reparados desde proyecto fresco |
 | 0.6 | Estructura de carpetas del repo | [x] | `Assets/_Project/...` creada |
-| 0.7 | Escena `Office_Floor_A` (blockout vacío) | [x] | Sala Archive + 2 valuables + player |
+| 0.7 | Escena `Office_Floor_A` (blockout vacío) | [x] | Regenerar con Setup (mapa completo en factory) |
 | 0.8 | README corto del proyecto | [x] | `README.md` en raíz |
-| 0.9 | Scripts stub gravedad / player / grab | [x] | + `VoidKillZone`, `SetupOfficeFloorA`, `GravityHud` |
+| 0.9 | Scripts stub gravedad / player / grab | [x] | Sistemas de misión + World factory |
 
 ---
 
@@ -92,17 +134,17 @@ Documento vivo del prototipo.
 
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
-| 1.1 | Player: move / look / jump | [x] | `PlayerMotor` (Input Manager) |
-| 1.2 | Agarrar / soltar props | [x] | Wind-up 0.4 s |
+| 1.1 | Player: move / look / jump | [x] | `PlayerMotor` + `LocalPlayerInput` |
+| 1.2 | Agarrar / soltar props | [x] | Wind-up 0.4 s + `Grabbable` |
 | 1.3 | `ValuableItem` con precio `$` | [x] | |
-| 1.4 | `GravityManager` por sala | [x] | Stub; telegráfo 1 s |
-| 1.5 | Aplicar vector de gravedad | [x] | Snap a ejes mundo hacia el valuable |
-| 1.6 | Telegráfo 1.0 s antes del flip | [x] | + HUD texto |
+| 1.4 | `GravityManager` por sala | [x] | Ya no es global: un manager por sala |
+| 1.5 | Aplicar vector de gravedad | [x] | Snap a ejes; `GravityBody` por rigidbody |
+| 1.6 | Telegráfo 1.0 s antes del flip | [x] | HUD |
 | 1.7 | Inercia corta al cambiar g | [x] | Reset parcial de velocidad + ground raycast |
-| 1.8 | Outline del valuable dominante | [x] | `DominantValuableOutline` (pulso/color) |
-| 1.9 | Escena mínima: 1 sala + 2 valuables | [x] | Sala sellada + respawn OOB |
-| 1.10 | Playtest local 2p (misma máquina o builds) | [ ] | Re-playtest 1p tras fix OOB |
-| 1.11 | Vídeo mudo 8–10 s del flip | [ ] | |
+| 1.8 | Outline del valuable dominante | [x] | Pulso/color (no outline URP) |
+| 1.9 | Escena mínima: 1 sala + 2 valuables | [x] | Archive sigue existiendo dentro del piso |
+| 1.10 | Playtest local 2p (misma máquina o builds) | [~] | Split-screen implementado; falta que 2 personas lo jueguen |
+| 1.11 | Vídeo mudo 8–10 s del flip | [ ] | Requiere grabar en Unity local |
 
 **Gate 1–2:** si no se entiende en 30 s → simplificar UI, no añadir features.
 
@@ -114,13 +156,13 @@ Documento vivo del prototipo.
 
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
-| 2.1 | `MissionPackage` (abolladuras / 3 vidas) | [ ] | |
-| 2.2 | Objetivo “enchufar” en Sala A | [ ] | |
-| 2.3 | Checkpoint al completar objetivo | [ ] | |
+| 2.1 | `MissionPackage` (abolladuras / 3 vidas) | [x] | 3 dents → destrucción; 3 destrucciones = lose |
+| 2.2 | Objetivo “enchufar” en Sala A | [x] | Zona verde pared este Archive |
+| 2.3 | Checkpoint al completar objetivo | [x] | `CheckpointSystem` avanza spawn |
 | 2.4 | Grab wind-up 0.4 s | [x] | Ya en 1.2 |
-| 2.5 | Ping radial (“¡no toques eso!”) | [ ] | |
-| 2.6 | Tutorial de 1 frase en pared del hub | [ ] | Texto: la gravedad sigue lo más caro |
-| 2.7 | Playtest Sala A completa | [ ] | |
+| 2.5 | Ping radial (“¡no toques eso!”) | [x] | Q / slash |
+| 2.6 | Tutorial de 1 frase en pared del hub | [x] | “LA GRAVEDAD SIGUE LO MÁS CARO” |
+| 2.7 | Playtest Sala A completa | [ ] | Humano; no se pudo en el agente |
 
 **Gate 3–4:** run de Archive estable y divertida.
 
@@ -132,16 +174,16 @@ Documento vivo del prototipo.
 
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
-| 3.1 | Blockout Pasillo + vacío lateral | [ ] | |
-| 3.2 | Blockout Sala B Open Office | [ ] | 3 valuables |
-| 3.3 | Blockout Sala C Executive | [ ] | 4 valuables |
-| 3.4 | Objetivo 2: entregar paquete | [ ] | |
-| 3.5 | Objetivo 3: sellar contrato | [ ] | |
-| 3.6 | Timer de partida ~10:00 | [ ] | |
-| 3.7 | Roles stub: Runner (sprint) / Anchor (fix 3 s) | [ ] | Clerk/Intern opcionales |
-| 3.8 | Muerte por vacío + respawn en checkpoint | [ ] | |
-| 3.9 | Moment of the Match (mayor caída) | [ ] | Local primero |
-| 3.10 | Flujo rematch <15 s | [ ] | |
+| 3.1 | Blockout Pasillo + vacío lateral | [x] | Catwalk 3.2 m, sin paredes laterales |
+| 3.2 | Blockout Sala B Open Office | [x] | Monitor $120, Planta $60, Cafetera $90 |
+| 3.3 | Blockout Sala C Executive | [x] | Maletín $200, Trofeo $150, Server $110, Planta oro $95 |
+| 3.4 | Objetivo 2: entregar paquete | [x] | Losa azul Open Office |
+| 3.5 | Objetivo 3: sellar contrato | [x] | Losa dorada + hold E ~1 s |
+| 3.6 | Timer de partida ~10:00 | [x] | `MatchDirector` 600 s |
+| 3.7 | Roles stub: Runner (sprint) / Anchor (fix 3 s) | [x] | P1 Runner / P2 Anchor por defecto |
+| 3.8 | Muerte por vacío + respawn en checkpoint | [x] | `VoidKillZone` multi-jugador + paquete |
+| 3.9 | Moment of the Match (mayor caída) | [x] | Local; se muestra al terminar |
+| 3.10 | Flujo rematch <15 s | [x] | R recarga la escena activa |
 
 **Gate 5–6:** rematch voluntario en playtests internos.
 
@@ -236,6 +278,7 @@ Juego/
         │   │   ├── Interaction/
         │   │   ├── Mission/
         │   │   ├── UI/
+        │   │   ├── World/
         │   │   └── Networking/     (sem 7+)
         │   └── Settings/
         └── ...
@@ -249,18 +292,20 @@ Cuando exista el proyecto, marcar `0.5`–`0.7` y pegar aquí la ruta real si ca
 
 | Sistema | Script(s) previstos | Estado |
 |---------|---------------------|--------|
-| Gravedad por sala | `GravityManager` | [x] | Stub inicial |
-| Objeto de valor | `ValuableItem` | [x] | Stub inicial |
-| Agarre | `PlayerInteractor` | [x] | Stub (falta `Grabbable` dedicado) |
-| Paquete de misión | `MissionPackage` | [ ] |
-| Objetivos | `ObjectiveTrigger` | [ ] |
-| Roles | `PlayerRole` + abilities | [ ] |
-| UI telegráfo / outline | `GravityHud` | [x] | Texto HUD; falta outline |
-| Moment of the Match | `MatchHighlightRecorder` | [ ] |
-| Red (host auth g) | por definir en 4.1 | [ ] |
-| Player move | `PlayerMotor` | [x] | Input Manager |
-| Void / respawn | `VoidKillZone` | [x] | |
-| Setup escena | `SetupOfficeFloorA` | [x] | Menú GravityReceipt |
+| Gravedad por sala | `GravityManager` + `RoomVolume` | [x] | Un manager por sala; pasillo hereda |
+| Cuerpo con g custom | `GravityBody` | [x] | Rigidbodies; Physics.gravity = 0 |
+| Objeto de valor | `ValuableItem` | [x] | Cambia de manager al cruzar salas |
+| Agarre | `PlayerInteractor` + `Grabbable` | [x] | |
+| Paquete de misión | `MissionPackage` | [x] | |
+| Objetivos | `ObjectiveTrigger` | [x] | 3 en el piso |
+| Roles | `PlayerRole` | [x] | Runner / Anchor stub |
+| UI telegráfo / outline | `GravityHud` + `DominantValuableOutline` | [x] | HUD completo; outline simple |
+| Moment of the Match | `MatchHighlightRecorder` | [x] | Local |
+| Red (host auth g) | por definir en 4.1 | [ ] | |
+| Player move | `PlayerMotor` + `LocalPlayerInput` | [x] | 2p |
+| Void / respawn | `VoidKillZone` + `CheckpointSystem` | [x] | |
+| Setup escena | `SetupOfficeFloorA` + `OfficeFloorFactory` | [x] | 1p y 2p |
+| Partida / rematch | `MatchDirector` | [x] | Estado Playing/Won/Lost |
 
 ---
 
@@ -272,13 +317,15 @@ Cuando exista el proyecto, marcar `0.5`–`0.7` y pegar aquí la ruta real si ca
                  Obj: enchufar                        Obj: entregar               Obj: sellar
 ```
 
+Eje +Z (metros aprox.): Hub z=-4..4 → Archive 4..16 → Pasillo 16..27 → Office 27..43 → Executive 43..57.
+
 | Sala | Valuables (MVP) | Estado blockout |
 |------|-----------------|-----------------|
-| Hub | — | [~] | Solo Archive por ahora |
-| A Archive | Caja fuerte $80, Archivador $40 | [x] | Escena generada |
-| Pasillo | Ninguno (g hereda) | [ ] |
-| B Open Office | Monitor $120, Planta $60, Cafetera $90 | [ ] |
-| C Executive | Maletín $200, Trofeo $150, Server $110, Planta oro $95 | [ ] |
+| Hub | — | [x] | Tutorial + spawn + paquete |
+| A Archive | Caja fuerte $80, Archivador $40 | [x] | Enchufar este |
+| Pasillo | Ninguno (g hereda) | [x] | Catwalk + vacío |
+| B Open Office | Monitor $120, Planta $60, Cafetera $90 | [x] | Entregar |
+| C Executive | Maletín $200, Trofeo $150, Server $110, Planta oro $95 | [x] | Sellar |
 
 ---
 
@@ -307,6 +354,7 @@ Cuando exista el proyecto, marcar `0.5`–`0.7` y pegar aquí la ruta real si ca
 | 2026-09-08 | Licencia OK; ProjectSettings reparados; escena `Office_Floor_A` creada | Playtest 1p + outline dominante (1.8) + vídeo (1.11) |
 | 2026-09-08 | Playtest: usuario agarró y salió de la escena | Fix OOB + gravedad snap + outline + regenerar Setup |
 | 2026-09-08 | Push a GitHub `felnarg/GravityReceipt` (commit proto) | Lanzar Cloud Agent overnight con prompt del plan |
+| 2026-09-09 | Cloud Agent: 2p split + mapa offline + misión/timer/roles/rematch | Playtest humano + vídeo flip; no Unity en el cloud |
 
 ---
 
@@ -330,15 +378,25 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Outline del dominante + sala sellada más gruesa.
 - **Usuario:** `GravityReceipt → Setup Office Floor A` → Play → llevar caja dorada a una **pared** y soltar.
 
+### 2026-09-09 — Overnight: offline 2p + mapa
+- `LocalPlayerInput` / split-screen 2p.
+- Gravedad por sala (`GravityBody`, `RoomVolume`, evento de g por instancia).
+- `MatchDirector` (máquina Playing/Won/Lost) + timer 10:00 + rematch R.
+- `MissionPackage`, 3 `ObjectiveTrigger`, `CheckpointSystem`, ping, tutorial Hub.
+- `OfficeFloorFactory`: Hub → Archive → Pasillo vacío → Open Office → Executive.
+- Roles Runner/Anchor stub. Highlight de mayor caída.
+- **No se pudo Play Mode** (sin Editor Unity en Linux). Escena YAML vieja hasta que el usuario pulse Setup.
+- Hard stop programado 08:00 America/Bogota; esta entrega es el avance de código.
+
 ---
 
 ## Checklist del día (copiar al empezar una sesión)
 
 ```
-Fecha:
-Enfoque de hoy (1–3 IDs del plan):
-Hecho:
-Pendiente al cerrar:
-Bloqueadores:
-Actualicé "Estado actual": sí / no
+Fecha: 2026-09-09
+Enfoque de hoy (1–3 IDs del plan): 1.10 2p, 2.1–2.6 misión, 3.1–3.10 mapa offline
+Hecho: sistemas + factory del piso (ver “Cierre de sesión”)
+Pendiente al cerrar: playtest Unity local, vídeo 1.11, no online
+Bloqueadores: Unity Editor ausente en el cloud agent
+Actualicé "Estado actual": sí
 ```

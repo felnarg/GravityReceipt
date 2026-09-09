@@ -1,3 +1,4 @@
+using GravityReceipt.World;
 using UnityEngine;
 
 namespace GravityReceipt.Gravity
@@ -15,14 +16,32 @@ namespace GravityReceipt.Gravity
         public int Price => price;
         public bool IsActiveValuable => isActiveValuable && isActiveAndEnabled;
         public bool IsHeld { get; private set; }
+        public GravityManager Manager => gravityManager;
+
+        public void Configure(int newPrice, GravityManager manager)
+        {
+            price = Mathf.Max(0, newPrice);
+            SetGravityManager(manager);
+        }
+
+        public void SetGravityManager(GravityManager next)
+        {
+            if (next == gravityManager)
+            {
+                return;
+            }
+
+            gravityManager?.Unregister(this);
+            gravityManager = next;
+            if (isActiveAndEnabled)
+            {
+                gravityManager?.Register(this);
+            }
+        }
 
         private void Awake()
         {
             _body = GetComponent<Rigidbody>();
-            if (gravityManager is null)
-            {
-                gravityManager = FindAnyObjectByType<GravityManager>();
-            }
         }
 
         private void OnEnable()
@@ -37,7 +56,13 @@ namespace GravityReceipt.Gravity
 
         private void FixedUpdate()
         {
-            if (IsHeld || _body.isKinematic)
+            var room = RoomRegistry.FindRoom(transform.position);
+            if (room is { HasOwnGravity: true, Gravity: { } roomGravity })
+            {
+                SetGravityManager(roomGravity);
+            }
+
+            if (IsHeld || _body is not { isKinematic: false })
             {
                 _wasMoving = false;
                 return;

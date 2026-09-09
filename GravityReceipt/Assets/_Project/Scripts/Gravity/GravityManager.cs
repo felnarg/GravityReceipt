@@ -10,7 +10,7 @@ namespace GravityReceipt.Gravity
     /// </summary>
     public sealed class GravityManager : MonoBehaviour
     {
-        public static event Action<Vector3, ValuableItem> GravityChanged;
+        public event Action<Vector3, ValuableItem> GravityChanged;
 
         [SerializeField] private float telegraphSeconds = 1f;
         [SerializeField] private float gravityMagnitude = 9.81f;
@@ -23,13 +23,27 @@ namespace GravityReceipt.Gravity
         private Vector3 _pendingDirection;
         private float _telegraphRemaining;
         private bool _isTelegraphing;
+        private float _anchorUntil;
 
         public Vector3 CurrentGravity => _currentGravityDirection * gravityMagnitude;
         public Vector3 CurrentDirection => _currentGravityDirection;
         public ValuableItem Dominant => _dominant;
-        public bool IsTelegraphing => _isTelegraphing;
+        public bool IsTelegraphing => _isTelegraphing && !IsAnchored;
+        public bool IsAnchored => Time.time < _anchorUntil;
         public float TelegraphNormalized =>
             telegraphSeconds <= 0f ? 0f : 1f - Mathf.Clamp01(_telegraphRemaining / telegraphSeconds);
+
+        public void Configure(Transform center, float telegraph = 1f)
+        {
+            roomCenter = center;
+            telegraphSeconds = telegraph;
+        }
+
+        public void AnchorFor(float seconds)
+        {
+            _anchorUntil = Time.time + Mathf.Max(0.1f, seconds);
+            _isTelegraphing = false;
+        }
 
         public void Register(ValuableItem item)
         {
@@ -69,7 +83,7 @@ namespace GravityReceipt.Gravity
 
         private void Update()
         {
-            if (!_isTelegraphing)
+            if (IsAnchored || !_isTelegraphing)
             {
                 return;
             }
@@ -84,13 +98,13 @@ namespace GravityReceipt.Gravity
             _isTelegraphing = false;
         }
 
-        private void FixedUpdate()
-        {
-            Physics.gravity = CurrentGravity;
-        }
-
         private void RecalculateDominant(bool immediate, ValuableItem movedHint = null)
         {
+            if (IsAnchored && !immediate)
+            {
+                return;
+            }
+
             ValuableItem best = null;
             var bestPrice = int.MinValue;
 
@@ -124,7 +138,7 @@ namespace GravityReceipt.Gravity
 
         private Vector3 DirectionTowardValuable(ValuableItem valuable)
         {
-            var center = roomCenter is not null ? roomCenter.position : Vector3.zero;
+            var center = roomCenter is not null ? roomCenter.position : transform.position;
             var toItem = valuable.transform.position - center;
             if (toItem.sqrMagnitude < 0.25f)
             {

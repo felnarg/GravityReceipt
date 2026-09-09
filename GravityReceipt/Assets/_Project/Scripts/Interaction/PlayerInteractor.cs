@@ -1,4 +1,5 @@
 using GravityReceipt.Gravity;
+using GravityReceipt.Player;
 using UnityEngine;
 
 namespace GravityReceipt.Interaction
@@ -10,15 +11,35 @@ namespace GravityReceipt.Interaction
         [SerializeField] private float grabWindUpSeconds = 0.4f;
         [SerializeField] private LayerMask interactMask = ~0;
 
+        private LocalPlayerInput _input;
         private Rigidbody _held;
         private ValuableItem _heldValuable;
         private float _windUp;
 
+        public float WindUpNormalized =>
+            grabWindUpSeconds <= 0f ? 0f : Mathf.Clamp01(_windUp / grabWindUpSeconds);
+        public bool IsHolding => _held is not null;
+
+        public void Configure(Transform hold)
+        {
+            holdPoint = hold;
+        }
+
+        private void Awake()
+        {
+            _input = GetComponent<LocalPlayerInput>();
+        }
+
         private void Update()
         {
+            if (_input is null)
+            {
+                return;
+            }
+
             if (_held is not null)
             {
-                if (Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(1))
+                if (_input.DropPressed())
                 {
                     Drop();
                 }
@@ -26,7 +47,7 @@ namespace GravityReceipt.Interaction
                 return;
             }
 
-            if (!Input.GetKey(KeyCode.E) && !Input.GetMouseButton(0))
+            if (!_input.GrabHeld())
             {
                 _windUp = 0f;
                 return;
@@ -63,12 +84,13 @@ namespace GravityReceipt.Interaction
         {
             body = null;
             valuable = null;
-            var ray = new Ray(transform.position, transform.forward);
-            if (Camera.main is { } cam)
+            var cam = _input is { PlayerCamera: { } c } ? c : Camera.main;
+            if (cam is null)
             {
-                ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+                return false;
             }
 
+            var ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             if (!Physics.Raycast(ray, out var hit, reach, interactMask, QueryTriggerInteraction.Ignore))
             {
                 return false;
@@ -76,6 +98,12 @@ namespace GravityReceipt.Interaction
 
             body = hit.rigidbody;
             if (body is null)
+            {
+                return false;
+            }
+
+            var grabbable = body.GetComponent<Grabbable>();
+            if (grabbable is not { CanGrab: true })
             {
                 return false;
             }
@@ -101,7 +129,7 @@ namespace GravityReceipt.Interaction
             }
 
             _held.isKinematic = false;
-            _held.useGravity = true;
+            _held.useGravity = false;
             _heldValuable?.SetHeld(false);
             _heldValuable?.MarkMovedByPlayer();
             _held = null;
