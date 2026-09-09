@@ -150,6 +150,7 @@ Documento vivo del prototipo.
 - Mancha de pared prevista dice **GIRA**. Aro naranja en la puerta hacia el objetivo (tras el splash).
 - **F10** comfort: reduce shake, FOV punch, roll, viñeta y flash (para mareo).
 - Paquete se aplasta al dent; aviso a 1 vida y a 30 s. Chispas al completar un objetivo.
+- Rigidbodies despiertan al flippear g (no se quedan dormidos en el suelo viejo).
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
