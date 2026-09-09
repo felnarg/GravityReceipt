@@ -56,6 +56,9 @@ namespace GravityReceipt.World
             AddPointLight(root.transform, CorC + Vector3.up * 0.2f, new Color(1f, 0.45f, 0.4f), 0.8f);
             AddPointLight(root.transform, OffC + Vector3.up, new Color(0.75f, 0.88f, 1f), 1.2f);
             AddPointLight(root.transform, ExeC + Vector3.up, new Color(1f, 0.82f, 0.55f), 1.15f);
+            AddPointLight(root.transform, new Vector3(5.9f, 1.6f, 10f), new Color(0.3f, 1f, 0.55f), 0.7f);
+            AddPointLight(root.transform, new Vector3(0f, 1.4f, 40.5f), new Color(0.35f, 0.65f, 1f), 0.65f);
+            AddPointLight(root.transform, new Vector3(0f, 1.4f, 54.2f), new Color(1f, 0.82f, 0.3f), 0.65f);
 
             var hubG = CreateGravity(root.transform, "Gravity_Hub", HubC);
             var arcG = CreateGravity(root.transform, "Gravity_Archive", ArcC);
