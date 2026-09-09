@@ -199,6 +199,7 @@ namespace GravityReceipt.UI
                 : looking
                     ? new Color(1f, 0.92f, 0.25f)
                     : new Color(1f, 1f, 1f, 0.85f);
+            cross.fontSize = winding ? 28 : 22;
         }
 
         private static string ObjectiveProgressSuffix()

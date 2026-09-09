@@ -27,7 +27,7 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~23:45 COT (sesión overnight Cloud Agent, bloque 2) |
+| **Última actualización** | 2026-09-09 ~00:00 COT (sesión overnight Cloud Agent, bloque 5) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
 | **Hecho relevante** | Split 2p, gravedad por sala, misión, mapa Hub→Executive, rematch, HUD de regla, flip feel, curbs del pasillo, valuables vuelven a casa |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete + flip con caja dorada a una pared |
@@ -423,6 +423,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 ### 2026-09-09 — Overnight bloque 5 (juice)
 - Ding al completar objetivo. HUD muestra cooldown de Anchor.
 - Moment of the Match cuenta flips además de caídas.
+- FOV extra al sprint Runner; cruceta crece al wind-up de agarre.
 
 ---
 

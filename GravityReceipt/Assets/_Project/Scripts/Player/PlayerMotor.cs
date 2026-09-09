@@ -30,6 +30,7 @@ namespace GravityReceipt.Player
         private float _baseFov = 60f;
         private float _fovPunch;
         private float _shake;
+        private float _sprintFov;
         private Vector3 _camBaseLocal;
 
         public GravityManager Gravity => gravityManager;
@@ -167,9 +168,11 @@ namespace GravityReceipt.Player
 
             _fovPunch = Mathf.MoveTowards(_fovPunch, 0f, Time.deltaTime * 38f);
             _shake = Mathf.MoveTowards(_shake, 0f, Time.deltaTime * 1.1f);
+            var sprintTarget = _role != null && _role.MoveMultiplier > 1.05f ? 7f : 0f;
+            _sprintFov = Mathf.MoveTowards(_sprintFov, sprintTarget, Time.deltaTime * 36f);
             if (_cam != null)
             {
-                _cam.fieldOfView = _baseFov + _fovPunch;
+                _cam.fieldOfView = _baseFov + _fovPunch + _sprintFov;
             }
 
             var offset = _shake > 0.01f
@@ -342,6 +345,7 @@ namespace GravityReceipt.Player
             _pitch = 0f;
             _fovPunch = 0f;
             _shake = 0f;
+            _sprintFov = 0f;
             if (cameraPivot != null)
             {
                 cameraPivot.localEulerAngles = Vector3.zero;

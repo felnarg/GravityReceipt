@@ -68,7 +68,7 @@ namespace GravityReceipt.World
             CreateRoomVolume(root.transform, "OpenOffice", OffC, OffS, offG, inherit: false);
             CreateRoomVolume(root.transform, "Executive", ExeC, ExeS, exeG, inherit: false);
 
-            CreateValuable("Valuable_Taza_15", new Vector3(-2.2f, 0.4f, 1.1f), new Vector3(0.28f, 0.22f, 0.28f), 15, hubG, new Color(0.75f, 0.45f, 0.28f), PrimitiveType.Cylinder);
+            CreateValuable("Valuable_Taza_15", new Vector3(-2.2f, 0.48f, 1.1f), new Vector3(0.28f, 0.22f, 0.28f), 15, hubG, new Color(0.75f, 0.45f, 0.28f), PrimitiveType.Cylinder);
             CreateValuable("Valuable_Archivador_40", new Vector3(-3.6f, 1.0f, 8.5f), new Vector3(0.8f, 1.6f, 0.5f), 40, arcG, new Color(0.55f, 0.38f, 0.22f), PrimitiveType.Cube);
             CreateValuable("Valuable_CajaFuerte_80", new Vector3(3.4f, 0.75f, 12.2f), new Vector3(1.1f, 1.1f, 1.1f), 80, arcG, new Color(0.9f, 0.72f, 0.18f), PrimitiveType.Cube);
             CreateValuable("Valuable_Monitor_120", new Vector3(4.5f, 0.55f, 32f), new Vector3(1.4f, 0.85f, 0.12f), 120, offG, new Color(0.15f, 0.45f, 0.95f), PrimitiveType.Cube);
