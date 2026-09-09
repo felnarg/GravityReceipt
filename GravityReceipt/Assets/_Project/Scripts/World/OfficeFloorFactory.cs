@@ -134,6 +134,7 @@ namespace GravityReceipt.World
             gm.Configure(go.transform, 1f);
             var outline = go.AddComponent<DominantValuableOutline>();
             outline.Bind(gm);
+            go.AddComponent<GravityTelegraphArrow>();
             return gm;
         }
 

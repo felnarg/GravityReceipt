@@ -15,6 +15,8 @@ namespace GravityReceipt.Interaction
         private Rigidbody _held;
         private ValuableItem _heldValuable;
         private float _windUp;
+        private Renderer _focus;
+        private Color _focusColor;
 
         public float WindUpNormalized =>
             grabWindUpSeconds <= 0f ? 0f : Mathf.Clamp01(_windUp / grabWindUpSeconds);
@@ -39,6 +41,7 @@ namespace GravityReceipt.Interaction
 
             if (_held is not null)
             {
+                ClearFocus();
                 if (_input.DropPressed())
                 {
                     Drop();
@@ -47,13 +50,15 @@ namespace GravityReceipt.Interaction
                 return;
             }
 
-            if (!_input.GrabHeld())
+            if (!TryGetTarget(out var body, out var valuable))
             {
                 _windUp = 0f;
+                ClearFocus();
                 return;
             }
 
-            if (!TryGetTarget(out var body, out var valuable))
+            SetFocus(body);
+            if (!_input.GrabHeld())
             {
                 _windUp = 0f;
                 return;
@@ -67,6 +72,7 @@ namespace GravityReceipt.Interaction
 
             Grab(body, valuable);
             _windUp = 0f;
+            ClearFocus();
         }
 
         private void FixedUpdate()
@@ -134,6 +140,40 @@ namespace GravityReceipt.Interaction
             _heldValuable?.MarkMovedByPlayer();
             _held = null;
             _heldValuable = null;
+        }
+
+        private void SetFocus(Rigidbody body)
+        {
+            var renderer = body.GetComponent<Renderer>();
+            if (renderer == _focus)
+            {
+                return;
+            }
+
+            ClearFocus();
+            if (renderer is null)
+            {
+                return;
+            }
+
+            _focus = renderer;
+            _focusColor = renderer.material.color;
+            renderer.material.color = Color.Lerp(_focusColor, Color.white, 0.45f);
+        }
+
+        private void ClearFocus()
+        {
+            if (_focus is not null)
+            {
+                _focus.material.color = _focusColor;
+            }
+
+            _focus = null;
+        }
+
+        private void OnDisable()
+        {
+            ClearFocus();
         }
     }
 }

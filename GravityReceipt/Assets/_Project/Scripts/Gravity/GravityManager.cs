@@ -30,6 +30,7 @@ namespace GravityReceipt.Gravity
         public ValuableItem Dominant => _dominant;
         public bool IsTelegraphing => _isTelegraphing && !IsAnchored;
         public bool IsAnchored => Time.time < _anchorUntil;
+        public Vector3 PendingDirection => _pendingDirection;
         public float TelegraphNormalized =>
             telegraphSeconds <= 0f ? 0f : 1f - Mathf.Clamp01(_telegraphRemaining / telegraphSeconds);
 

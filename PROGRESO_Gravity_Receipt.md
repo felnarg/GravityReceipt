@@ -138,7 +138,7 @@ Documento vivo del prototipo.
 | 1.3 | `ValuableItem` con precio `$` | [x] | |
 | 1.4 | `GravityManager` por sala | [x] | Ya no es global: un manager por sala |
 | 1.5 | Aplicar vector de gravedad | [x] | Snap a ejes; `GravityBody` por rigidbody |
-| 1.6 | Telegráfo 1.0 s antes del flip | [x] | HUD |
+| 1.6 | Telegráfo 1.0 s antes del flip | [x] | HUD + flecha 3D en la sala |
 | 1.7 | Inercia corta al cambiar g | [x] | Reset parcial de velocidad + ground raycast |
 | 1.8 | Outline del valuable dominante | [x] | Pulso/color (no outline URP) |
 | 1.9 | Escena mínima: 1 sala + 2 valuables | [x] | Archive sigue existiendo dentro del piso |
@@ -386,6 +386,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Roles Runner/Anchor stub. Highlight de mayor caída.
 - Play en escena vieja ahora **auto-reconstruye** el piso 2p (`OfficeFloorPlayGuard`).
 - Chevrones amarillos de ruta, marcos de puerta, etiquetas `$` en valuables y “PAQUETE”.
+- Flecha 3D de telegráfo en la sala que va a voltear.
 - Hard stop programado 08:00 America/Bogota; esta entrega es el avance de código.
 
 ---
