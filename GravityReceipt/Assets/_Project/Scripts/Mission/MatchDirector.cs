@@ -99,6 +99,12 @@ namespace GravityReceipt.Mission
                 return;
             }
 
+            if (Input.GetKeyDown(KeyCode.F4) && IsPlaying)
+            {
+                DebugWarpCheckpoint();
+                return;
+            }
+
             if (Input.GetKeyDown(KeyCode.F6) && IsPlaying)
             {
                 DebugSkipObjective();
@@ -219,6 +225,19 @@ namespace GravityReceipt.Mission
             {
                 return;
             }
+
+            WarpPlayersAndPackage();
+            Debug.Log("[GravityReceipt] F6 skip → objetivo " + next);
+        }
+
+        private void DebugWarpCheckpoint()
+        {
+            WarpPlayersAndPackage();
+            Debug.Log("[GravityReceipt] F4 warp checkpoint");
+        }
+
+        private void WarpPlayersAndPackage()
+        {
             var checkpoints = CheckpointSystem.Instance;
             var motors = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
             foreach (var motor in motors)
@@ -241,8 +260,6 @@ namespace GravityReceipt.Mission
             {
                 pkg.Respawn();
             }
-
-            Debug.Log("[GravityReceipt] F6 skip → objetivo " + next);
         }
 
         private void End(MatchPhase phase, string reason)

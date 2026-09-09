@@ -34,7 +34,7 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 | Screenshot PNG | **F8** | **F8** |
 | Ocultar chrome HUD | **F9** | **F9** |
 
-Cheat de iteración (no sale en el HUD): **F6** completa el siguiente objetivo y teleporta al checkpoint. **F7** respawnea el paquete en el checkpoint.
+Cheat de iteración (no sale en el HUD): **F4** teleporta al checkpoint · **F6** completa el siguiente objetivo y teleporta · **F7** respawnea el paquete.
 
 ### Qué probar (loop corto)
 
