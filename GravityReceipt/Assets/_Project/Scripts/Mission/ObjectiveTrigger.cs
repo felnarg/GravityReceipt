@@ -24,6 +24,8 @@ namespace GravityReceipt.Mission
         private Renderer _renderer;
         private Color _baseColor;
         private Transform _progressBar;
+        private Transform _beacon;
+        private Renderer _beaconRenderer;
 
         public int Index => objectiveIndex;
         public string Label => objectiveLabel;
@@ -100,6 +102,7 @@ namespace GravityReceipt.Mission
             {
                 MarkCompleteVisual();
                 SetProgressBar(0f);
+                SetBeacon(false);
                 return;
             }
 
@@ -110,11 +113,13 @@ namespace GravityReceipt.Mission
                 var pulse = 0.5f + 0.5f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 3.2f));
                 _renderer.material.color = Color.Lerp(_baseColor, Color.white, pulse * 0.5f);
                 SetProgressBar(_progress);
+                SetBeacon(true);
                 return;
             }
 
             _renderer.material.color = Color.Lerp(_baseColor, new Color(0.12f, 0.12f, 0.14f), 0.45f);
             SetProgressBar(0f);
+            SetBeacon(false);
         }
 
         private void SetProgressBar(float progressSeconds)
@@ -159,6 +164,58 @@ namespace GravityReceipt.Mission
             _progressBar.localScale = new Vector3(Mathf.Max(0.15f, shown * 2.2f), 0.09f, 0.09f);
         }
 
+        private void SetBeacon(bool on)
+        {
+            if (!on)
+            {
+                if (_beacon != null)
+                {
+                    _beacon.gameObject.SetActive(false);
+                }
+
+                return;
+            }
+
+            if (_beacon == null)
+            {
+                var go = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                go.name = "ObjectiveBeacon";
+                go.transform.SetParent(transform.root, true);
+                var col = go.GetComponent<Collider>();
+                if (col != null)
+                {
+                    col.enabled = false;
+                }
+
+                _beaconRenderer = go.GetComponent<Renderer>();
+                if (_beaconRenderer != null)
+                {
+                    var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
+                    if (shader != null)
+                    {
+                        _beaconRenderer.sharedMaterial = new Material(shader)
+                        {
+                            color = Color.Lerp(_baseColor, Color.white, 0.35f)
+                        };
+                    }
+                }
+
+                _beacon = go.transform;
+            }
+
+            _beacon.gameObject.SetActive(true);
+            var h = 2.6f + 0.25f * Mathf.Sin(Time.unscaledTime * 4f);
+            _beacon.position = transform.position + Vector3.up * (h * 0.5f + 0.2f);
+            _beacon.localScale = new Vector3(0.18f, h * 0.5f, 0.18f);
+            if (_beaconRenderer != null)
+            {
+                var pulse = 0.45f + 0.55f * (0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 4f));
+                var c = Color.Lerp(_baseColor, Color.white, pulse);
+                c.a = 1f;
+                _beaconRenderer.material.color = c;
+            }
+        }
+
         private void MarkCompleteVisual()
         {
             _done = true;
@@ -174,6 +231,12 @@ namespace GravityReceipt.Mission
             {
                 Destroy(_progressBar.gameObject);
                 _progressBar = null;
+            }
+
+            if (_beacon != null)
+            {
+                Destroy(_beacon.gameObject);
+                _beacon = null;
             }
         }
 

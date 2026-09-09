@@ -25,12 +25,12 @@ Documento vivo del prototipo.
 
 | Campo | Valor |
 |-------|--------|
-| **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla |
+| **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla/arte |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~00:45 COT (overnight, puertas/2p/HUD) |
+| **Última actualización** | 2026-09-09 ~00:55 COT (overnight, waypoints/pausa/arte) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
-| **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F4/F6/F7, OOB AABB, pings, hit-stop, carteles dintel, ignore collision P1-P2 |
-| **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete + flip con caja dorada a una pared |
+| **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F3/F4/F6/F7, OOB AABB, waypoint objetivo, beacon paquete, pausa P, linger FLIP, roll de cámara |
+| **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete (sigue la flecha) + flip con caja dorada a una pared |
 | **Build jugable** | Sí (Editor Play Mode, 1p o 2p local). **Hay que regenerar la escena con el menú Setup.** |
 | **Online 4p** | No (no empezar hasta que el playtest offline sea sólido) |
 | **Bloqueadores** | Este entorno Linux no tiene Unity Editor: no se pudo Play Mode ni grabar el vídeo 1.11 |
@@ -91,12 +91,24 @@ Documento vivo del prototipo.
 - P1 y P2 no colisionan entre sí (el pasillo estrecho no es un empujón al vacío).
 - G se recalcula al **parar** un valuable (no solo al empezar a moverse): el flip usa la posición en la pared.
 - Llevar el dominante a una pared **también** telegráfa (el timer no se reinicia si g pendiente no cambia).
+- Bias vertical extra si el valuable está en las manos (no flippea andando por el centro).
+- Flecha 3D a los pies hacia el objetivo actual (se oculta a < ~3.5 m).
+- Columna luminosa en la losa/zona del objetivo en curso.
+- Orbe naranja pulsante sobre el paquete (no se pierde tras un flip).
+- HUD: distancia al objetivo y al paquete; banner ¡FLIP! se queda 0.85 s al aplicar.
+- PNG automático del primer flip **después** del banner (0.16 s).
+- Cámara se inclina (roll) hacia la g pendiente durante el telegráfo.
+- Thud al aterrizar de una caída > 2.2 m.
+- **P** pausa (timescale 0) · **F3** desatasca jugadores.
+- Puertas 2.6 m; ventanas unlit, lámparas de techo, zócalos E/W, cubículos Office, cuadro Executive.
+- Siluetas extra: asas del trofeo, pestillos del maletín, tapa de cafetera, pantalla del monitor, 3.er cajón.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
 - 1.10 / 2.7 playtest: código listo, **cero playtests reales** (no hay Unity aquí).
 - Outline dominante sigue siendo pulso de escala + tint, no un outline URP de verdad.
 - Whoosh de flip listo; emotes son billboard (sin animación de avatar).
+- Arte de salas: primitivas de color (ventanas/lámparas/cubículos), no texturas.
 
 ### FALTA
 - 1.11 Vídeo mudo 8–10 s del flip (grabar en Unity local).
@@ -110,16 +122,16 @@ Documento vivo del prototipo.
 2. Espera a que compile (scripts nuevos en `Assets/_Project/Scripts/...`).
 3. Opción A (recomendada): menú **GravityReceipt → Setup Office Floor A** → OK.  
    Opción B: pulsa **Play** directo; si la escena es la vieja, se reconstruye sola (2p).
-4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja). Los valuables muestran `$` encima. Splash 9 s: “LA GRAVEDAD SIGUE AL OBJETO MÁS CARO”.
+4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja). Los valuables muestran `$` encima. Splash 9 s: “LA GRAVEDAD SIGUE AL OBJETO MÁS CARO”. El paquete tiene un orbe naranja. Una flecha en el suelo apunta a Enchufar.
 5. **P1:** WASD + ratón. Agarra el cubo naranja (mantener E ~0.4 s).
-6. Entra a Archive (norte). Zona verde en la pared este: paquete dentro → objetivo Enchufar.
-7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y llévala a una **pared** (en manos o suelta). Espera ~1 s: banner **¡FLIP ARCHIVE!**, whoosh, FOV, g cambia.
+6. Entra a Archive (norte). Sigue la flecha / columna verde en la pared este: paquete dentro → objetivo Enchufar.
+7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y llévala a una **pared** (en manos o suelta). Espera ~1 s: banner **¡FLIP ARCHIVE!** (se queda un instante al voltear), whoosh, FOV, la cámara se inclina, g cambia. El primer flip guarda un PNG solo.
 8. Cruza el pasillo (bordillos rojos altos; vacío a los lados). Si caes **o sales volando a los lados** (g heredada), respawneas. Si un valuable cae, vuelve a su sitio.
 9. Losa azul Open Office = Entregar. Losa dorada Executive + paquete en manos o mantener E = Sellar.
-10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre. El cronómetro no baja durante el splash inicial.
+10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre. El cronómetro no baja durante el splash inicial. **P** pausa.
 11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
-12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). **F9** oculta help/status para un clip más limpio. Graba 8–10 s mudos del paso 7, o dispara F8 durante el FLIP.
-13. Cheats playtest: **F4** warp al checkpoint · **F6** skip objetivo + warp · **F7** solo respawnea el paquete.
+12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). **F9** oculta help/status para un clip más limpio. Graba 8–10 s mudos del paso 7, o usa el PNG automático del primer flip.
+13. Cheats playtest: **F3** unstuck · **F4** warp al checkpoint · **F6** skip objetivo + warp · **F7** solo respawnea el paquete.
 14. Emotes: P1 teclas **1–4**, P2 **KP1 / KP2 / KP3 / KP9**. Apunta a un cubo gris: el prompt debe decir “(sin $)”.
 
 ---
@@ -263,8 +275,8 @@ Documento vivo del prototipo.
 | 5.2 | Medir rematch % | [ ] | Meta ≥ 55% |
 | 5.3 | Medir mareo % | [ ] | Meta < 10% |
 | 5.4 | Medir comprensión de la regla | [ ] | Meta ≥ 80% en 1ª partida |
-| 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake creciente en telegráfo + banner + hit-stop 80 ms; falta mareo real |
-| 5.6 | Pass siluetas/colores valuables | [~] | Primitivas + piezas (asa, pomo, peana, pico, LEDs, maceta); falta arte |
+| 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + roll de cámara + linger 0.85 s + hit-stop 80 ms; falta mareo real |
+| 5.6 | Pass siluetas/colores valuables | [~] | Primitivas + piezas (asa, pomo, peana, pico, LEDs, maceta, asas trofeo, pestillos, tapa); falta arte |
 | 5.7 | Emotes (4) + whoosh final | [x] | Whoosh en cada flip; emotes billboard OK/NO/?/¡AQUÍ! (sin animación de avatar) |
 | 5.8 | Decisión go / no-go | [ ] | Ver métricas abajo |
 
@@ -279,8 +291,8 @@ Documento vivo del prototipo.
 
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
-| 6.1 | Pass de arte (no final, salir de gris total) | [ ] | |
-| 6.2 | Pulido UI mínima | [~] | Splash, FLIP, toast, `[>]` objetivo, prompt de mirada, pista “Siguiente” |
+| 6.1 | Pass de arte (no final, salir de gris total) | [~] | Ventanas unlit, lámparas, zócalos, cubículos, paletas por sala; falta texturas |
+| 6.2 | Pulido UI mínima | [~] | Splash, FLIP linger, toast, `[>]` objetivo, waypoint 3D, distancias, pausa P |
 | 6.3 | Build Steam o itch privada | [ ] | |
 | 6.4 | Trailer 15–20 s del mejor clip | [ ] | |
 | 6.5 | Lista bugs P0 cerrada | [ ] | Gravedad, softlock, desync |
@@ -402,6 +414,7 @@ Eje +Z (metros aprox.): Hub z=-4..4 → Archive 4..16 → Pasillo 16..27 → Off
 | 2026-09-09 | Cloud Agent: 2p split + mapa offline + misión/timer/roles/rematch | Playtest humano + vídeo flip; no Unity en el cloud |
 | 2026-09-09 | Pulido overnight: curbs, grab exclusivo, HUD regla/FLIP, FOV+whoosh, valuables home | Playtest Unity local + vídeo 1.11; no online |
 | 2026-09-09 | Emotes 4 + prompt mirada + pulso losa actual + muebles estáticos | Playtest humano; vídeo 1.11 |
+| 2026-09-09 | Waypoint 3D + beacon paquete + pausa P + roll cámara + arte salas | Playtest Unity local + vídeo 1.11; no online |
 
 ---
 
@@ -510,14 +523,23 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - `SpawnHome` compilaba mal (llave de más).
 - `Physics.IgnoreCollision` entre CharacterControllers.
 
+### 2026-09-09 — Overnight bloque 12 (waypoints + feel + arte)
+- `ObjectiveWaypoint`: flecha a los pies hacia Enchufar/Entregar/Sellar.
+- Columna en la losa actual + orbe sobre el paquete.
+- Banner ¡FLIP! permanece 0.85 s; PNG del primer flip espera 0.16 s.
+- Roll de cámara hacia la g pendiente; thud al aterrizar.
+- **P** pausa · **F3** unstuck. Puertas 2.6 m.
+- Dress de salas: ventanas, lámparas, zócalos E/W, cubículos, cuadro.
+- Siluetas extra en trofeo / maletín / cafetera / monitor / archivador.
+
 ---
 
 ## Checklist del día (copiar al empezar una sesión)
 
 ```
 Fecha: 2026-09-09
-Enfoque de hoy (1–3 IDs del plan): pulido 1.10/2.7 (sin Unity) + 5.7 emotes + 6.2 HUD
-Hecho: emotes, prompt mirada, pulso losa, muebles estáticos
+Enfoque de hoy (1–3 IDs del plan): pulido 5.5/5.6/6.1/6.2 (sin Unity) + playtest mañana
+Hecho: waypoint, beacon paquete, linger FLIP, roll cámara, pausa, arte primitivas
 Pendiente al cerrar: playtest Unity local, vídeo 1.11, no online
 Bloqueadores: Unity Editor ausente en el cloud agent
 Actualicé "Estado actual": sí

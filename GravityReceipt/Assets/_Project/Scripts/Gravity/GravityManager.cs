@@ -28,13 +28,16 @@ namespace GravityReceipt.Gravity
         private bool _isTelegraphing;
         private float _anchorUntil;
         private Coroutine _hitStop;
+        private float _flipBannerUntil;
 
         public Vector3 CurrentGravity => _currentGravityDirection * gravityMagnitude;
         public Vector3 CurrentDirection => _currentGravityDirection;
         public ValuableItem Dominant => _dominant;
         public bool IsTelegraphing => _isTelegraphing && !IsAnchored;
         public bool IsAnchored => Time.time < _anchorUntil;
+        public bool ShowFlipBanner => IsTelegraphing || Time.unscaledTime < _flipBannerUntil;
         public Vector3 PendingDirection => _pendingDirection;
+        public Vector3 BannerDirection => IsTelegraphing ? _pendingDirection : _currentGravityDirection;
         public float TelegraphNormalized =>
             telegraphSeconds <= 0f ? 0f : 1f - Mathf.Clamp01(_telegraphRemaining / telegraphSeconds);
 
@@ -101,7 +104,6 @@ namespace GravityReceipt.Gravity
 
             ApplyGravity(_pendingDirection, _dominant);
             _isTelegraphing = false;
-            CaptureFirstFlip();
         }
 
         private void RecalculateDominant(bool immediate, ValuableItem movedHint = null)
@@ -208,6 +210,7 @@ namespace GravityReceipt.Gravity
             _dominant = dominant;
             if (Vector3.Dot(previous, _currentGravityDirection) < 0.99f)
             {
+                _flipBannerUntil = Time.unscaledTime + 0.85f;
                 GravityChanged?.Invoke(CurrentGravity, dominant);
                 if (isActiveAndEnabled && Time.timeSinceLevelLoad > 1f)
                 {
@@ -217,6 +220,7 @@ namespace GravityReceipt.Gravity
                     }
 
                     _hitStop = StartCoroutine(HitStop());
+                    StartCoroutine(CaptureFirstFlipDelayed());
                 }
             }
         }
@@ -234,7 +238,7 @@ namespace GravityReceipt.Gravity
             yield return new WaitForSecondsRealtime(0.08f);
             if (match != null && match.IsPlaying)
             {
-                Time.timeScale = 1f;
+                Time.timeScale = match.IsPaused ? 0f : 1f;
             }
 
             _hitStop = null;
@@ -247,14 +251,15 @@ namespace GravityReceipt.Gravity
 
         private static bool _flipShotTaken;
 
-        private static void CaptureFirstFlip()
+        private IEnumerator CaptureFirstFlipDelayed()
         {
             if (_flipShotTaken)
             {
-                return;
+                yield break;
             }
 
             _flipShotTaken = true;
+            yield return new WaitForSecondsRealtime(0.16f);
             var name = $"GravityReceipt_flip_{System.DateTime.Now:HHmmss}.png";
             ScreenCapture.CaptureScreenshot(name);
             Debug.Log("[GravityReceipt] Primer flip capturado: " + name);

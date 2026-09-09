@@ -41,6 +41,7 @@ namespace GravityReceipt.Player
         private Vector3 _camBaseLocal;
         private float _jumpBuffer;
         private float _coyote;
+        private float _camRoll;
 
         public GravityManager Gravity => gravityManager;
         public bool Grounded { get; private set; }
@@ -196,6 +197,17 @@ namespace GravityReceipt.Player
                     0f)
                 : Vector3.zero;
             cameraPivot.localPosition = _camBaseLocal + offset;
+
+            var rollTarget = 0f;
+            if (gravityManager != null && gravityManager.IsTelegraphing)
+            {
+                rollTarget = Vector3.Dot(gravityManager.PendingDirection, transform.right)
+                             * -16f
+                             * gravityManager.TelegraphNormalized;
+            }
+
+            _camRoll = Mathf.Lerp(_camRoll, rollTarget, 1f - Mathf.Exp(-12f * Time.deltaTime));
+            cameraPivot.localEulerAngles = new Vector3(_pitch, 0f, _camRoll);
         }
 
         private void Look()
@@ -215,10 +227,6 @@ namespace GravityReceipt.Player
             var my = look.y * mouseSensitivity;
             transform.Rotate(0f, mx, 0f, Space.Self);
             _pitch = Mathf.Clamp(_pitch - my, -80f, 80f);
-            if (cameraPivot != null)
-            {
-                cameraPivot.localEulerAngles = new Vector3(_pitch, 0f, 0f);
-            }
         }
 
         private void Move()
@@ -268,6 +276,7 @@ namespace GravityReceipt.Player
                 {
                     _fovPunch = Mathf.Max(_fovPunch, 8f);
                     _shake = Mathf.Max(_shake, 0.18f);
+                    MissionSfx.PlayLand();
                 }
 
                 _airFall = 0f;
@@ -385,6 +394,7 @@ namespace GravityReceipt.Player
             _sprintFov = 0f;
             _jumpBuffer = 0f;
             _coyote = 0f;
+            _camRoll = 0f;
             if (cameraPivot != null)
             {
                 cameraPivot.localEulerAngles = Vector3.zero;
@@ -406,6 +416,23 @@ namespace GravityReceipt.Player
         {
             _fovPunch = Mathf.Max(_fovPunch, fov);
             _shake = Mathf.Max(_shake, shake);
+        }
+
+        /// <summary>Cheat F3: empuja al jugador contra -g si se atascó en geometría.</summary>
+        public void NudgeUnstuck()
+        {
+            var gDir = gravityManager != null ? gravityManager.CurrentDirection : Vector3.down;
+            if (_controller != null)
+            {
+                _controller.enabled = false;
+            }
+
+            transform.position += -gDir * 0.75f;
+            TryUnstuck(gDir);
+            if (_controller != null)
+            {
+                _controller.enabled = true;
+            }
         }
     }
 }

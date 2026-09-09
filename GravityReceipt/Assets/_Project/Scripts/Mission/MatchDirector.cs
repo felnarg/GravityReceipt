@@ -24,9 +24,11 @@ namespace GravityReceipt.Mission
         private float _remaining;
         private readonly bool[] _objectives = new bool[3];
         private string _endReason = string.Empty;
+        private bool _paused;
 
         public MatchPhase Phase => _phase;
         public float RemainingSeconds => Mathf.Max(0f, _remaining);
+        public bool IsPaused => _paused;
         public int ObjectivesDone
         {
             get
@@ -124,6 +126,18 @@ namespace GravityReceipt.Mission
                 return;
             }
 
+            if (Input.GetKeyDown(KeyCode.F3) && IsPlaying)
+            {
+                DebugUnstuckPlayers();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.P) && IsPlaying)
+            {
+                TogglePause();
+                return;
+            }
+
             if (_phase == MatchPhase.Playing && Time.timeSinceLevelLoad >= 9f)
             {
                 _remaining -= Time.deltaTime;
@@ -190,8 +204,36 @@ namespace GravityReceipt.Mission
         public void Rematch()
         {
             Time.timeScale = 1f;
+            _paused = false;
             var scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
+        }
+
+        private void TogglePause()
+        {
+            _paused = !_paused;
+            Time.timeScale = _paused ? 0f : 1f;
+            if (_paused)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+
+            Debug.Log(_paused ? "[GravityReceipt] Pausa" : "[GravityReceipt] Reanuda");
+        }
+
+        private void DebugUnstuckPlayers()
+        {
+            var motors = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
+            foreach (var motor in motors)
+            {
+                if (motor != null)
+                {
+                    motor.NudgeUnstuck();
+                }
+            }
+
+            Debug.Log("[GravityReceipt] F3 unstuck jugadores");
         }
 
         /// <summary>
@@ -273,6 +315,7 @@ namespace GravityReceipt.Mission
             _phase = phase;
             _endReason = reason;
             Time.timeScale = 0.22f;
+            _paused = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             MatchEnded?.Invoke(phase, reason);

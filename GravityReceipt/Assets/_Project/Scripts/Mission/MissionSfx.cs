@@ -10,6 +10,7 @@ namespace GravityReceipt.Mission
         private static AudioClip _objective;
         private static AudioClip _win;
         private static AudioClip _lose;
+        private static AudioClip _land;
 
         public static void PlayObjective() => Play(_objective ??= MakeClip("ObjectiveDing", 880f, 1320f, 0.22f));
 
@@ -17,6 +18,8 @@ namespace GravityReceipt.Mission
             Play(won
                 ? _win ??= MakeClip("WinFanfare", 523f, 784f, 0.45f)
                 : _lose ??= MakeClip("LoseThud", 110f, 73f, 0.4f));
+
+        public static void PlayLand() => Play(_land ??= MakeClip("LandThud", 140f, 70f, 0.14f), 0.32f);
 
         private static AudioClip _dent;
         private static AudioClip _ping;

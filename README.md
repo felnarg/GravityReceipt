@@ -33,15 +33,17 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 | Rematch | **R** al terminar / **F5** siempre | igual |
 | Screenshot PNG | **F8** | **F8** |
 | Ocultar chrome HUD | **F9** | **F9** |
+| Pausa | **P** | **P** |
+| Unstuck (cheat) | **F3** | **F3** |
 | Warp checkpoint (cheat) | **F4** | **F4** |
 | Respawn paquete (cheat) | **F7** | **F7** |
 
-Cheat de iteración (no sale en el HUD): **F4** teleporta al checkpoint · **F6** completa el siguiente objetivo y teleporta · **F7** respawnea el paquete.
+Cheat de iteración (no sale en el HUD): **F3** desatasca · **F4** teleporta al checkpoint · **F6** completa el siguiente objetivo y teleporta · **F7** respawnea el paquete.
 
 ### Qué probar (loop corto)
 
-1. Cartel del Hub: **LA GRAVEDAD SIGUE LO MÁS CARO**. Cubos grises **no** tienen `$` (no tiran de g). Taza `$15` sí.
-2. Agarra el paquete **naranja**. En Archive, llévalo a la zona verde **ENCHUFA EL PAQUETE** (pared este).
+1. Cartel del Hub: **LA GRAVEDAD SIGUE LO MÁS CARO**. Cubos grises **no** tienen `$` (no tiran de g). Taza `$15` sí. El paquete lleva un orbe naranja encima.
+2. Agarra el paquete **naranja**. Sigue la flecha a los pies / columna del objetivo. En Archive, llévalo a la zona verde **ENCHUFA EL PAQUETE** (pared este).
 3. Caja fuerte **dorada $80**: llévala a una **pared** (puedes **mantenerla en las manos**). Tras ~1 s la gravedad de Archive tira hacia esa pared. Si la sueltas, espera a que se detenga.
 4. Cruza el pasillo (vacío a los lados; bordillos rojos). Si caes, respawneas en el último checkpoint.
 5. Open Office: deja el paquete en la losa azul **ENTREGAR** (también cuenta si lo llevas en las manos sobre la losa).
@@ -55,6 +57,7 @@ Cheat de iteración (no sale en el HUD): **F4** teleporta al checkpoint · **F6*
 - **P2 no aparece:** Setup 2p (no el ítem “1 jugador”).
 - **Caes al vacío andando:** los bordillos son de 0.58 m; hay que saltar o un flip. **F5** si te atascas.
 - **Quieres saltar objetivos:** **F6** (cheat).
+- **Te atascaste en un flip:** **F3** o **P** para mirar.
 
 ## Seguimiento
 Ver [`PROGRESO_Gravity_Receipt.md`](PROGRESO_Gravity_Receipt.md)

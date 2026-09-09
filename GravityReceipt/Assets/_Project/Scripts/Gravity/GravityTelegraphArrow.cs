@@ -22,7 +22,7 @@ namespace GravityReceipt.Gravity
 
         private void Update()
         {
-            if (gravityManager == null || !gravityManager.IsTelegraphing)
+            if (gravityManager == null || !gravityManager.ShowFlipBanner)
             {
                 if (_arrow != null)
                 {
@@ -34,16 +34,16 @@ namespace GravityReceipt.Gravity
 
             EnsureArrow();
             _arrow.gameObject.SetActive(true);
-            _arrow.position = transform.position + (-gravityManager.PendingDirection) * 0.35f;
-            var dir = gravityManager.PendingDirection;
+            var dir = gravityManager.BannerDirection;
+            _arrow.position = transform.position + (-dir) * 0.35f;
             if (dir.sqrMagnitude > 0.01f)
             {
                 var up = Mathf.Abs(Vector3.Dot(dir, Vector3.up)) > 0.95f ? Vector3.forward : Vector3.up;
                 _arrow.rotation = Quaternion.LookRotation(dir, up);
             }
 
-            var pulse = 2.1f + 0.45f * Mathf.Sin(Time.time * 14f);
-            _arrow.localScale = new Vector3(0.7f, 0.7f, pulse);
+            var pulse = 2.4f + 0.55f * Mathf.Sin(Time.unscaledTime * 14f);
+            _arrow.localScale = new Vector3(0.85f, 0.85f, pulse);
             if (_renderer != null)
             {
                 _renderer.material.color = Color.Lerp(

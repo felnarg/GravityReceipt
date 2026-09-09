@@ -146,7 +146,7 @@ namespace GravityReceipt.UI
             statusText.text = p2 != null
                 ? $"P1 {roomName} g→{DirName(g1)} {DomShort(g1)}  |  P2 {room2Name} g→{DirName(g2)} {DomShort(g2)}  |  {TelegraphLabel(flipG != null ? flipG : g1)}"
                 : $"Sala: {roomName}  |  g → {DirName(gravity)}  |  Dominante: {DomLong(gravity)}  |  {TelegraphLabel(gravity)}";
-            statusText.color = flipG != null || (gravity != null && gravity.IsTelegraphing)
+            statusText.color = flipG != null || (gravity != null && gravity.ShowFlipBanner)
                 ? new Color(1f, 0.9f, 0.2f)
                 : Color.white;
 
@@ -163,9 +163,9 @@ namespace GravityReceipt.UI
                     ? new Color(1f, 0.45f, 0.4f)
                     : Color.white;
                 matchText.text =
-                    $"⏱ {mm:00}:{ss:00}   Paquete {hearts}{PackageHolderSuffix()}  dest {(pkg != null ? pkg.Destructions : 0)}/{(pkg != null ? pkg.MaxDestructions : 3)}\n" +
+                    $"⏱ {mm:00}:{ss:00}   Paquete {hearts}{PackageHolderSuffix()}{PackageRangeSuffix(p1)}  dest {(pkg != null ? pkg.Destructions : 0)}/{(pkg != null ? pkg.MaxDestructions : 3)}\n" +
                     $"{ObjMark(match, 0)} Enchufar   {ObjMark(match, 1)} Entregar   {ObjMark(match, 2)} Sellar   ({match.ObjectivesDone}/{match.ObjectivesToWin})" +
-                    NextObjectiveHint(match) +
+                    NextObjectiveHint(match, p1) +
                     ObjectiveProgressSuffix();
             }
 
@@ -173,7 +173,7 @@ namespace GravityReceipt.UI
             {
                 var r1 = RoleOf(LocalPlayerSlot.One);
                 var wind = WindUp(p1);
-                helpP1Text.text = $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  1-4 emote  Shift sprint  F ancla  Tab rol  F5 restart  F9 HUD{wind}";
+                helpP1Text.text = $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  1-4 emote  Shift sprint  F ancla  Tab rol  P pausa  F5 restart  F9 HUD{wind}";
             }
 
             if (helpText != null)
@@ -195,6 +195,11 @@ namespace GravityReceipt.UI
                         ? new Color(0.45f, 1f, 0.55f)
                         : new Color(1f, 0.45f, 0.4f);
                 }
+                else if (match.IsPaused)
+                {
+                    centerText.text = "PAUSA\nP continúa · clic para mirar · F5 restart";
+                    centerText.color = new Color(0.85f, 0.95f, 1f);
+                }
                 else if (TryTelegraphBanner(p1, p2, out var banner, out var bannerColor))
                 {
                     centerText.text = banner;
@@ -209,6 +214,11 @@ namespace GravityReceipt.UI
                 {
                     centerText.text = "LA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nGrises sin $ no cuentan · taza $15 o caja $80 a una PARED";
                     centerText.color = new Color(1f, 0.92f, 0.4f);
+                }
+                else if (CursorUnlockedHint(p1))
+                {
+                    centerText.text = "Clic para mirar";
+                    centerText.color = new Color(0.85f, 0.9f, 1f);
                 }
                 else
                 {
@@ -330,9 +340,12 @@ namespace GravityReceipt.UI
                 return "ANCLA";
             }
 
-            return g.IsTelegraphing
-                ? $"FLIP en {1f - g.TelegraphNormalized:0.0}s"
-                : "estable";
+            if (g.IsTelegraphing)
+            {
+                return $"FLIP en {1f - g.TelegraphNormalized:0.0}s";
+            }
+
+            return g.ShowFlipBanner ? "FLIP" : "estable";
         }
 
         private static string Hearts(MissionPackage pkg)
@@ -366,7 +379,7 @@ namespace GravityReceipt.UI
             return index == match.CurrentObjectiveIndex ? "[>]" : "[ ]";
         }
 
-        private static string NextObjectiveHint(MatchDirector match)
+        private static string NextObjectiveHint(MatchDirector match, PlayerMotor from)
         {
             if (match == null || !match.IsPlaying)
             {
@@ -375,11 +388,61 @@ namespace GravityReceipt.UI
 
             return match.CurrentObjectiveIndex switch
             {
-                0 => "\nSiguiente: paquete a la zona VERDE de Archive",
-                1 => "\nSiguiente: suelta el paquete en la losa AZUL",
-                2 => "\nSiguiente: paquete + mantén E en la losa DORADA",
+                0 => "\nSiguiente: paquete a la zona VERDE de Archive" + DistToObjective(0, from),
+                1 => "\nSiguiente: suelta el paquete en la losa AZUL" + DistToObjective(1, from),
+                2 => "\nSiguiente: paquete + mantén E en la losa DORADA" + DistToObjective(2, from),
                 _ => string.Empty
             };
+        }
+
+        private static string DistToObjective(int index, PlayerMotor from)
+        {
+            if (from == null)
+            {
+                return string.Empty;
+            }
+
+            var triggers = FindObjectsByType<ObjectiveTrigger>(FindObjectsSortMode.None);
+            foreach (var t in triggers)
+            {
+                if (t == null || t.Index != index || t.IsDone)
+                {
+                    continue;
+                }
+
+                var m = Vector3.Distance(from.transform.position, t.transform.position);
+                return m >= 3.5f ? $" ({m:0} m)" : string.Empty;
+            }
+
+            return string.Empty;
+        }
+
+        private static string PackageRangeSuffix(PlayerMotor from)
+        {
+            if (from == null)
+            {
+                return string.Empty;
+            }
+
+            var pkg = FindAnyObjectByType<MissionPackage>();
+            if (pkg == null)
+            {
+                return string.Empty;
+            }
+
+            var m = Vector3.Distance(from.transform.position, pkg.transform.position);
+            return m >= 4f ? $" · {m:0}m" : string.Empty;
+        }
+
+        private static bool CursorUnlockedHint(PlayerMotor p1)
+        {
+            if (p1 == null)
+            {
+                return false;
+            }
+
+            var input = p1.GetComponent<LocalPlayerInput>();
+            return input != null && input.UsesMouseLook && Cursor.lockState != CursorLockMode.Locked;
         }
 
         private static void UpdateLookPrompt(Text prompt, PlayerMotor motor, string grabKey)
@@ -501,7 +564,7 @@ namespace GravityReceipt.UI
                 return false;
             }
 
-            var dir = DirName(g.PendingDirection);
+            var dir = DirName(g.BannerDirection);
             var item = g.Dominant != null ? $"${g.Dominant.Price}" : "el objeto caro";
             var room = g.name.StartsWith("Gravity_") ? g.name[8..] : g.name;
             banner = $"¡FLIP {room.ToUpperInvariant()}!\nLa gravedad va hacia {dir}\nSigue a {item}";
@@ -511,12 +574,12 @@ namespace GravityReceipt.UI
 
         private static GravityManager FirstTelegraph(PlayerMotor p1, PlayerMotor p2)
         {
-            if (p1 != null && p1.Gravity != null && p1.Gravity.IsTelegraphing)
+            if (p1 != null && p1.Gravity != null && p1.Gravity.ShowFlipBanner)
             {
                 return p1.Gravity;
             }
 
-            if (p2 != null && p2.Gravity != null && p2.Gravity.IsTelegraphing)
+            if (p2 != null && p2.Gravity != null && p2.Gravity.ShowFlipBanner)
             {
                 return p2.Gravity;
             }

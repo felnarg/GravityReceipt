@@ -20,7 +20,7 @@ namespace GravityReceipt.EditorTools
             BuildAndSave(2);
             EditorUtility.DisplayDialog(
                 "Gravity Receipt",
-                "Escena 2P regenerada (split).\n\nP1 arriba: WASD + ratón, E agarrar, Q ping, 1-4 emote, Shift sprint, F ancla.\nP2 abajo: flechas + J/L e I/K (o numpad 4/6/8/5), RShift agarrar, / ping, KP1/2/3/9 emote.\n\n1) Play\n2) Agarra el paquete NARANJA (franja verde)\n3) Enchúfalo en Archive (zona verde, pared este)\n4) Caja DORADA a una pared → flip de g (~1 s)\n\nR = rematch. F5 = restart. F7 = respawn paquete. F8 = PNG. F9 = HUD. F6 = skip objetivo.",
+                "Escena 2P regenerada (split).\n\nP1 arriba: WASD + ratón, E agarrar, Q ping, 1-4 emote, Shift sprint, F ancla.\nP2 abajo: flechas + J/L e I/K (o numpad 4/6/8/5), RShift agarrar, / ping, KP1/2/3/9 emote.\n\n1) Play\n2) Agarra el paquete NARANJA (franja verde + orbe)\n3) Enchúfalo en Archive (zona verde, pared este; sigue la flecha)\n4) Caja DORADA a una pared → flip de g (~1 s)\n\nR = rematch. P = pausa. F5 = restart. F3 = unstuck. F7 = paquete. F8 = PNG. F9 = HUD. F6 = skip.",
                 "OK");
         }
 
@@ -30,7 +30,7 @@ namespace GravityReceipt.EditorTools
             BuildAndSave(1);
             EditorUtility.DisplayDialog(
                 "Gravity Receipt",
-                "Escena 1P regenerada.\n\nWASD + ratón, E agarrar, Q ping, 1-4 emote, Shift sprint, F ancla.\nPlay → paquete naranja → enchufar en Archive → flip con la caja dorada.\nF5 restart · F7 paquete · F8 PNG · F9 HUD · F6 skip.",
+                "Escena 1P regenerada.\n\nWASD + ratón, E agarrar, Q ping, 1-4 emote, Shift sprint, F ancla.\nPlay → paquete naranja → enchufar en Archive → flip con la caja dorada.\nP pausa · F5 restart · F3 unstuck · F7 paquete · F8 PNG · F9 HUD · F6 skip.",
                 "OK");
         }
 

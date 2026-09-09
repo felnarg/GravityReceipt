@@ -36,13 +36,13 @@ namespace GravityReceipt.Gravity
             }
 
             EnsureArrow();
-            var dir = g.IsTelegraphing ? g.PendingDirection : g.CurrentDirection;
+            var dir = g.ShowFlipBanner ? g.BannerDirection : g.CurrentDirection;
             if (dir.sqrMagnitude < 0.01f)
             {
                 dir = Vector3.down;
             }
 
-            var unusual = g.IsAnchored || g.IsTelegraphing || Vector3.Dot(dir, Vector3.down) < 0.92f;
+            var unusual = g.IsAnchored || g.ShowFlipBanner || Vector3.Dot(dir, Vector3.down) < 0.92f;
             _arrow.gameObject.SetActive(unusual);
             if (!unusual)
             {
@@ -60,7 +60,7 @@ namespace GravityReceipt.Gravity
                 {
                     color = new Color(0.35f, 0.85f, 1f);
                 }
-                else if (g.IsTelegraphing)
+                else if (g.ShowFlipBanner)
                 {
                     color = Color.Lerp(new Color(1f, 0.9f, 0.2f), new Color(1f, 0.35f, 0.1f), g.TelegraphNormalized);
                 }
