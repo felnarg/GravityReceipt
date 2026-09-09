@@ -82,7 +82,7 @@ Documento vivo del prototipo.
 9. Losa azul Open Office = Entregar. Losa dorada Executive + paquete en manos o mantener E = Sellar.
 10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre.
 11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
-12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). Graba 8–10 s mudos del paso 7, o dispara F8 durante el FLIP.
+12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). **F9** oculta help/status para un clip más limpio. Graba 8–10 s mudos del paso 7, o dispara F8 durante el FLIP.
 
 ---
 
@@ -424,6 +424,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Ding al completar objetivo. HUD muestra cooldown de Anchor.
 - Moment of the Match cuenta flips además de caídas.
 - FOV extra al sprint Runner; cruceta crece al wind-up de agarre.
+- **F9** oculta help/status para grabar el clip 1.11.
 
 ---
 

@@ -24,6 +24,7 @@ namespace GravityReceipt.UI
         private MatchDirector _boundMatch;
         private string _toast = string.Empty;
         private float _toastUntil;
+        private bool _chromeHidden;
 
         private void Awake()
         {
@@ -82,8 +83,27 @@ namespace GravityReceipt.UI
                 return;
             }
 
+            if (Input.GetKeyDown(KeyCode.F9))
+            {
+                _chromeHidden = !_chromeHidden;
+            }
+
             var p1 = FindPlayer(LocalPlayerSlot.One);
             var p2 = FindPlayer(LocalPlayerSlot.Two);
+            if (statusText != null)
+            {
+                statusText.gameObject.SetActive(!_chromeHidden);
+            }
+
+            if (helpP1Text != null)
+            {
+                helpP1Text.gameObject.SetActive(!_chromeHidden);
+            }
+
+            if (helpText != null)
+            {
+                helpText.gameObject.SetActive(!_chromeHidden && p2 != null);
+            }
             var gravity = p1 != null && p1.Gravity != null ? p1.Gravity : FindAnyObjectByType<GravityManager>();
             var room1 = p1 != null ? RoomRegistry.FindRoom(p1.transform.position) : null;
             var room2 = p2 != null ? RoomRegistry.FindRoom(p2.transform.position) : null;
@@ -131,7 +151,7 @@ namespace GravityReceipt.UI
             {
                 var r1 = RoleOf(LocalPlayerSlot.One);
                 var wind = WindUp(p1);
-                helpP1Text.text = $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  Shift sprint  F ancla  Tab rol  F5 restart{wind}";
+                helpP1Text.text = $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  Shift sprint  F ancla  Tab rol  F5 restart  F9 HUD{wind}";
             }
 
             if (helpText != null)

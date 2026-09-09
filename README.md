@@ -31,6 +31,7 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 | Cambiar rol | Tab | Keypad 7 |
 | Rematch | **R** al terminar / **F5** siempre | igual |
 | Screenshot PNG | **F8** | **F8** |
+| Ocultar chrome HUD | **F9** | **F9** |
 
 ### Qué probar (loop corto)
 
