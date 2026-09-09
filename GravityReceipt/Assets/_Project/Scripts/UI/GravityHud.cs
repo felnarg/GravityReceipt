@@ -372,8 +372,12 @@ namespace GravityReceipt.UI
 
             if (inter.LookHint is { Length: > 0 })
             {
-                prompt.text = $"{grabKey}  {inter.LookHint}";
-                prompt.color = new Color(1f, 0.95f, 0.55f);
+                prompt.text = inter.LookHint.Contains("ocupado")
+                    ? inter.LookHint
+                    : $"{grabKey}  {inter.LookHint}";
+                prompt.color = inter.LookHint.Contains("ocupado")
+                    ? new Color(1f, 0.45f, 0.4f)
+                    : new Color(1f, 0.95f, 0.55f);
                 return;
             }
 

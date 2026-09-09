@@ -86,8 +86,14 @@ namespace GravityReceipt.Interaction
             HasLookTarget = false;
             LookHint = "";
             _windUp = 0f;
-            if (!TryGetTarget(out var body, out var valuable, out var grab))
+            if (!TryGetTarget(out var body, out var valuable, out var grab, out var occupied))
             {
+                if (occupied && body != null)
+                {
+                    HasLookTarget = true;
+                    LookHint = $"{FormatHint(body, valuable)}  · ocupado";
+                }
+
                 ClearFocus();
                 return;
             }
@@ -107,7 +113,7 @@ namespace GravityReceipt.Interaction
 
         private void TickWinding()
         {
-            if (!TryGetTarget(out var body, out var valuable, out var grab) || !_input.GrabHeld())
+            if (!TryGetTarget(out var body, out var valuable, out var grab, out _) || !_input.GrabHeld())
             {
                 _phase = GrabPhase.Idle;
                 _windUp = 0f;
@@ -140,11 +146,12 @@ namespace GravityReceipt.Interaction
             _held.MoveRotation(holdPoint.rotation);
         }
 
-        private bool TryGetTarget(out Rigidbody body, out ValuableItem valuable, out Grabbable grab)
+        private bool TryGetTarget(out Rigidbody body, out ValuableItem valuable, out Grabbable grab, out bool occupied)
         {
             body = null;
             valuable = null;
             grab = null;
+            occupied = false;
             var cam = _input != null && _input.PlayerCamera != null ? _input.PlayerCamera : Camera.main;
             if (cam == null)
             {
@@ -164,12 +171,18 @@ namespace GravityReceipt.Interaction
             }
 
             grab = body.GetComponent<Grabbable>();
-            if (grab == null || !grab.CanGrab)
+            if (grab == null)
             {
                 return false;
             }
 
             valuable = body.GetComponent<ValuableItem>();
+            if (!grab.CanGrab)
+            {
+                occupied = true;
+                return false;
+            }
+
             return true;
         }
 

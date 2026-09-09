@@ -70,6 +70,8 @@ Documento vivo del prototipo.
 - Toast + thud si el paquete se abolla.
 - Hit-stop 80 ms al aplicar un flip; etiquetas `$` siguen el “arriba” del objeto.
 - Siluetas: asa en la taza, pomo en la caja, asa en el maletín, bola en el trofeo.
+- Prompt “ocupado” si el otro jugador ya lleva el objeto.
+- Respaldo en sillas; letreros → ARCHIVE / PASILLO / OPEN OFFICE / EXECUTIVE.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -475,6 +477,10 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Congela 0.08 s (unscaled) al aplicar g nueva; no pisa el slow-mo de fin de partida.
 - Billboards en espacio local del objeto (tras un flip el `$` queda “arriba” del valuable).
 - Piezas extra en taza / caja fuerte / maletín / trofeo.
+
+### 2026-09-09 — Overnight bloque 9 (2p ocupado + puertas)
+- Mirar un objeto agarrado por el compañero muestra “ocupado”.
+- Sillas con respaldo. Lintel de cada puerta nombra la sala siguiente.
 
 ---
 
