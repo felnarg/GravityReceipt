@@ -442,6 +442,11 @@ namespace GravityReceipt.World
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void EnsureFloor()
         {
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
             if (Object.FindAnyObjectByType<MatchDirector>() is not null)
             {
                 return;

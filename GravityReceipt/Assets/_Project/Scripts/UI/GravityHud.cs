@@ -20,6 +20,7 @@ namespace GravityReceipt.UI
         [SerializeField] private Text centerText;
         private Text _crossP1;
         private Text _crossP2;
+        private GameObject _splitBar;
 
         private void Awake()
         {
