@@ -1,5 +1,6 @@
 using GravityReceipt.Interaction;
 using GravityReceipt.Player;
+using GravityReceipt.World;
 using UnityEngine;
 
 namespace GravityReceipt.Mission
@@ -160,7 +161,9 @@ namespace GravityReceipt.Mission
             }
 
             _progressBar.gameObject.SetActive(true);
-            _progressBar.position = transform.position + transform.up * 0.45f;
+            var up = CurrentUp();
+            _progressBar.position = transform.position + up * 0.45f;
+            _progressBar.rotation = Quaternion.FromToRotation(Vector3.up, up);
             _progressBar.localScale = new Vector3(Mathf.Max(0.15f, shown * 2.2f), 0.09f, 0.09f);
         }
 
@@ -205,8 +208,10 @@ namespace GravityReceipt.Mission
             }
 
             _beacon.gameObject.SetActive(true);
+            var up = CurrentUp();
             var h = 2.6f + 0.25f * Mathf.Sin(Time.unscaledTime * 4f);
-            _beacon.position = transform.position + transform.up * (h * 0.5f + 0.2f);
+            _beacon.position = transform.position + up * (h * 0.5f + 0.2f);
+            _beacon.rotation = Quaternion.FromToRotation(Vector3.up, up);
             _beacon.localScale = new Vector3(0.18f, h * 0.5f, 0.18f);
             if (_beaconRenderer != null)
             {
@@ -215,6 +220,21 @@ namespace GravityReceipt.Mission
                 c.a = 1f;
                 _beaconRenderer.material.color = c;
             }
+        }
+
+        private Vector3 CurrentUp()
+        {
+            var room = RoomRegistry.FindRoom(transform.position);
+            if (room != null && room.Gravity != null)
+            {
+                var g = room.Gravity.CurrentDirection;
+                if (g.sqrMagnitude > 0.01f)
+                {
+                    return -g;
+                }
+            }
+
+            return Vector3.up;
         }
 
         private void MarkCompleteVisual()
