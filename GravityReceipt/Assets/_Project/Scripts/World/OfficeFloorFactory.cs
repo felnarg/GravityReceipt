@@ -310,8 +310,9 @@ namespace GravityReceipt.World
             var host = new GameObject(name + "_Label");
             host.transform.SetParent(parent, false);
             host.transform.position = pos + Vector3.up * 1.15f;
-            host.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             WorldLabel.Create(host.transform, "Text", label.ToUpperInvariant(), Vector3.zero, Color.white, 0.1f);
+            var billboard = host.AddComponent<FollowBillboard>();
+            billboard.Configure(host.transform, Vector3.zero);
         }
 
         private static void CreateSign(
