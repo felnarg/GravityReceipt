@@ -1,3 +1,4 @@
+using GravityReceipt.Gravity;
 using GravityReceipt.Player;
 using UnityEngine;
 
@@ -30,9 +31,24 @@ namespace GravityReceipt.Mission
             }
 
             var pkg = FindAnyObjectByType<MissionPackage>();
-            if (pkg is { } && (pkg.transform.position.y < killY || pkg.transform.position.magnitude > maxDistanceFromOrigin))
+            if (pkg != null && (pkg.transform.position.y < killY || pkg.transform.position.magnitude > maxDistanceFromOrigin))
             {
                 pkg.Respawn();
+            }
+
+            var valuables = FindObjectsByType<ValuableItem>(FindObjectsSortMode.None);
+            foreach (var item in valuables)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+
+                var p = item.transform.position;
+                if (p.y < killY || p.magnitude > maxDistanceFromOrigin)
+                {
+                    item.ResetToHome();
+                }
             }
         }
 
@@ -57,12 +73,21 @@ namespace GravityReceipt.Mission
                 return;
             }
 
-            if (other.attachedRigidbody is { } rb)
+            var valuable = other.GetComponentInParent<ValuableItem>();
+            if (valuable != null)
+            {
+                valuable.ResetToHome();
+                return;
+            }
+
+            var rb = other.attachedRigidbody;
+            if (rb != null)
             {
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
-                var spawn = CheckpointSystem.Instance is { } cp
-                    ? cp.PackageSpawn
+                var checkpoints = CheckpointSystem.Instance;
+                var spawn = checkpoints != null
+                    ? checkpoints.PackageSpawn
                     : new Vector3(0f, 1f, 0f);
                 rb.position = spawn + Vector3.right * Random.Range(-1.2f, 1.2f);
             }
@@ -72,8 +97,9 @@ namespace GravityReceipt.Mission
         {
             var input = motor.GetComponent<LocalPlayerInput>();
             var slot = input != null ? input.Slot : LocalPlayerSlot.One;
-            var point = CheckpointSystem.Instance is { } cp
-                ? cp.GetPlayerSpawn(slot)
+            var checkpoints = CheckpointSystem.Instance;
+            var point = checkpoints != null
+                ? checkpoints.GetPlayerSpawn(slot)
                 : new Vector3(0f, 1f, 0f);
             motor.Warp(point);
         }

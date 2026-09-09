@@ -1,4 +1,5 @@
 using GravityReceipt.Gravity;
+using GravityReceipt.Mission;
 using GravityReceipt.Player;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace GravityReceipt.Interaction
         private LocalPlayerInput _input;
         private Rigidbody _held;
         private ValuableItem _heldValuable;
+        private Grabbable _heldGrab;
         private float _windUp;
         private Renderer _focus;
         private Color _focusColor;
@@ -21,6 +23,7 @@ namespace GravityReceipt.Interaction
         public float WindUpNormalized =>
             grabWindUpSeconds <= 0f ? 0f : Mathf.Clamp01(_windUp / grabWindUpSeconds);
         public bool IsHolding => _held != null;
+        public bool IsHoldingPackage => _held != null && _held.GetComponent<MissionPackage>() != null;
         public bool HasLookTarget { get; private set; }
 
         public void Configure(Transform hold)
@@ -44,6 +47,7 @@ namespace GravityReceipt.Interaction
             if (_held == null)
             {
                 _heldValuable = null;
+                _heldGrab = null;
             }
             else
             {
@@ -56,7 +60,7 @@ namespace GravityReceipt.Interaction
                 return;
             }
 
-            if (!TryGetTarget(out var body, out var valuable))
+            if (!TryGetTarget(out var body, out var valuable, out var grab))
             {
                 _windUp = 0f;
                 ClearFocus();
@@ -78,7 +82,7 @@ namespace GravityReceipt.Interaction
                 return;
             }
 
-            Grab(body, valuable);
+            Grab(body, valuable, grab);
             _windUp = 0f;
             ClearFocus();
         }
@@ -94,10 +98,11 @@ namespace GravityReceipt.Interaction
             _held.MoveRotation(holdPoint.rotation);
         }
 
-        private bool TryGetTarget(out Rigidbody body, out ValuableItem valuable)
+        private bool TryGetTarget(out Rigidbody body, out ValuableItem valuable, out Grabbable grab)
         {
             body = null;
             valuable = null;
+            grab = null;
             var cam = _input != null && _input.PlayerCamera != null ? _input.PlayerCamera : Camera.main;
             if (cam == null)
             {
@@ -116,8 +121,8 @@ namespace GravityReceipt.Interaction
                 return false;
             }
 
-            var grabbable = body.GetComponent<Grabbable>();
-            if (grabbable == null || !grabbable.CanGrab)
+            grab = body.GetComponent<Grabbable>();
+            if (grab == null || !grab.CanGrab)
             {
                 return false;
             }
@@ -126,17 +131,28 @@ namespace GravityReceipt.Interaction
             return true;
         }
 
-        private void Grab(Rigidbody body, ValuableItem valuable)
+        private void Grab(Rigidbody body, ValuableItem valuable, Grabbable grab)
         {
+            if (body == null || grab == null || !grab.CanGrab)
+            {
+                return;
+            }
+
             _held = body;
             _heldValuable = valuable;
+            _heldGrab = grab;
             _held.isKinematic = true;
             _held.useGravity = false;
-            _heldValuable?.SetHeld(true);
+            grab.BeginGrab();
+            if (_heldValuable != null)
+            {
+                _heldValuable.SetHeld(true);
+            }
+
             IgnoreHeldCollision(true);
         }
 
-        private void Drop()
+        public void Drop()
         {
             if (_held == null)
             {
@@ -146,10 +162,20 @@ namespace GravityReceipt.Interaction
             _held.isKinematic = false;
             _held.useGravity = false;
             IgnoreHeldCollision(false);
-            _heldValuable?.SetHeld(false);
-            _heldValuable?.MarkMovedByPlayer();
+            if (_heldValuable != null)
+            {
+                _heldValuable.SetHeld(false);
+                _heldValuable.MarkMovedByPlayer();
+            }
+
+            if (_heldGrab != null)
+            {
+                _heldGrab.EndGrab();
+            }
+
             _held = null;
             _heldValuable = null;
+            _heldGrab = null;
         }
 
         private void IgnoreHeldCollision(bool ignore)
@@ -201,6 +227,7 @@ namespace GravityReceipt.Interaction
         private void OnDisable()
         {
             ClearFocus();
+            Drop();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace GravityReceipt.Mission
         {
             _body = GetComponent<Rigidbody>();
             _renderer = GetComponent<Renderer>();
-            if (_renderer is not null)
+            if (_renderer != null)
             {
                 _baseColor = _renderer.material.color;
             }
@@ -96,11 +96,12 @@ namespace GravityReceipt.Mission
 
         public void Respawn()
         {
-            var point = CheckpointSystem.Instance is { } cp
-                ? cp.PackageSpawn
+            var checkpoints = CheckpointSystem.Instance;
+            var point = checkpoints != null
+                ? checkpoints.PackageSpawn
                 : new Vector3(0f, 1f, 0f);
 
-            if (_body is { })
+            if (_body != null)
             {
                 _body.linearVelocity = Vector3.zero;
                 _body.angularVelocity = Vector3.zero;
@@ -115,7 +116,7 @@ namespace GravityReceipt.Mission
 
         private void RefreshTint()
         {
-            if (_renderer is null)
+            if (_renderer == null)
             {
                 return;
             }

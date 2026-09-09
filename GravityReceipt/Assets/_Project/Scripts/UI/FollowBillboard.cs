@@ -26,7 +26,7 @@ namespace GravityReceipt.UI
 
             transform.position = target.position + worldOffset;
             var cam = ClosestCamera(transform.position);
-            if (cam is not null)
+            if (cam != null)
             {
                 transform.rotation = Quaternion.LookRotation(transform.position - cam.transform.position);
             }

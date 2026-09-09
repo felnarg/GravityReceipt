@@ -24,7 +24,7 @@ namespace GravityReceipt.UI
 
         private void Awake()
         {
-            if (statusText is null)
+            if (statusText == null)
             {
                 EnsureCanvas();
             }
@@ -38,24 +38,24 @@ namespace GravityReceipt.UI
                 return;
             }
 
-            if (_crossP2 is not null)
+            if (_crossP2 != null)
             {
                 _crossP2.gameObject.SetActive(false);
             }
 
-            if (_crossP1 is not null)
+            if (_crossP1 != null)
             {
                 var rt = _crossP1.rectTransform;
                 rt.anchorMin = new Vector2(0.5f, 0.5f);
                 rt.anchorMax = new Vector2(0.5f, 0.5f);
             }
 
-            if (helpText is not null)
+            if (helpText != null)
             {
                 helpText.gameObject.SetActive(false);
             }
 
-            if (_splitBar is not null)
+            if (_splitBar != null)
             {
                 _splitBar.SetActive(false);
             }
@@ -63,7 +63,7 @@ namespace GravityReceipt.UI
 
         private void Update()
         {
-            if (statusText is null)
+            if (statusText == null)
             {
                 return;
             }
@@ -113,28 +113,24 @@ namespace GravityReceipt.UI
                     ObjectiveProgressSuffix();
             }
 
-            if (helpP1Text is not null)
+            if (helpP1Text != null)
             {
                 var r1 = RoleOf(LocalPlayerSlot.One);
                 var wind = WindUp(p1);
                 helpP1Text.text = $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  Shift sprint  F ancla  Tab rol  F5 restart{wind}";
             }
 
-            if (helpText is not null)
+            if (helpText != null)
             {
                 var r2 = RoleOf(LocalPlayerSlot.Two);
                 helpText.text = p2 != null
-                    ? $"P2 [{r2}] flechas  J/L mirar  RShift agarrar  / ping  Alt sprint  KP0 ancla  KP7 rol"
+                    ? $"P2 [{r2}] flechas  J/L+I/K mirar  RShift agarrar  / ping  Alt sprint  KP0 ancla  KP7 rol"
                     : $"P1 [{RoleOf(LocalPlayerSlot.One)}] WASD+ratón  E agarrar  Q ping  Shift sprint  F ancla";
             }
 
             if (centerText != null && match != null)
             {
-                if (match.Phase == MatchPhase.Playing)
-                {
-                    centerText.text = string.Empty;
-                }
-                else
+                if (match.Phase != MatchPhase.Playing)
                 {
                     var title = match.Phase == MatchPhase.Won ? "GANASTE" : "PERDISTE";
                     var moment = rec != null ? rec.Summary : "—";
@@ -142,6 +138,20 @@ namespace GravityReceipt.UI
                     centerText.color = match.Phase == MatchPhase.Won
                         ? new Color(0.45f, 1f, 0.55f)
                         : new Color(1f, 0.45f, 0.4f);
+                }
+                else if (TryTelegraphBanner(p1, p2, out var banner, out var bannerColor))
+                {
+                    centerText.text = banner;
+                    centerText.color = bannerColor;
+                }
+                else if (Time.timeSinceLevelLoad < 9f)
+                {
+                    centerText.text = "LA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nSuelta la caja dorada ($80) en una PARED";
+                    centerText.color = new Color(1f, 0.92f, 0.4f);
+                }
+                else
+                {
+                    centerText.text = string.Empty;
                 }
             }
             TintCross(_crossP1, p1);
@@ -270,7 +280,39 @@ namespace GravityReceipt.UI
                 }
             }
 
-            return motors.Length > 0 ? motors[0] : null;
+            return null;
+        }
+
+        private static bool TryTelegraphBanner(PlayerMotor p1, PlayerMotor p2, out string banner, out Color color)
+        {
+            banner = string.Empty;
+            color = new Color(1f, 0.85f, 0.2f);
+            var g = FirstTelegraph(p1, p2);
+            if (g == null)
+            {
+                return false;
+            }
+
+            var dir = DirName(g.PendingDirection);
+            var item = g.Dominant != null ? $"${g.Dominant.Price}" : "el objeto caro";
+            banner = $"¡FLIP!\nLa gravedad va hacia {dir}\nSigue a {item}";
+            color = Color.Lerp(new Color(1f, 0.92f, 0.25f), new Color(1f, 0.4f, 0.12f), g.TelegraphNormalized);
+            return true;
+        }
+
+        private static GravityManager FirstTelegraph(PlayerMotor p1, PlayerMotor p2)
+        {
+            if (p1 != null && p1.Gravity != null && p1.Gravity.IsTelegraphing)
+            {
+                return p1.Gravity;
+            }
+
+            if (p2 != null && p2.Gravity != null && p2.Gravity.IsTelegraphing)
+            {
+                return p2.Gravity;
+            }
+
+            return null;
         }
 
         private void EnsureCanvas()

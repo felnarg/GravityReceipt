@@ -78,7 +78,7 @@ namespace GravityReceipt.World
             CreateValuable("Valuable_Server_110", new Vector3(4.2f, 0.85f, 54f), new Vector3(0.8f, 1.5f, 0.6f), 110, exeG, new Color(0.35f, 0.38f, 0.45f));
             CreateValuable("Valuable_PlantaOro_95", new Vector3(-4.4f, 0.7f, 46.5f), new Vector3(0.7f, 1.2f, 0.7f), 95, exeG, new Color(0.82f, 0.7f, 0.2f));
 
-            var pkg = CreatePackage(new Vector3(0f, 0.45f, 0.6f));
+            var pkg = CreatePackage(new Vector3(0f, 0.45f, 0.6f), hubG);
             AttachPriceTag(pkg.transform, 0, 0.45f, "PAQUETE");
 
             var matchGo = new GameObject("MatchDirector");
@@ -95,15 +95,23 @@ namespace GravityReceipt.World
             checkpoints.SetStageSpawns(3, new[] { new Vector3(-1.2f, 0.3f, 54f), new Vector3(1.2f, 0.3f, 54f) }, new Vector3(0f, 0.5f, 54f));
 
             CreateObjective(root.transform, "Obj1_Enchufar", 0, "Enchufar", new Vector3(5.9f, 1.1f, 10f), new Vector3(1.5f, 1.8f, 1.8f), new Vector3(2.2f, 1.4f, 1.4f), 0.45f, package: true, player: false, hold: false, new Color(0.2f, 0.85f, 0.55f));
-            CreateObjective(root.transform, "Obj2_Entregar", 1, "Entregar", new Vector3(0f, 0.22f, 40.5f), new Vector3(2.6f, 0.12f, 2.6f), new Vector3(1f, 10f, 1f), 0.5f, package: true, player: false, hold: false, new Color(0.3f, 0.6f, 1f));
-            CreateObjective(root.transform, "Obj3_Sellar", 2, "Sellar", new Vector3(0f, 0.22f, 54.2f), new Vector3(2.8f, 0.12f, 2.4f), new Vector3(1f, 12f, 1f), 1.0f, package: true, player: true, hold: true, new Color(0.95f, 0.75f, 0.2f));
+            CreateObjective(root.transform, "Obj2_Entregar", 1, "Entregar", new Vector3(0f, 0.22f, 40.5f), new Vector3(2.6f, 0.12f, 2.6f), new Vector3(1f, 28f, 1f), 0.5f, package: true, player: false, hold: false, new Color(0.3f, 0.6f, 1f));
+            CreateObjective(root.transform, "Obj3_Sellar", 2, "Sellar", new Vector3(0f, 0.22f, 54.2f), new Vector3(2.8f, 0.12f, 2.4f), new Vector3(1f, 32f, 1f), 1.0f, package: true, player: true, hold: true, new Color(0.95f, 0.75f, 0.2f));
 
             CreateSign(root.transform, "TutorialSign", new Vector3(0f, 1.65f, 3.72f), new Vector3(6.4f, 1.5f, 0.12f),
                 "LA GRAVEDAD SIGUE LO MÁS CARO", new Vector3(0f, 1.65f, 3.55f), Quaternion.Euler(0f, 180f, 0f), new Color(0.08f, 0.1f, 0.12f), new Color(1f, 0.92f, 0.35f));
+            CreateSign(root.transform, "Sign_HintPared", new Vector3(-4.72f, 1.7f, 0f), new Vector3(0.1f, 1.1f, 3.6f),
+                "CAJA DORADA A UNA PARED = FLIP", new Vector3(-4.45f, 1.7f, 0f), Quaternion.Euler(0f, 90f, 0f), new Color(0.12f, 0.1f, 0.04f), new Color(1f, 0.85f, 0.35f));
             CreateSign(root.transform, "Sign_Pasillo", new Vector3(0f, 2.3f, 16.15f), new Vector3(3.2f, 0.55f, 0.1f),
                 "CUIDADO: VACÍO", new Vector3(0f, 2.3f, 16.0f), Quaternion.Euler(0f, 180f, 0f), new Color(0.18f, 0.06f, 0.06f), new Color(1f, 0.5f, 0.45f));
             CreateSign(root.transform, "Sign_Socket", new Vector3(6.72f, 2.35f, 10f), new Vector3(0.1f, 0.55f, 2.6f),
                 "ENCHUFA EL PAQUETE", new Vector3(6.4f, 2.35f, 10f), Quaternion.Euler(0f, -90f, 0f), new Color(0.08f, 0.2f, 0.14f), new Color(0.55f, 1f, 0.75f));
+            CreateSign(root.transform, "Sign_ArchivePared", new Vector3(-6.72f, 2.2f, 10f), new Vector3(0.1f, 0.7f, 3.4f),
+                "SUELTA LA CAJA $80 EN UNA PARED", new Vector3(-6.4f, 2.2f, 10f), Quaternion.Euler(0f, 90f, 0f), new Color(0.12f, 0.08f, 0.04f), new Color(1f, 0.88f, 0.4f));
+            CreateSign(root.transform, "Sign_Entregar", new Vector3(7.72f, 1.8f, 40.5f), new Vector3(0.1f, 0.7f, 3.2f),
+                "SUELTA EL PAQUETE EN LA LOSA AZUL", new Vector3(7.4f, 1.8f, 40.5f), Quaternion.Euler(0f, -90f, 0f), new Color(0.06f, 0.12f, 0.22f), new Color(0.65f, 0.85f, 1f));
+            CreateSign(root.transform, "Sign_Sellar", new Vector3(-5.72f, 1.8f, 54.2f), new Vector3(0.1f, 0.7f, 3.0f),
+                "PAQUETE + MANTÉN E PARA SELLAR", new Vector3(-5.4f, 1.8f, 54.2f), Quaternion.Euler(0f, 90f, 0f), new Color(0.18f, 0.12f, 0.04f), new Color(1f, 0.85f, 0.4f));
 
             CreatePathChevrons(root.transform);
 
@@ -163,7 +171,7 @@ namespace GravityReceipt.World
             go.transform.position = center;
             var box = go.AddComponent<BoxCollider>();
             box.isTrigger = true;
-            box.size = new Vector3(size.x * 0.92f, size.y * 0.88f, size.z * 0.92f);
+            box.size = new Vector3(size.x * 1.04f, size.y * 0.95f, size.z * 1.04f);
             var vol = go.AddComponent<RoomVolume>();
             vol.Configure(id, gravity, inherit);
         }
@@ -188,10 +196,16 @@ namespace GravityReceipt.World
             root.transform.SetParent(parent, false);
             root.transform.position = center;
             CreateCube(root.transform, "Floor", new Vector3(0f, -size.y * 0.5f, 0f), new Vector3(size.x, WallT, size.z), floor);
-            CreateCube(root.transform, "Curb_L", new Vector3(-size.x * 0.5f, -size.y * 0.5f + 0.22f, 0f), new Vector3(0.12f, 0.18f, size.z), new Color(0.85f, 0.25f, 0.2f));
-            CreateCube(root.transform, "Curb_R", new Vector3(size.x * 0.5f, -size.y * 0.5f + 0.22f, 0f), new Vector3(0.12f, 0.18f, size.z), new Color(0.85f, 0.25f, 0.2f));
-            CreateCube(root.transform, "Post_L", new Vector3(-size.x * 0.5f, -size.y * 0.15f, 0f), new Vector3(0.12f, size.y * 0.5f, 0.12f), new Color(0.7f, 0.25f, 0.2f));
-            CreateCube(root.transform, "Post_R", new Vector3(size.x * 0.5f, -size.y * 0.15f, 0f), new Vector3(0.12f, size.y * 0.5f, 0.12f), new Color(0.7f, 0.25f, 0.2f));
+            var curbH = 0.58f;
+            var curbY = -size.y * 0.5f + WallT * 0.5f + curbH * 0.5f;
+            CreateCube(root.transform, "Curb_L", new Vector3(-size.x * 0.5f, curbY, 0f), new Vector3(0.16f, curbH, size.z), new Color(0.85f, 0.25f, 0.2f));
+            CreateCube(root.transform, "Curb_R", new Vector3(size.x * 0.5f, curbY, 0f), new Vector3(0.16f, curbH, size.z), new Color(0.85f, 0.25f, 0.2f));
+            var postZs = new[] { -size.z * 0.35f, 0f, size.z * 0.35f };
+            foreach (var z in postZs)
+            {
+                CreateCube(root.transform, "Post_L", new Vector3(-size.x * 0.5f, -size.y * 0.15f, z), new Vector3(0.12f, size.y * 0.5f, 0.12f), new Color(0.7f, 0.25f, 0.2f));
+                CreateCube(root.transform, "Post_R", new Vector3(size.x * 0.5f, -size.y * 0.15f, z), new Vector3(0.12f, size.y * 0.5f, 0.12f), new Color(0.7f, 0.25f, 0.2f));
+            }
         }
 
         private static void CreateWallOnZ(Transform parent, string name, Vector3 localPos, Vector3 roomSize, Color color, bool door)
@@ -238,7 +252,7 @@ namespace GravityReceipt.World
                 go.transform.position = new Vector3(0f, 0.24f, z);
                 go.transform.localScale = new Vector3(0.55f, 0.05f, 0.8f);
                 var col = go.GetComponent<Collider>();
-                if (col is not null)
+                if (col != null)
                 {
                     col.enabled = false;
                 }
@@ -278,7 +292,7 @@ namespace GravityReceipt.World
             WorldLabel.Create(host.transform, "Text", text ?? ("$" + price), Vector3.zero, new Color(1f, 0.92f, 0.3f), 0.1f);
         }
 
-        private static GameObject CreatePackage(Vector3 position)
+        private static GameObject CreatePackage(Vector3 position, GravityManager gravity)
         {
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             go.name = "MissionPackage";
@@ -293,7 +307,8 @@ namespace GravityReceipt.World
             rb.useGravity = false;
 
             go.AddComponent<Grabbable>();
-            go.AddComponent<GravityBody>();
+            var body = go.AddComponent<GravityBody>();
+            body.SetManager(gravity);
             go.AddComponent<MissionPackage>();
             return go;
         }
@@ -388,6 +403,8 @@ namespace GravityReceipt.World
             cc.center = new Vector3(0f, 0.9f, 0f);
             cc.skinWidth = 0.08f;
             cc.minMoveDistance = 0f;
+            cc.stepOffset = 0.28f;
+            cc.slopeLimit = 50f;
 
             var camGo = new GameObject(name + "_Camera");
             camGo.transform.SetParent(player.transform, false);
@@ -448,7 +465,7 @@ namespace GravityReceipt.World
         private static void SetColor(GameObject go, Color color)
         {
             var renderer = go.GetComponent<Renderer>();
-            if (renderer is null)
+            if (renderer == null)
             {
                 return;
             }
@@ -456,7 +473,7 @@ namespace GravityReceipt.World
             var shader = Shader.Find("Standard")
                          ?? Shader.Find("Universal Render Pipeline/Lit")
                          ?? Shader.Find("Unlit/Color");
-            if (shader is null)
+            if (shader == null)
             {
                 return;
             }

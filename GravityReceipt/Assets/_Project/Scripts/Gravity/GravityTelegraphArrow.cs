@@ -14,7 +14,7 @@ namespace GravityReceipt.Gravity
 
         private void Awake()
         {
-            if (gravityManager is null)
+            if (gravityManager == null)
             {
                 gravityManager = GetComponent<GravityManager>();
             }
@@ -24,7 +24,7 @@ namespace GravityReceipt.Gravity
         {
             if (gravityManager == null || !gravityManager.IsTelegraphing)
             {
-                if (_arrow is not null)
+                if (_arrow != null)
                 {
                     _arrow.gameObject.SetActive(false);
                 }
@@ -34,7 +34,7 @@ namespace GravityReceipt.Gravity
 
             EnsureArrow();
             _arrow.gameObject.SetActive(true);
-            _arrow.position = transform.position + (-gravityManager.PendingDirection) * 0.5f;
+            _arrow.position = transform.position + (-gravityManager.PendingDirection) * 0.35f;
             var dir = gravityManager.PendingDirection;
             if (dir.sqrMagnitude > 0.01f)
             {
@@ -42,9 +42,9 @@ namespace GravityReceipt.Gravity
                 _arrow.rotation = Quaternion.LookRotation(dir, up);
             }
 
-            var pulse = 1.6f + 0.35f * Mathf.Sin(Time.time * 14f);
-            _arrow.localScale = new Vector3(0.55f, 0.55f, pulse);
-            if (_renderer is not null)
+            var pulse = 2.1f + 0.45f * Mathf.Sin(Time.time * 14f);
+            _arrow.localScale = new Vector3(0.7f, 0.7f, pulse);
+            if (_renderer != null)
             {
                 _renderer.material.color = Color.Lerp(
                     new Color(1f, 0.85f, 0.15f),
@@ -55,7 +55,7 @@ namespace GravityReceipt.Gravity
 
         private void EnsureArrow()
         {
-            if (_arrow is not null)
+            if (_arrow != null)
             {
                 return;
             }
@@ -64,16 +64,16 @@ namespace GravityReceipt.Gravity
             go.name = "TelegraphArrow";
             go.transform.SetParent(transform, false);
             var col = go.GetComponent<Collider>();
-            if (col is not null)
+            if (col != null)
             {
                 col.enabled = false;
             }
 
             _renderer = go.GetComponent<Renderer>();
-            if (_renderer is not null)
+            if (_renderer != null)
             {
                 var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
-                if (shader is not null)
+                if (shader != null)
                 {
                     _renderer.sharedMaterial = new Material(shader) { color = new Color(1f, 0.8f, 0.1f) };
                 }

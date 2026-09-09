@@ -29,7 +29,7 @@ namespace GravityReceipt.Interaction
             }
 
             var cam = _input.PlayerCamera;
-            if (cam is null)
+            if (cam == null)
             {
                 return;
             }
@@ -46,7 +46,7 @@ namespace GravityReceipt.Interaction
 
         private static void SpawnMarker(Vector3 point)
         {
-            if (_active is not null)
+            if (_active != null)
             {
                 Destroy(_active.gameObject);
             }
@@ -57,10 +57,10 @@ namespace GravityReceipt.Interaction
             go.transform.localScale = Vector3.one * 0.45f;
             Object.Destroy(go.GetComponent<Collider>());
             var renderer = go.GetComponent<Renderer>();
-            if (renderer is not null)
+            if (renderer != null)
             {
                 var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
-                if (shader is not null)
+                if (shader != null)
                 {
                     renderer.sharedMaterial = new Material(shader) { color = new Color(1f, 0.85f, 0.15f) };
                 }
@@ -94,10 +94,10 @@ namespace GravityReceipt.Interaction
             {
                 transform.localScale = Vector3.one * (0.45f + 0.08f * Mathf.Sin(Time.time * 10f));
                 var cam = FollowBillboard.ClosestCamera(transform.position);
-                if (cam is not null)
+                if (cam != null)
                 {
                     var label = GetComponentInChildren<TextMesh>();
-                    if (label is not null)
+                    if (label != null)
                     {
                         label.transform.rotation = Quaternion.LookRotation(
                             label.transform.position - cam.transform.position);

@@ -42,7 +42,7 @@ namespace GravityReceipt.Mission
         private void Awake()
         {
             Instance = this;
-            if (_stages[0] is null)
+            if (_stages[0] == null)
             {
                 _stages[0] = playerSpawns;
                 _packageStages[0] = packageSpawn;
@@ -65,7 +65,7 @@ namespace GravityReceipt.Mission
         public Vector3 GetPlayerSpawn(LocalPlayerSlot slot)
         {
             var list = _stages[Mathf.Clamp(_stage, 0, _stages.Length - 1)] ?? playerSpawns;
-            if (list is not { Length: > 0 })
+            if (list == null || list.Length == 0)
             {
                 return new Vector3(0f, 1f, 0f);
             }

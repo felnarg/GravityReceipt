@@ -1,3 +1,4 @@
+using GravityReceipt.Interaction;
 using GravityReceipt.Player;
 using UnityEngine;
 
@@ -95,7 +96,9 @@ namespace GravityReceipt.Mission
                     if (requireHoldInteract)
                     {
                         var input = p.GetComponent<LocalPlayerInput>();
-                        if (input == null || !input.GrabHeld())
+                        var inter = p.GetComponent<PlayerInteractor>();
+                        var holdingPackage = inter != null && inter.IsHoldingPackage;
+                        if (!holdingPackage && (input == null || !input.GrabHeld()))
                         {
                             continue;
                         }
@@ -116,9 +119,14 @@ namespace GravityReceipt.Mission
 
         private bool Contains(Vector3 worldPos)
         {
-            if (_box is null)
+            if (_box == null)
             {
                 _box = GetComponent<BoxCollider>();
+            }
+
+            if (_box == null)
+            {
+                return false;
             }
 
             var local = transform.InverseTransformPoint(worldPos);

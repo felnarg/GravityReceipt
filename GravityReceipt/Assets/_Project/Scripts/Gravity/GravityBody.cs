@@ -23,7 +23,7 @@ namespace GravityReceipt.Gravity
         private void Awake()
         {
             _body = GetComponent<Rigidbody>();
-            if (_body is { })
+            if (_body != null)
             {
                 _body.useGravity = false;
             }

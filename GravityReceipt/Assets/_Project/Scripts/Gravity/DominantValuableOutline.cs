@@ -1,3 +1,4 @@
+using GravityReceipt.UI;
 using UnityEngine;
 
 namespace GravityReceipt.Gravity
@@ -15,6 +16,7 @@ namespace GravityReceipt.Gravity
         private Renderer _renderer;
         private Color _baseColor;
         private Vector3 _baseScale;
+        private GameObject _beacon;
 
         public void Bind(GravityManager manager)
         {
@@ -68,7 +70,7 @@ namespace GravityReceipt.Gravity
                 return;
             }
 
-            var pulse = 1f + 0.05f * Mathf.Sin(Time.time * pulseSpeed);
+            var pulse = 1f + 0.1f * Mathf.Sin(Time.time * pulseSpeed);
             _current.transform.localScale = _baseScale * pulse;
         }
 
@@ -115,10 +117,23 @@ namespace GravityReceipt.Gravity
                     mat.SetColor("_EmissionColor", dominantColor * 0.4f);
                 }
             }
+
+            SpawnBeacon(item);
+        }
+
+        private void SpawnBeacon(ValuableItem item)
+        {
+            ClearBeacon();
+            _beacon = new GameObject("DominantBeacon");
+            var follow = _beacon.AddComponent<FollowBillboard>();
+            var height = _baseScale.y * 0.5f + 0.55f;
+            follow.Configure(item.transform, Vector3.up * height);
+            WorldLabel.Create(_beacon.transform, "Text", "¡ESTE TIRA DE G!", Vector3.zero, new Color(1f, 0.9f, 0.25f), 0.09f);
         }
 
         private void Clear()
         {
+            ClearBeacon();
             if (_current != null)
             {
                 _current.transform.localScale = _baseScale;
@@ -136,6 +151,23 @@ namespace GravityReceipt.Gravity
 
             _current = null;
             _renderer = null;
+        }
+
+        private void ClearBeacon()
+        {
+            if (_beacon != null)
+            {
+                if (Application.isPlaying)
+                {
+                    Object.Destroy(_beacon);
+                }
+                else
+                {
+                    Object.DestroyImmediate(_beacon);
+                }
+
+                _beacon = null;
+            }
         }
     }
 }

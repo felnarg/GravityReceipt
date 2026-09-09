@@ -42,12 +42,12 @@ namespace GravityReceipt.World
 
         public bool Contains(Vector3 worldPos)
         {
-            if (_box is null)
+            if (_box == null)
             {
                 _box = GetComponent<BoxCollider>();
             }
 
-            if (_box is null)
+            if (_box == null)
             {
                 return false;
             }

@@ -21,7 +21,7 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 | Acción | P1 (mitad superior, azul) | P2 (mitad inferior, naranja) |
 |--------|---------------------------|------------------------------|
 | Mover | WASD | Flechas o pad 1 |
-| Mirar | Ratón | J/L (yaw) + Y/H (pitch), Numpad 4/6/8/5 **con NumLock**, U/O, o stick der. |
+| Mirar | Ratón | J/L (yaw) + I/K o Y/H (pitch), Numpad 4/6/8/5 **con NumLock**, U/O, o stick der. |
 | Saltar | Space | Right Ctrl / Keypad Enter / botón A |
 | Agarrar (0.4 s) | Mantener **E** o clic izq | Right Shift / Keypad . / botón B |
 | Soltar | **E** o clic der | Right Shift |
@@ -38,8 +38,8 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 2. Agarra el paquete **naranja**. En Archive, llévalo a la zona verde **ENCHUFA EL PAQUETE** (pared este).
 3. Caja fuerte **dorada $80**: llévala cerca de una **pared** y suéltala. Tras ~1 s la gravedad de Archive tira hacia esa pared.
 4. Cruza el pasillo (vacío a los lados; bordillos rojos). Si caes, respawneas en el último checkpoint.
-5. Open Office: deja el paquete en la losa azul **ENTREGAR**.
-6. Executive: paquete + jugador en la losa dorada, mantén agarrar para **SELLAR**.
+5. Open Office: deja el paquete en la losa azul **ENTREGAR** (también cuenta si lo llevas en las manos sobre la losa).
+6. Executive: paquete + jugador en la losa dorada. Mantén **E** **o** quédate encima con el paquete agarrado = **SELLAR**.
 7. Timer 10:00. 3 destrucciones del paquete (impactos fuertes) = derrota. **R** recarga la escena.
 8. **Gravedad por sala:** Archive puede estar “de lado” mientras Office sigue normal.
 

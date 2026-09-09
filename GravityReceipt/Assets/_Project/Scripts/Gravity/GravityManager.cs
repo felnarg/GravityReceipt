@@ -147,7 +147,7 @@ namespace GravityReceipt.Gravity
 
         private Vector3 DirectionTowardValuable(ValuableItem valuable)
         {
-            var center = roomCenter is not null ? roomCenter.position : transform.position;
+            var center = roomCenter != null ? roomCenter.position : transform.position;
             var toItem = valuable.transform.position - center;
             if (toItem.sqrMagnitude < 0.25f)
             {

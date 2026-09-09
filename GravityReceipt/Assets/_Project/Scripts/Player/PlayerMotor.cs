@@ -1,4 +1,5 @@
 using GravityReceipt.Gravity;
+using GravityReceipt.Interaction;
 using GravityReceipt.Mission;
 using GravityReceipt.World;
 using UnityEngine;
@@ -25,6 +26,11 @@ namespace GravityReceipt.Player
         private float _airFall;
         private bool _ownsCursor;
         private bool _pendingUnstuck;
+        private Camera _cam;
+        private float _baseFov = 60f;
+        private float _fovPunch;
+        private float _shake;
+        private Vector3 _camBaseLocal;
 
         public GravityManager Gravity => gravityManager;
         public bool Grounded { get; private set; }
@@ -32,6 +38,7 @@ namespace GravityReceipt.Player
         public void Configure(Transform pivot, GravityManager gravity)
         {
             cameraPivot = pivot;
+            CacheCamera();
             SetGravityManager(gravity);
         }
 
@@ -60,11 +67,13 @@ namespace GravityReceipt.Player
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<LocalPlayerInput>();
             _role = GetComponent<PlayerRole>();
-            _ownsCursor = _input is not { UsesMouseLook: false };
+            _ownsCursor = _input != null && _input.UsesMouseLook;
+            CacheCamera();
 
             if (cameraPivot == null && _input != null && _input.PlayerCamera != null)
             {
                 cameraPivot = _input.PlayerCamera.transform;
+                CacheCamera();
             }
 
             if (_ownsCursor)
@@ -88,10 +97,28 @@ namespace GravityReceipt.Player
             }
         }
 
+        private void CacheCamera()
+        {
+            if (cameraPivot == null)
+            {
+                return;
+            }
+
+            _camBaseLocal = cameraPivot.localPosition;
+            _cam = cameraPivot.GetComponent<Camera>();
+            if (_cam != null)
+            {
+                _baseFov = _cam.fieldOfView;
+            }
+        }
+
         private void OnGravityChanged(Vector3 _, ValuableItem __)
         {
             _velocity *= 0.35f;
             _pendingUnstuck = true;
+            _fovPunch = 14f;
+            _shake = 0.28f;
+            GravityFlipSfx.Play();
         }
 
         private void Update()
@@ -122,7 +149,31 @@ namespace GravityReceipt.Player
             }
 
             Look();
+            ApplyFlipFeel();
             Move();
+        }
+
+        private void ApplyFlipFeel()
+        {
+            if (cameraPivot == null)
+            {
+                return;
+            }
+
+            _fovPunch = Mathf.MoveTowards(_fovPunch, 0f, Time.deltaTime * 38f);
+            _shake = Mathf.MoveTowards(_shake, 0f, Time.deltaTime * 1.1f);
+            if (_cam != null)
+            {
+                _cam.fieldOfView = _baseFov + _fovPunch;
+            }
+
+            var offset = _shake > 0.01f
+                ? new Vector3(
+                    (Mathf.PerlinNoise(Time.time * 28f, 0.3f) - 0.5f) * _shake * 0.12f,
+                    (Mathf.PerlinNoise(0.7f, Time.time * 31f) - 0.5f) * _shake * 0.12f,
+                    0f)
+                : Vector3.zero;
+            cameraPivot.localPosition = _camBaseLocal + offset;
         }
 
         private void Look()
@@ -176,7 +227,11 @@ namespace GravityReceipt.Player
             {
                 if (_airFall > 0.5f && _input != null)
                 {
-                    MatchHighlightRecorder.Instance?.ReportFall(_input.Slot, _airFall);
+                    var rec = MatchHighlightRecorder.Instance;
+                    if (rec != null)
+                    {
+                        rec.ReportFall(_input.Slot, _airFall);
+                    }
                 }
 
                 _airFall = 0f;
@@ -218,7 +273,23 @@ namespace GravityReceipt.Player
                 QueryTriggerInteraction.Ignore);
             if (overlapping)
             {
-                transform.position += -gDir * 0.4f;
+                transform.position += -gDir * 0.55f;
+                var stillStuck = Physics.CheckSphere(
+                    transform.TransformPoint(_controller.center),
+                    _controller.radius * 1.15f,
+                    ~0,
+                    QueryTriggerInteraction.Ignore);
+                if (stillStuck)
+                {
+                    var right = Vector3.Cross(gDir, transform.forward);
+                    if (right.sqrMagnitude < 0.01f)
+                    {
+                        right = Vector3.Cross(gDir, transform.up);
+                    }
+
+                    right.Normalize();
+                    transform.position += right * 0.35f;
+                }
             }
 
             _controller.enabled = true;
@@ -250,6 +321,12 @@ namespace GravityReceipt.Player
 
         public void Warp(Vector3 position)
         {
+            var interactor = GetComponent<PlayerInteractor>();
+            if (interactor != null && interactor.IsHolding)
+            {
+                interactor.Drop();
+            }
+
             if (_controller != null)
             {
                 _controller.enabled = false;
@@ -258,9 +335,17 @@ namespace GravityReceipt.Player
             transform.SetPositionAndRotation(position, Quaternion.identity);
             _velocity = Vector3.zero;
             _pitch = 0f;
+            _fovPunch = 0f;
+            _shake = 0f;
             if (cameraPivot != null)
             {
                 cameraPivot.localEulerAngles = Vector3.zero;
+                cameraPivot.localPosition = _camBaseLocal;
+            }
+
+            if (_cam != null)
+            {
+                _cam.fieldOfView = _baseFov;
             }
 
             if (_controller != null)
