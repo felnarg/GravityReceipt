@@ -128,6 +128,7 @@ Documento vivo del prototipo.
 - Pasos procedurales al caminar; click al agarrar; cámara baja un poco al aterrizar duro.
 - Losas de techo (grid) + lámparas en el pasillo; teclado, cajas en estantería, lámpara Executive.
 - Cruceta naranja si miras el dominante.
+- Chip `g → …` en cada viewport (P1/P2). Toast al entrar al pasillo con g de lado.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -318,7 +319,7 @@ Documento vivo del prototipo.
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
 | 6.1 | Pass de arte (no final, salir de gris total) | [~] | Ventanas unlit, lámparas (también pasillo), zócalos, cubículos, losas de techo, paletas por sala; falta texturas |
-| 6.2 | Pulido UI mínima | [~] | Splash, FLIP linger, toast, `[>]` objetivo, waypoint 3D, distancias, pausa P, paneles oscuros HUD, flash de flip, cruceta dominante |
+| 6.2 | Pulido UI mínima | [~] | Splash, FLIP linger, toast, `[>]` objetivo, waypoint 3D, distancias, pausa P, paneles HUD, flash, cruceta dominante, chip g por viewport |
 | 6.3 | Build Steam o itch privada | [ ] | |
 | 6.4 | Trailer 15–20 s del mejor clip | [ ] | |
 | 6.5 | Lista bugs P0 cerrada | [ ] | Gravedad, softlock, desync |
@@ -572,6 +573,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Burst de chispas + flash HUD al aplicar flip; dip de cámara al aterrizar; pasos + click de agarre.
 - Beacon dorado en la taza $15. Losas de techo + lámparas de pasillo + dress extra.
 - Cruceta naranja al mirar el dominante.
+- Chip `g →` por viewport; toast al cruzar el pasillo con g heredada de lado.
 
 ### 2026-09-09 — Overnight bloque 13 (regla visible)
 - Waypoint paquete/objetivo, beacon, linger FLIP, roll, P/F3, arte de salas.

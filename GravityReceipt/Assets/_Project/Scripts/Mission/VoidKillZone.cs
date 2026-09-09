@@ -15,6 +15,7 @@ namespace GravityReceipt.Mission
         [SerializeField] private float maxDistanceFromOrigin = 80f;
         [SerializeField] private float killY = -4f;
 
+        private MissionPackage _pkg;
         private float _scanAt;
         private PlayerMotor[] _players;
         private ValuableItem[] _valuables;
@@ -28,6 +29,7 @@ namespace GravityReceipt.Mission
                 _players = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
                 _valuables = FindObjectsByType<ValuableItem>(FindObjectsSortMode.None);
                 _homes = FindObjectsByType<SpawnHome>(FindObjectsSortMode.None);
+                _pkg = FindAnyObjectByType<MissionPackage>();
             }
 
             var players = _players;
@@ -48,7 +50,7 @@ namespace GravityReceipt.Mission
                 }
             }
 
-            var pkg = FindAnyObjectByType<MissionPackage>();
+            var pkg = _pkg;
             if (pkg != null && IsLost(pkg.transform.position))
             {
                 pkg.Respawn();

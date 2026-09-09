@@ -31,6 +31,9 @@ namespace GravityReceipt.UI
         private Image _flash;
         private float _flashUntil;
         private bool _wasTelegraphing;
+        private Text _gChipP1;
+        private Text _gChipP2;
+        private bool _hallwayWarned;
         private MatchDirector _boundMatch;
         private string _toast = string.Empty;
         private float _toastUntil;
@@ -89,6 +92,18 @@ namespace GravityReceipt.UI
                 var rt = _promptP1.rectTransform;
                 rt.anchorMin = new Vector2(0.5f, 0.5f);
                 rt.anchorMax = new Vector2(0.5f, 0.5f);
+            }
+
+            if (_gChipP1 != null)
+            {
+                var rt = _gChipP1.rectTransform;
+                rt.anchorMin = new Vector2(0.5f, 0.92f);
+                rt.anchorMax = new Vector2(0.5f, 0.92f);
+            }
+
+            if (_gChipP2 != null)
+            {
+                _gChipP2.gameObject.SetActive(false);
             }
 
             if (helpText != null)
@@ -157,6 +172,16 @@ namespace GravityReceipt.UI
             if (_promptP2 != null)
             {
                 _promptP2.gameObject.SetActive(!_chromeHidden && p2 != null);
+            }
+
+            if (_gChipP1 != null)
+            {
+                _gChipP1.gameObject.SetActive(!_chromeHidden);
+            }
+
+            if (_gChipP2 != null)
+            {
+                _gChipP2.gameObject.SetActive(!_chromeHidden && p2 != null);
             }
             var g1 = p1 != null ? p1.Gravity : null;
             var g2 = p2 != null ? p2.Gravity : null;
@@ -261,6 +286,9 @@ namespace GravityReceipt.UI
             TintCross(_crossP2, p2);
             UpdateLookPrompt(_promptP1, p1, "E");
             UpdateLookPrompt(_promptP2, p2, "RShift");
+            UpdateGravityChip(_gChipP1, p1);
+            UpdateGravityChip(_gChipP2, p2);
+            MaybeWarnHallway(p1, p2, match);
 
             if (Input.GetKeyDown(KeyCode.F8))
             {
@@ -529,6 +557,94 @@ namespace GravityReceipt.UI
             return input != null && input.UsesMouseLook && Cursor.lockState != CursorLockMode.Locked;
         }
 
+        private void MaybeWarnHallway(PlayerMotor p1, PlayerMotor p2, MatchDirector match)
+        {
+            if (match == null || !match.IsPlaying || match.IsInSplash)
+            {
+                return;
+            }
+
+            if (Time.unscaledTime < _toastUntil)
+            {
+                return;
+            }
+
+            if (IsSidewaysHallway(p1) || IsSidewaysHallway(p2))
+            {
+                if (_hallwayWarned)
+                {
+                    return;
+                }
+
+                _hallwayWarned = true;
+                _toast = "Pasillo: g hereda · vacío a los lados";
+                _toastUntil = Time.unscaledTime + 2.6f;
+                return;
+            }
+
+            _hallwayWarned = false;
+        }
+
+        private static bool IsSidewaysHallway(PlayerMotor motor)
+        {
+            if (motor == null)
+            {
+                return false;
+            }
+
+            var room = RoomRegistry.FindRoom(motor.transform.position);
+            if (room == null || room.HasOwnGravity)
+            {
+                return false;
+            }
+
+            var g = motor.Gravity;
+            return g != null && Vector3.Dot(g.CurrentDirection, Vector3.down) < 0.92f;
+        }
+
+        private static void UpdateGravityChip(Text chip, PlayerMotor motor)
+        {
+            if (chip == null)
+            {
+                return;
+            }
+
+            if (motor == null)
+            {
+                chip.text = "";
+                return;
+            }
+
+            var g = motor.Gravity;
+            var room = RoomRegistry.FindRoom(motor.transform.position);
+            var inherit = room != null && !room.HasOwnGravity;
+            if (g == null)
+            {
+                chip.text = inherit ? "g hereda" : "";
+                return;
+            }
+
+            var dir = DirName(g);
+            if (g.IsTelegraphing)
+            {
+                chip.text = $"FLIP → {DirName(g.PendingDirection)}";
+                chip.color = new Color(1f, 0.82f, 0.2f);
+                return;
+            }
+
+            if (g.IsAnchored)
+            {
+                chip.text = "ANCLA";
+                chip.color = new Color(0.45f, 0.9f, 1f);
+                return;
+            }
+
+            chip.text = inherit ? $"g hereda → {dir}" : $"g → {dir}";
+            chip.color = Vector3.Dot(g.CurrentDirection, Vector3.down) > 0.92f
+                ? new Color(0.75f, 0.9f, 1f)
+                : new Color(1f, 0.78f, 0.35f);
+        }
+
         private static void UpdateLookPrompt(Text prompt, PlayerMotor motor, string grabKey)
         {
             if (prompt == null)
@@ -772,6 +888,10 @@ namespace GravityReceipt.UI
             _promptP1.color = new Color(1f, 0.95f, 0.55f);
             _promptP2 = MakeText(canvasGo.transform, "PromptP2", new Vector2(0f, -36f), new Vector2(0.5f, 0.25f), new Vector2(520f, 32f), 18, TextAnchor.UpperCenter);
             _promptP2.color = new Color(1f, 0.95f, 0.55f);
+            _gChipP1 = MakeText(canvasGo.transform, "GChipP1", new Vector2(0f, 42f), new Vector2(0.5f, 0.75f), new Vector2(420f, 28f), 18, TextAnchor.LowerCenter);
+            _gChipP1.color = new Color(0.7f, 0.92f, 1f);
+            _gChipP2 = MakeText(canvasGo.transform, "GChipP2", new Vector2(0f, 42f), new Vector2(0.5f, 0.25f), new Vector2(420f, 28f), 18, TextAnchor.LowerCenter);
+            _gChipP2.color = new Color(1f, 0.82f, 0.55f);
             _splitBar = MakeSplitBar(canvasGo.transform);
         }
 
