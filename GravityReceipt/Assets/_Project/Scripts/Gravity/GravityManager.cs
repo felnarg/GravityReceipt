@@ -202,7 +202,7 @@ namespace GravityReceipt.Gravity
             if (Vector3.Dot(previous, _currentGravityDirection) < 0.99f)
             {
                 GravityChanged?.Invoke(CurrentGravity, dominant);
-                if (isActiveAndEnabled)
+                if (isActiveAndEnabled && Time.timeSinceLevelLoad > 1f)
                 {
                     if (_hitStop != null)
                     {
