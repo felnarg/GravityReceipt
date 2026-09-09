@@ -104,7 +104,8 @@ namespace GravityReceipt.UI
                 var o3 = Mark(match.IsObjectiveComplete(2));
                 matchText.text =
                     $"⏱ {mm:00}:{ss:00}   Paquete {hearts}  dest {pkg?.Destructions ?? 0}/{pkg?.MaxDestructions ?? 3}\n" +
-                    $"{o1} Enchufar   {o2} Entregar   {o3} Sellar   ({match.ObjectivesDone}/{match.ObjectivesToWin})";
+                    $"{o1} Enchufar   {o2} Entregar   {o3} Sellar   ({match.ObjectivesDone}/{match.ObjectivesToWin})" +
+                    ObjectiveProgressSuffix();
             }
 
             if (helpP1Text is not null)
