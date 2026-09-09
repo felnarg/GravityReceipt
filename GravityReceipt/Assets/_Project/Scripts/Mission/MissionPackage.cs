@@ -87,6 +87,19 @@ namespace GravityReceipt.Mission
             RefreshTint();
             MissionSfx.PlayDent();
             MatchDirector.Instance.NotifyPackageDented();
+            var motors = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
+            foreach (var motor in motors)
+            {
+                if (motor == null)
+                {
+                    continue;
+                }
+
+                if ((motor.transform.position - transform.position).sqrMagnitude < 64f)
+                {
+                    motor.PunchFeel(10f, 0.22f);
+                }
+            }
             if (_lives > 0)
             {
                 return;

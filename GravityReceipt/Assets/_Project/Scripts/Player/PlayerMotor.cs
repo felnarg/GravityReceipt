@@ -401,5 +401,11 @@ namespace GravityReceipt.Player
                 _controller.enabled = true;
             }
         }
+
+        public void PunchFeel(float fov = 8f, float shake = 0.18f)
+        {
+            _fovPunch = Mathf.Max(_fovPunch, fov);
+            _shake = Mathf.Max(_shake, shake);
+        }
     }
 }
