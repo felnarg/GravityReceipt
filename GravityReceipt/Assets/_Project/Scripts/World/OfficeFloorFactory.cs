@@ -147,7 +147,9 @@ namespace GravityReceipt.World
             var minute = CreateStaticCube(root.transform, "Furn_ClockMinute", new Vector3(0f, 3.35f, -3.64f), new Vector3(0.03f, 0.28f, 0.03f), new Color(0.18f, 0.18f, 0.2f));
             DisableCollider(minute);
             minute.AddComponent<SpinInPlace>().Configure(Vector3.forward, 48f);
-            CreateStaticCube(root.transform, "Furn_Printer", new Vector3(6.4f, 0.45f, 38.5f), new Vector3(0.9f, 0.7f, 0.7f), new Color(0.28f, 0.3f, 0.34f));
+            var printer = CreateStaticCube(root.transform, "Furn_Printer", new Vector3(6.4f, 0.45f, 38.5f), new Vector3(0.9f, 0.7f, 0.7f), new Color(0.28f, 0.3f, 0.34f));
+            var printerLed = AddLocalVisual(printer.transform, PrimitiveType.Cube, new Vector3(0.42f, 0.35f, 0.4f), new Vector3(0.08f, 0.08f, 0.12f), new Color(0.2f, 1f, 0.35f));
+            printerLed.AddComponent<PulseColor>().Configure(new Color(0.2f, 1f, 0.35f), new Color(0.05f, 0.25f, 0.1f), 6f);
             var mat = CreateStaticCube(root.transform, "Furn_SpawnMat", new Vector3(0f, 0.03f, -1.8f), new Vector3(3.4f, 0.04f, 1.6f), new Color(0.18f, 0.4f, 0.42f));
             DisableCollider(mat);
             CreateStaticCube(root.transform, "Furn_ArchiveShelfB", new Vector3(6.2f, 1.35f, 12.6f), new Vector3(0.35f, 2.6f, 2.6f), new Color(0.4f, 0.3f, 0.2f));
