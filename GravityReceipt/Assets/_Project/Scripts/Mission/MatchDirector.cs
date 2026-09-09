@@ -83,6 +83,7 @@ namespace GravityReceipt.Mission
             _remaining = matchSeconds;
             _splashLeft = 9f;
             _paused = false;
+            _splashEnded = false;
             Physics.gravity = Vector3.zero;
             Physics.defaultSolverIterations = 10;
             Physics.defaultSolverVelocityIterations = 4;
@@ -152,6 +153,12 @@ namespace GravityReceipt.Mission
                 }
                 else
                 {
+                    if (!_splashEnded)
+                    {
+                        _splashEnded = true;
+                        MissionSfx.PlayObjective();
+                    }
+
                     _remaining -= Time.deltaTime;
                     if (_remaining <= 0f)
                     {
