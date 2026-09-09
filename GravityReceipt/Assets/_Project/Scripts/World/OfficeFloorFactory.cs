@@ -405,6 +405,14 @@ namespace GravityReceipt.World
             var roleCmp = player.AddComponent<PlayerRole>();
             roleCmp.Configure(role);
 
+            var tagColor = slot == LocalPlayerSlot.One
+                ? new Color(0.55f, 0.8f, 1f)
+                : new Color(1f, 0.7f, 0.35f);
+            var host = new GameObject(name + "_Tag");
+            var follow = host.AddComponent<FollowBillboard>();
+            follow.Configure(player.transform, Vector3.up * 2.05f);
+            WorldLabel.Create(host.transform, "Text", slot == LocalPlayerSlot.One ? "P1" : "P2", Vector3.zero, tagColor, 0.09f);
+
             return player;
         }
 
