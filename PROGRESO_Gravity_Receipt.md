@@ -433,7 +433,8 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - HUD marca pasillo como “g hereda”.
 - Brújula 3D a los pies: apunta a g actual (amarillo en telegráfo).
 - La brújula solo aparece si g no es “abajo” o hay telegráfo.
-- Orden de ejecución: GravityManager → ValuableItem → GravityBody → PlayerMotor.
+- Orden de ejecución: GravityManager → ValuableItem → GravityBody → PlayerMotor → Interactor.
+- `PlayerMotor` distingue Grounded / Airborne.
 
 ---
 

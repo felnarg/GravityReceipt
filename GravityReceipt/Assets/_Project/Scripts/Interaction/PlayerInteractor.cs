@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace GravityReceipt.Interaction
 {
+    [DefaultExecutionOrder(30)]
     public sealed class PlayerInteractor : MonoBehaviour
     {
         private enum GrabPhase

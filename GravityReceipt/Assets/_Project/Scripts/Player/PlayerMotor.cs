@@ -6,6 +6,12 @@ using UnityEngine;
 
 namespace GravityReceipt.Player
 {
+    public enum LocomotionPhase
+    {
+        Grounded = 0,
+        Airborne = 1
+    }
+
     [RequireComponent(typeof(CharacterController))]
     [DefaultExecutionOrder(20)]
     public sealed class PlayerMotor : MonoBehaviour
@@ -36,6 +42,7 @@ namespace GravityReceipt.Player
 
         public GravityManager Gravity => gravityManager;
         public bool Grounded { get; private set; }
+        public LocomotionPhase Locomotion { get; private set; }
 
         public void Configure(Transform pivot, GravityManager gravity)
         {
@@ -232,7 +239,8 @@ namespace GravityReceipt.Player
             var wish = transform.TransformDirection(input) * speed;
 
             Grounded = IsGrounded(gDir);
-            if (Grounded)
+            Locomotion = Grounded ? LocomotionPhase.Grounded : LocomotionPhase.Airborne;
+            if (Locomotion == LocomotionPhase.Grounded)
             {
                 if (_airFall > 0.5f && _input != null)
                 {
