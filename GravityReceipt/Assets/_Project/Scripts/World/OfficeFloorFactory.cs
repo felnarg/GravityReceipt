@@ -123,6 +123,10 @@ namespace GravityReceipt.World
             CreateStaticCube(root.transform, "Furn_OfficeDeskLegL", new Vector3(-7.05f, 0.18f, 34.2f), new Vector3(0.12f, 0.36f, 0.85f), new Color(0.28f, 0.26f, 0.24f));
             CreateStaticCube(root.transform, "Furn_OfficeDeskLegR", new Vector3(-5.35f, 0.18f, 34.2f), new Vector3(0.12f, 0.36f, 0.85f), new Color(0.28f, 0.26f, 0.24f));
             CreateStaticCube(root.transform, "Furn_ExeTable", new Vector3(0f, 0.38f, 50.2f), new Vector3(3.6f, 0.12f, 1.6f), new Color(0.28f, 0.16f, 0.1f));
+            CreateStaticCube(root.transform, "Furn_ExeTableLeg1", new Vector3(-1.5f, 0.18f, 49.6f), new Vector3(0.12f, 0.36f, 0.12f), new Color(0.18f, 0.1f, 0.06f));
+            CreateStaticCube(root.transform, "Furn_ExeTableLeg2", new Vector3(1.5f, 0.18f, 49.6f), new Vector3(0.12f, 0.36f, 0.12f), new Color(0.18f, 0.1f, 0.06f));
+            CreateStaticCube(root.transform, "Furn_ExeTableLeg3", new Vector3(-1.5f, 0.18f, 50.8f), new Vector3(0.12f, 0.36f, 0.12f), new Color(0.18f, 0.1f, 0.06f));
+            CreateStaticCube(root.transform, "Furn_ExeTableLeg4", new Vector3(1.5f, 0.18f, 50.8f), new Vector3(0.12f, 0.36f, 0.12f), new Color(0.18f, 0.1f, 0.06f));
             CreateStaticCube(root.transform, "Furn_HubCounter", new Vector3(0f, 0.42f, -3.45f), new Vector3(3.4f, 0.14f, 0.55f), new Color(0.22f, 0.34f, 0.36f));
             var cooler = CreateStaticCube(root.transform, "Furn_WaterCooler", new Vector3(4.4f, 0.7f, -2.6f), new Vector3(0.45f, 1.2f, 0.45f), new Color(0.75f, 0.82f, 0.88f));
             AddLocalVisual(cooler.transform, PrimitiveType.Cylinder, new Vector3(0f, 0.55f, 0f), new Vector3(0.7f, 0.35f, 0.7f), new Color(0.45f, 0.75f, 0.95f));
