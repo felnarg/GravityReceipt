@@ -34,6 +34,12 @@ namespace GravityReceipt.World
             playerCount = Mathf.Clamp(playerCount, 1, 2);
             RoomRegistry.Clear();
             Physics.gravity = Vector3.zero;
+            RenderSettings.fog = true;
+            RenderSettings.fogMode = FogMode.ExponentialSquared;
+            RenderSettings.fogColor = new Color(0.05f, 0.055f, 0.07f);
+            RenderSettings.fogDensity = 0.018f;
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
+            RenderSettings.ambientLight = new Color(0.42f, 0.45f, 0.5f);
 
             var root = new GameObject("OfficeFloor");
 
