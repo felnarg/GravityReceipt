@@ -121,7 +121,7 @@ namespace GravityReceipt.UI
                         ? $"FLIP en {1f - gravity.TelegraphNormalized:0.0}s"
                         : "estable";
             var gDir = gravity != null ? DirName(gravity.CurrentDirection) : "?";
-            statusText.text = !string.IsNullOrEmpty(room2Name)
+            statusText.text = p2 != null
                 ? $"P1 {roomName}  |  P2 {room2Name}  |  g → {gDir}  |  Dom: {dominant}  |  {telegraph}"
                 : $"Sala: {roomName}  |  g → {gDir}  |  Dominante: {dominant}  |  {telegraph}";
             statusText.color = gravity != null && gravity.IsTelegraphing ? new Color(1f, 0.9f, 0.2f) : Color.white;
@@ -236,6 +236,16 @@ namespace GravityReceipt.UI
             }
 
             return string.Empty;
+        }
+
+        private static string FormatRoom(RoomVolume room)
+        {
+            if (room == null || room.RoomId.Length == 0)
+            {
+                return "—";
+            }
+
+            return room.HasOwnGravity ? room.RoomId : room.RoomId + " · g hereda";
         }
 
         private static string DirName(Vector3 d)
