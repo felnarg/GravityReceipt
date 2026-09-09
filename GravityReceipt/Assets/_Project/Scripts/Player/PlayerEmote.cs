@@ -34,6 +34,11 @@ namespace GravityReceipt.Player
         {
             if (_input == null)
             {
+                _input = GetComponent<LocalPlayerInput>();
+            }
+
+            if (_input == null)
+            {
                 return;
             }
 

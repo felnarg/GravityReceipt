@@ -26,6 +26,11 @@ namespace GravityReceipt.Interaction
 
         private void Update()
         {
+            if (_input == null)
+            {
+                _input = GetComponent<LocalPlayerInput>();
+            }
+
             if (_input == null || !_input.PingPressed())
             {
                 return;

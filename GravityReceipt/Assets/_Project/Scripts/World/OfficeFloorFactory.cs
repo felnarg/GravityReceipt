@@ -705,6 +705,7 @@ namespace GravityReceipt.World
             var input = player.AddComponent<LocalPlayerInput>();
             input.Configure(slot, mouseLook, cam);
 
+            // Interactor + Role must exist before Compass/Waypoint Awake; Motor still lazy-binds them.
             var motor = player.AddComponent<PlayerMotor>();
             motor.Configure(camGo.transform, gravity);
 
