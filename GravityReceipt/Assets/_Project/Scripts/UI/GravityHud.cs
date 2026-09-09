@@ -21,6 +21,9 @@ namespace GravityReceipt.UI
         private Text _crossP1;
         private Text _crossP2;
         private GameObject _splitBar;
+        private MatchDirector _boundMatch;
+        private string _toast = string.Empty;
+        private float _toastUntil;
 
         private void Awake()
         {
@@ -30,8 +33,19 @@ namespace GravityReceipt.UI
             }
         }
 
+        private void OnEnable()
+        {
+            TryBindMatch();
+        }
+
+        private void OnDisable()
+        {
+            UnbindMatch();
+        }
+
         private void Start()
         {
+            TryBindMatch();
             var playerCount = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None).Length;
             if (playerCount >= 2)
             {
@@ -143,6 +157,11 @@ namespace GravityReceipt.UI
                 {
                     centerText.text = banner;
                     centerText.color = bannerColor;
+                }
+                else if (Time.unscaledTime < _toastUntil && _toast.Length > 0)
+                {
+                    centerText.text = _toast;
+                    centerText.color = new Color(0.55f, 1f, 0.65f);
                 }
                 else if (Time.timeSinceLevelLoad < 9f)
                 {
@@ -313,6 +332,40 @@ namespace GravityReceipt.UI
             }
 
             return null;
+        }
+
+        private void TryBindMatch()
+        {
+            var match = MatchDirector.Instance;
+            if (match == _boundMatch)
+            {
+                return;
+            }
+
+            UnbindMatch();
+            _boundMatch = match;
+            if (_boundMatch != null)
+            {
+                _boundMatch.ObjectiveCompleted += OnObjectiveCompleted;
+            }
+        }
+
+        private void UnbindMatch()
+        {
+            if (_boundMatch != null)
+            {
+                _boundMatch.ObjectiveCompleted -= OnObjectiveCompleted;
+            }
+
+            _boundMatch = null;
+        }
+
+        private void OnObjectiveCompleted(int _, string label)
+        {
+            _toast = label is { Length: > 0 }
+                ? $"¡{label.ToUpperInvariant()} COMPLETADO!"
+                : "¡OBJETIVO COMPLETADO!";
+            _toastUntil = Time.unscaledTime + 2.4f;
         }
 
         private void EnsureCanvas()

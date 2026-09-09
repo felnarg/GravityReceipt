@@ -1,4 +1,5 @@
 using GravityReceipt.Interaction;
+using GravityReceipt.Player;
 using UnityEngine;
 
 namespace GravityReceipt.Mission
@@ -55,7 +56,12 @@ namespace GravityReceipt.Mission
                 return;
             }
 
-            if (collision == null || _spawnGrace > 0f)
+            if (collision == null || collision.collider == null || _spawnGrace > 0f)
+            {
+                return;
+            }
+
+            if (collision.collider.GetComponentInParent<PlayerMotor>() != null)
             {
                 return;
             }

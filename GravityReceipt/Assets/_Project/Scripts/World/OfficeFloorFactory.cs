@@ -68,15 +68,15 @@ namespace GravityReceipt.World
             CreateRoomVolume(root.transform, "OpenOffice", OffC, OffS, offG, inherit: false);
             CreateRoomVolume(root.transform, "Executive", ExeC, ExeS, exeG, inherit: false);
 
-            CreateValuable("Valuable_Archivador_40", new Vector3(-3.6f, 1.0f, 8.5f), new Vector3(0.8f, 1.6f, 0.5f), 40, arcG, new Color(0.55f, 0.38f, 0.22f));
-            CreateValuable("Valuable_CajaFuerte_80", new Vector3(3.4f, 0.75f, 12.2f), new Vector3(1.1f, 1.1f, 1.1f), 80, arcG, new Color(0.9f, 0.72f, 0.18f));
-            CreateValuable("Valuable_Monitor_120", new Vector3(4.5f, 0.55f, 32f), new Vector3(1.2f, 0.7f, 0.2f), 120, offG, new Color(0.2f, 0.55f, 0.85f));
-            CreateValuable("Valuable_Planta_60", new Vector3(-5.5f, 0.7f, 38f), new Vector3(0.6f, 1.2f, 0.6f), 60, offG, new Color(0.25f, 0.65f, 0.3f));
-            CreateValuable("Valuable_Cafetera_90", new Vector3(6f, 0.5f, 37.5f), new Vector3(0.7f, 0.8f, 0.5f), 90, offG, new Color(0.75f, 0.25f, 0.2f));
-            CreateValuable("Valuable_Maletin_200", new Vector3(2.2f, 0.35f, 47.5f), new Vector3(0.9f, 0.35f, 0.55f), 200, exeG, new Color(0.18f, 0.12f, 0.1f));
-            CreateValuable("Valuable_Trofeo_150", new Vector3(-3.2f, 0.7f, 52.5f), new Vector3(0.4f, 1.2f, 0.4f), 150, exeG, new Color(0.95f, 0.8f, 0.25f));
-            CreateValuable("Valuable_Server_110", new Vector3(4.2f, 0.85f, 54f), new Vector3(0.8f, 1.5f, 0.6f), 110, exeG, new Color(0.35f, 0.38f, 0.45f));
-            CreateValuable("Valuable_PlantaOro_95", new Vector3(-4.4f, 0.7f, 46.5f), new Vector3(0.7f, 1.2f, 0.7f), 95, exeG, new Color(0.82f, 0.7f, 0.2f));
+            CreateValuable("Valuable_Archivador_40", new Vector3(-3.6f, 1.0f, 8.5f), new Vector3(0.8f, 1.6f, 0.5f), 40, arcG, new Color(0.55f, 0.38f, 0.22f), PrimitiveType.Cube);
+            CreateValuable("Valuable_CajaFuerte_80", new Vector3(3.4f, 0.75f, 12.2f), new Vector3(1.1f, 1.1f, 1.1f), 80, arcG, new Color(0.9f, 0.72f, 0.18f), PrimitiveType.Cube);
+            CreateValuable("Valuable_Monitor_120", new Vector3(4.5f, 0.55f, 32f), new Vector3(1.4f, 0.85f, 0.12f), 120, offG, new Color(0.15f, 0.45f, 0.95f), PrimitiveType.Cube);
+            CreateValuable("Valuable_Planta_60", new Vector3(-5.5f, 0.85f, 38f), new Vector3(0.55f, 0.85f, 0.55f), 60, offG, new Color(0.2f, 0.72f, 0.28f), PrimitiveType.Capsule);
+            CreateValuable("Valuable_Cafetera_90", new Vector3(6f, 0.55f, 37.5f), new Vector3(0.55f, 0.55f, 0.55f), 90, offG, new Color(0.82f, 0.18f, 0.14f), PrimitiveType.Cylinder);
+            CreateValuable("Valuable_Maletin_200", new Vector3(2.2f, 0.32f, 47.5f), new Vector3(1.05f, 0.28f, 0.7f), 200, exeG, new Color(0.12f, 0.08f, 0.06f), PrimitiveType.Cube);
+            CreateValuable("Valuable_Trofeo_150", new Vector3(-3.2f, 0.85f, 52.5f), new Vector3(0.35f, 0.85f, 0.35f), 150, exeG, new Color(0.98f, 0.82f, 0.18f), PrimitiveType.Capsule);
+            CreateValuable("Valuable_Server_110", new Vector3(4.2f, 0.95f, 54f), new Vector3(0.7f, 1.7f, 0.55f), 110, exeG, new Color(0.28f, 0.32f, 0.42f), PrimitiveType.Cube);
+            CreateValuable("Valuable_PlantaOro_95", new Vector3(-4.4f, 0.85f, 46.5f), new Vector3(0.6f, 0.9f, 0.6f), 95, exeG, new Color(0.88f, 0.72f, 0.12f), PrimitiveType.Capsule);
 
             var pkg = CreatePackage(new Vector3(0f, 0.45f, 0.6f), hubG);
             AttachPriceTag(pkg.transform, 0, 0.45f, "PAQUETE");
@@ -261,26 +261,30 @@ namespace GravityReceipt.World
             }
         }
 
-        private static GameObject CreateValuable(string name, Vector3 position, Vector3 scale, int price, GravityManager gravity, Color color)
+        private static GameObject CreateValuable(string name, Vector3 position, Vector3 scale, int price, GravityManager gravity, Color color, PrimitiveType primitive)
         {
-            var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var go = GameObject.CreatePrimitive(primitive);
             go.name = name;
             go.transform.position = position;
             go.transform.localScale = scale;
             SetColor(go, color);
 
             var rb = go.AddComponent<Rigidbody>();
-            rb.mass = 8f;
+            rb.mass = 3.5f + price * 0.045f;
             rb.interpolation = RigidbodyInterpolation.Interpolate;
             rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
             rb.useGravity = false;
+            rb.sleepThreshold = 0.12f;
 
             go.AddComponent<Grabbable>();
             var body = go.AddComponent<GravityBody>();
             body.SetManager(gravity);
             var valuable = go.AddComponent<ValuableItem>();
             valuable.Configure(price, gravity);
-            AttachPriceTag(go.transform, price, scale.y, "$" + price);
+            var tagHeight = primitive is PrimitiveType.Capsule or PrimitiveType.Cylinder
+                ? scale.y * 2f
+                : scale.y;
+            AttachPriceTag(go.transform, price, tagHeight, "$" + price);
             return go;
         }
 
@@ -305,6 +309,7 @@ namespace GravityReceipt.World
             rb.interpolation = RigidbodyInterpolation.Interpolate;
             rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
             rb.useGravity = false;
+            rb.sleepThreshold = 0.12f;
 
             go.AddComponent<Grabbable>();
             var body = go.AddComponent<GravityBody>();

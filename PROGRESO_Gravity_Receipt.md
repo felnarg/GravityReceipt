@@ -226,7 +226,7 @@ Documento vivo del prototipo.
 | 5.3 | Medir mareo % | [ ] | Meta < 10% |
 | 5.4 | Medir comprensión de la regla | [ ] | Meta ≥ 80% en 1ª partida |
 | 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + banner FLIP; falta ajustar con mareo real |
-| 5.6 | Pass siluetas/colores valuables | [ ] | |
+| 5.6 | Pass siluetas/colores valuables | [~] | Primitivas distintas (caja/cápsula/cilindro) + masa por precio; falta arte |
 | 5.7 | Emotes (4) + whoosh final | [~] | Whoosh procedural en cada flip; emotes no |
 | 5.8 | Decisión go / no-go | [ ] | Ver métricas abajo |
 
@@ -242,7 +242,7 @@ Documento vivo del prototipo.
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
 | 6.1 | Pass de arte (no final, salir de gris total) | [ ] | |
-| 6.2 | Pulido UI mínima | [ ] | |
+| 6.2 | Pulido UI mínima | [~] | Splash regla, banner FLIP, toast de objetivo |
 | 6.3 | Build Steam o itch privada | [ ] | |
 | 6.4 | Trailer 15–20 s del mejor clip | [ ] | |
 | 6.5 | Lista bugs P0 cerrada | [ ] | Gravedad, softlock, desync |
@@ -409,6 +409,11 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Beacon “¡ESTE TIRA DE G!” en el dominante. P2 mira con I/K.
 - FindPlayer ya no atribuye P1 al slot P2 en 1p.
 - Unity fake-null: `== null` en Text/Collider/Renderer/Rigidbody/managers.
+
+### 2026-09-09 — Overnight bloque 3 (siluetas + toast)
+- Valuables: monitor plano, plantas/trofeo cápsula, cafetera cilindro; masa escala con `$`.
+- Paquete no recibe dents de jugadores (caminar/empujar).
+- HUD toast 2.4 s al completar Enchufar/Entregar/Sellar.
 
 ---
 
