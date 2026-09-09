@@ -347,6 +347,15 @@ namespace GravityReceipt.Mission
             Cursor.visible = true;
             MatchEnded?.Invoke(phase, reason);
             MissionSfx.PlayEnd(phase == MatchPhase.Won);
+            StartCoroutine(CaptureEndShot());
+        }
+
+        private IEnumerator CaptureEndShot()
+        {
+            yield return new WaitForSecondsRealtime(0.28f);
+            var name = $"GravityReceipt_end_{System.DateTime.Now:HHmmss}.png";
+            ScreenCapture.CaptureScreenshot(name);
+            Debug.Log("[GravityReceipt] Fin de partida capturado: " + name);
         }
     }
 }
