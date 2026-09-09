@@ -15,7 +15,7 @@ namespace GravityReceipt.Interaction
             Holding
         }
 
-        [SerializeField] private float reach = 3.4f;
+        [SerializeField] private float reach = 3.8f;
         [SerializeField] private Transform holdPoint;
         [SerializeField] private float grabWindUpSeconds = 0.4f;
         [SerializeField] private LayerMask interactMask = ~0;
