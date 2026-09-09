@@ -39,6 +39,8 @@ namespace GravityReceipt.Player
         private float _shake;
         private float _sprintFov;
         private Vector3 _camBaseLocal;
+        private float _jumpBuffer;
+        private float _coyote;
 
         public GravityManager Gravity => gravityManager;
         public bool Grounded { get; private set; }
@@ -240,8 +242,15 @@ namespace GravityReceipt.Player
 
             Grounded = IsGrounded(gDir);
             Locomotion = Grounded ? LocomotionPhase.Grounded : LocomotionPhase.Airborne;
+            if (_input != null && _input.JumpPressed())
+            {
+                _jumpBuffer = 0.12f;
+            }
+
+            _jumpBuffer = Mathf.Max(0f, _jumpBuffer - Time.deltaTime);
             if (Locomotion == LocomotionPhase.Grounded)
             {
+                _coyote = 0.12f;
                 if (_airFall > 0.5f && _input != null)
                 {
                     var rec = MatchHighlightRecorder.Instance;
@@ -258,20 +267,29 @@ namespace GravityReceipt.Player
                 {
                     _velocity -= gDir * intoGround;
                 }
-
-                if (_input != null && _input.JumpPressed())
-                {
-                    _velocity += -gDir * jumpSpeed;
-                }
             }
             else
             {
+                _coyote = Mathf.Max(0f, _coyote - Time.deltaTime);
                 _velocity += gDir * gMag * Time.deltaTime;
                 var fallStep = Vector3.Dot(_velocity, gDir) * Time.deltaTime;
                 if (fallStep > 0f)
                 {
                     _airFall += fallStep;
                 }
+            }
+
+            if (_jumpBuffer > 0f && _coyote > 0f)
+            {
+                _jumpBuffer = 0f;
+                _coyote = 0f;
+                var intoGround = Vector3.Dot(_velocity, gDir);
+                if (intoGround > 0f)
+                {
+                    _velocity -= gDir * intoGround;
+                }
+
+                _velocity += -gDir * jumpSpeed;
             }
 
             var planar = Vector3.ProjectOnPlane(wish, gDir);
@@ -355,6 +373,8 @@ namespace GravityReceipt.Player
             _fovPunch = 0f;
             _shake = 0f;
             _sprintFov = 0f;
+            _jumpBuffer = 0f;
+            _coyote = 0f;
             if (cameraPivot != null)
             {
                 cameraPivot.localEulerAngles = Vector3.zero;
