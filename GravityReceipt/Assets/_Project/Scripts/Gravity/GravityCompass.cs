@@ -36,11 +36,17 @@ namespace GravityReceipt.Gravity
             }
 
             EnsureArrow();
-            _arrow.gameObject.SetActive(true);
             var dir = g.IsTelegraphing ? g.PendingDirection : g.CurrentDirection;
             if (dir.sqrMagnitude < 0.01f)
             {
                 dir = Vector3.down;
+            }
+
+            var unusual = g.IsTelegraphing || Vector3.Dot(dir, Vector3.down) < 0.92f;
+            _arrow.gameObject.SetActive(unusual);
+            if (!unusual)
+            {
+                return;
             }
 
             _arrow.position = transform.position + (-dir) * 1.05f + transform.forward * 0.45f;

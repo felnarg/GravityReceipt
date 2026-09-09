@@ -429,6 +429,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - `PlayerInteractor` usa máquina Idle → Winding → Holding.
 - HUD marca pasillo como “g hereda”.
 - Brújula 3D a los pies: apunta a g actual (amarillo en telegráfo).
+- La brújula solo aparece si g no es “abajo” o hay telegráfo.
 
 ---
 
