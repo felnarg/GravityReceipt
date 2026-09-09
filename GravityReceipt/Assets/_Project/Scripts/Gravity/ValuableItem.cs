@@ -33,6 +33,11 @@ namespace GravityReceipt.Gravity
         {
             if (next == gravityManager)
             {
+                if (next != null && isActiveAndEnabled)
+                {
+                    next.Register(this);
+                }
+
                 return;
             }
 
@@ -76,6 +81,10 @@ namespace GravityReceipt.Gravity
             if (room != null && room.HasOwnGravity && room.Gravity != null)
             {
                 SetGravityManager(room.Gravity);
+            }
+            else if (room != null && !room.HasOwnGravity && gravityManager != null)
+            {
+                gravityManager.Unregister(this);
             }
 
             if (IsHeld)

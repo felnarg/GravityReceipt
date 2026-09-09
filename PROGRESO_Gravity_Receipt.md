@@ -151,6 +151,7 @@ Documento vivo del prototipo.
 - **F10** comfort: reduce shake, FOV punch, roll, viñeta y flash (para mareo).
 - Paquete se aplasta al dent; aviso a 1 vida y a 30 s. Chispas al completar un objetivo.
 - Rigidbodies despiertan al flippear g (no se quedan dormidos en el suelo viejo).
+- Un `$` en el pasillo **ya no tira** de la g de la sala anterior (se desregistra; al volver a una sala se vuelve a listar).
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -632,6 +633,9 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 
 ### 2026-09-09 — Overnight bloque 20 (física)
 - `GravityBody` hace WakeUp al cambiar el vector de g (props dormidos no se quedan pegados al suelo viejo).
+
+### 2026-09-09 — Overnight bloque 21 (g por sala)
+- Valuable en volumen inherit (pasillo) se sale de la lista de la sala previa. Al reentrar, `Register` otra vez.
 
 ---
 
