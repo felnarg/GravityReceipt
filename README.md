@@ -44,7 +44,7 @@ Cheat de iteración (no sale en el HUD): **F4** teleporta al checkpoint · **F6*
 4. Cruza el pasillo (vacío a los lados; bordillos rojos). Si caes, respawneas en el último checkpoint.
 5. Open Office: deja el paquete en la losa azul **ENTREGAR** (también cuenta si lo llevas en las manos sobre la losa).
 6. Executive: paquete + jugador en la losa dorada. Mantén **E** **o** quédate encima con el paquete agarrado = **SELLAR**.
-7. Timer 10:00. 3 destrucciones del paquete (impactos fuertes) = derrota. **R** recarga la escena.
+7. Timer 10:00 (no baja durante el splash de 9 s). 3 destrucciones del paquete (impactos fuertes) = derrota. **R** recarga la escena.
 8. **Gravedad por sala:** Archive puede estar “de lado” mientras Office sigue normal.
 
 ### Si algo falla
