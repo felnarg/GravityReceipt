@@ -31,18 +31,18 @@ namespace GravityReceipt.Gravity
 
         private void FixedUpdate()
         {
-            if (_body is not { isKinematic: false })
+            if (_body == null || _body.isKinematic)
             {
                 return;
             }
 
             var room = RoomRegistry.FindRoom(_body.position);
-            if (room is { HasOwnGravity: true, Gravity: { } roomGravity })
+            if (room != null && room.HasOwnGravity && room.Gravity != null)
             {
-                gravityManager = roomGravity;
+                gravityManager = room.Gravity;
             }
 
-            var g = gravityManager is not null
+            var g = gravityManager != null
                 ? gravityManager.CurrentGravity
                 : Vector3.down * 9.81f;
             _body.AddForce(g, ForceMode.Acceleration);

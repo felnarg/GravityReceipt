@@ -103,13 +103,13 @@ namespace GravityReceipt.Interaction
             }
 
             body = hit.rigidbody;
-            if (body is null)
+            if (body == null)
             {
                 return false;
             }
 
             var grabbable = body.GetComponent<Grabbable>();
-            if (grabbable is not { CanGrab: true })
+            if (grabbable == null || !grabbable.CanGrab)
             {
                 return false;
             }

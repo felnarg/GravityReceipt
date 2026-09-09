@@ -22,7 +22,7 @@ namespace GravityReceipt.Gravity
 
         private void Update()
         {
-            if (gravityManager is not { IsTelegraphing: true })
+            if (gravityManager == null || !gravityManager.IsTelegraphing)
             {
                 if (_arrow is not null)
                 {

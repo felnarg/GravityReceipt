@@ -67,7 +67,7 @@ namespace GravityReceipt.Mission
 
         public void ApplyDamage(int amount)
         {
-            if (MatchDirector.Instance is not { IsPlaying: true })
+            if (MatchDirector.Instance == null || !MatchDirector.Instance.IsPlaying)
             {
                 return;
             }

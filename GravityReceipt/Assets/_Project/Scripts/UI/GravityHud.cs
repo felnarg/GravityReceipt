@@ -70,30 +70,32 @@ namespace GravityReceipt.UI
 
             var p1 = FindPlayer(LocalPlayerSlot.One);
             var p2 = FindPlayer(LocalPlayerSlot.Two);
-            var gravity = p1 is { Gravity: { } g } ? g : FindAnyObjectByType<GravityManager>();
-            var room1 = p1 is not null ? RoomRegistry.FindRoom(p1.transform.position) : null;
-            var room2 = p2 is not null ? RoomRegistry.FindRoom(p2.transform.position) : null;
-            var roomName = room1 is { RoomId: { Length: > 0 } id } ? id : "—";
-            var room2Name = room2 is { RoomId: { Length: > 0 } id2 } ? id2 : null;
+            var gravity = p1 != null && p1.Gravity != null ? p1.Gravity : FindAnyObjectByType<GravityManager>();
+            var room1 = p1 != null ? RoomRegistry.FindRoom(p1.transform.position) : null;
+            var room2 = p2 != null ? RoomRegistry.FindRoom(p2.transform.position) : null;
+            var roomName = room1 != null && room1.RoomId.Length > 0 ? room1.RoomId : "—";
+            var room2Name = room2 != null && room2.RoomId.Length > 0 ? room2.RoomId : null;
 
-            var dominant = gravity is { Dominant: { } d } ? $"{d.name} (${d.Price})" : "ninguno";
-            var telegraph = gravity is null
+            var dominant = gravity != null && gravity.Dominant != null
+                ? $"{gravity.Dominant.name} (${gravity.Dominant.Price})"
+                : "ninguno";
+            var telegraph = gravity == null
                 ? ""
                 : gravity.IsAnchored
                     ? "ANCLA"
                     : gravity.IsTelegraphing
                         ? $"FLIP en {1f - gravity.TelegraphNormalized:0.0}s"
                         : "estable";
-            var gDir = gravity is not null ? DirName(gravity.CurrentDirection) : "?";
-            statusText.text = room2Name is { Length: > 0 }
+            var gDir = gravity != null ? DirName(gravity.CurrentDirection) : "?";
+            statusText.text = !string.IsNullOrEmpty(room2Name)
                 ? $"P1 {roomName}  |  P2 {room2Name}  |  g → {gDir}  |  Dom: {dominant}  |  {telegraph}"
                 : $"Sala: {roomName}  |  g → {gDir}  |  Dominante: {dominant}  |  {telegraph}";
-            statusText.color = gravity is { IsTelegraphing: true } ? new Color(1f, 0.9f, 0.2f) : Color.white;
+            statusText.color = gravity != null && gravity.IsTelegraphing ? new Color(1f, 0.9f, 0.2f) : Color.white;
 
             var match = MatchDirector.Instance;
             var pkg = FindAnyObjectByType<MissionPackage>();
             var rec = MatchHighlightRecorder.Instance;
-            if (matchText is not null && match is not null)
+            if (matchText != null && match != null)
             {
                 var t = Mathf.CeilToInt(match.RemainingSeconds);
                 var mm = t / 60;
@@ -118,12 +120,12 @@ namespace GravityReceipt.UI
             if (helpText is not null)
             {
                 var r2 = RoleOf(LocalPlayerSlot.Two);
-                helpText.text = p2 is not null
+                helpText.text = p2 != null
                     ? $"P2 [{r2}] flechas  J/L o numpad mirar  RShift agarrar  / ping  Alt sprint  KP0 ancla"
                     : $"P1 [{RoleOf(LocalPlayerSlot.One)}] WASD+ratón  E agarrar  Q ping  Shift sprint  F ancla";
             }
 
-            if (centerText is not null && match is not null)
+            if (centerText != null && match != null)
             {
                 if (match.Phase == MatchPhase.Playing)
                 {
@@ -146,7 +148,7 @@ namespace GravityReceipt.UI
             var triggers = FindObjectsByType<ObjectiveTrigger>(FindObjectsSortMode.None);
             foreach (var t in triggers)
             {
-                if (t is not { IsDone: false, ProgressNormalized: > 0.02f })
+                if (t == null || t.IsDone || t.ProgressNormalized <= 0.02f)
                 {
                     continue;
                 }
@@ -170,7 +172,7 @@ namespace GravityReceipt.UI
 
         private static string Hearts(MissionPackage pkg)
         {
-            if (pkg is null)
+            if (pkg == null)
             {
                 return "—";
             }
@@ -191,8 +193,13 @@ namespace GravityReceipt.UI
             var players = FindObjectsByType<PlayerRole>(FindObjectsSortMode.None);
             foreach (var r in players)
             {
+                if (r == null)
+                {
+                    continue;
+                }
+
                 var input = r.GetComponent<LocalPlayerInput>();
-                if (input is not null && input.Slot == slot)
+                if (input != null && input.Slot == slot)
                 {
                     return r.RoleLabel;
                 }
@@ -203,13 +210,13 @@ namespace GravityReceipt.UI
 
         private static string WindUp(PlayerMotor motor)
         {
-            if (motor is null)
+            if (motor == null)
             {
                 return string.Empty;
             }
 
             var inter = motor.GetComponent<PlayerInteractor>();
-            if (inter is not { WindUpNormalized: > 0.05f and < 1f })
+            if (inter == null || inter.WindUpNormalized <= 0.05f || inter.WindUpNormalized >= 1f)
             {
                 return string.Empty;
             }
@@ -222,8 +229,13 @@ namespace GravityReceipt.UI
             var motors = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
             foreach (var m in motors)
             {
+                if (m == null)
+                {
+                    continue;
+                }
+
                 var input = m.GetComponent<LocalPlayerInput>();
-                if (input is not null && input.Slot == slot)
+                if (input != null && input.Slot == slot)
                 {
                     return m;
                 }

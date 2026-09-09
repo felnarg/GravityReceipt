@@ -17,7 +17,7 @@ namespace GravityReceipt.Mission
             var players = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
             foreach (var motor in players)
             {
-                if (motor is not { })
+                if (motor == null)
                 {
                     continue;
                 }
@@ -38,7 +38,7 @@ namespace GravityReceipt.Mission
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other is not { })
+            if (other == null)
             {
                 return;
             }

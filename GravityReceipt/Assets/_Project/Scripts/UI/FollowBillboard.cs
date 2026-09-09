@@ -18,7 +18,7 @@ namespace GravityReceipt.UI
 
         private void LateUpdate()
         {
-            if (target is not { })
+            if (target == null)
             {
                 Destroy(gameObject);
                 return;
@@ -40,7 +40,7 @@ namespace GravityReceipt.UI
             for (var i = 0; i < cams.Length; i++)
             {
                 var cam = cams[i];
-                if (cam is not { isActiveAndEnabled: true })
+                if (cam == null || !cam.isActiveAndEnabled)
                 {
                     continue;
                 }

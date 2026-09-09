@@ -23,7 +23,7 @@ namespace GravityReceipt.Interaction
 
         private void Update()
         {
-            if (_input is not { } || !_input.PingPressed())
+            if (_input == null || !_input.PingPressed())
             {
                 return;
             }

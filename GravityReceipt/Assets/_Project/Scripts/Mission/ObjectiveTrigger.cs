@@ -43,7 +43,7 @@ namespace GravityReceipt.Mission
 
         private void Update()
         {
-            if (_done || MatchDirector.Instance is not { IsPlaying: true })
+            if (_done || MatchDirector.Instance == null || !MatchDirector.Instance.IsPlaying)
             {
                 return;
             }
@@ -69,7 +69,7 @@ namespace GravityReceipt.Mission
             if (requirePackage)
             {
                 var pkg = FindAnyObjectByType<MissionPackage>();
-                if (pkg is not { isActiveAndEnabled: true } || !Contains(pkg.transform.position))
+                if (pkg == null || !pkg.isActiveAndEnabled || !Contains(pkg.transform.position))
                 {
                     return false;
                 }
@@ -81,7 +81,7 @@ namespace GravityReceipt.Mission
                 var any = false;
                 foreach (var p in players)
                 {
-                    if (p is not { } || !Contains(p.transform.position))
+                    if (p == null || !Contains(p.transform.position))
                     {
                         continue;
                     }
@@ -89,7 +89,7 @@ namespace GravityReceipt.Mission
                     if (requireHoldInteract)
                     {
                         var input = p.GetComponent<LocalPlayerInput>();
-                        if (input is not { } || !input.GrabHeld())
+                        if (input == null || !input.GrabHeld())
                         {
                             continue;
                         }

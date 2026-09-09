@@ -112,9 +112,9 @@ namespace GravityReceipt.Player
             }
 
             var room = RoomRegistry.FindRoom(transform.position);
-            if (room is { HasOwnGravity: true, Gravity: { } roomGravity })
+            if (room != null && room.HasOwnGravity && room.Gravity != null)
             {
-                SetGravityManager(roomGravity);
+                SetGravityManager(room.Gravity);
             }
 
             Look();

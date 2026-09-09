@@ -21,7 +21,7 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 | Acción | P1 (mitad superior, azul) | P2 (mitad inferior, naranja) |
 |--------|---------------------------|------------------------------|
 | Mover | WASD | Flechas o pad 1 |
-| Mirar | Ratón | Numpad 4/6 (yaw) 8/5 (pitch) **con NumLock**, U/O Y/H, o stick der. |
+| Mirar | Ratón | J/L (yaw) + Y/H (pitch), Numpad 4/6/8/5 **con NumLock**, U/O, o stick der. |
 | Saltar | Space | Right Ctrl / Keypad Enter / botón A |
 | Agarrar (0.4 s) | Mantener **E** o clic izq | Right Shift / Keypad . / botón B |
 | Soltar | **E** o clic der | Right Shift |
