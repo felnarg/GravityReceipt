@@ -16,6 +16,7 @@ namespace GravityReceipt.UI
         [SerializeField] private Text statusText;
         [SerializeField] private Text matchText;
         [SerializeField] private Text helpText;
+        [SerializeField] private Text helpP1Text;
         [SerializeField] private Text centerText;
         private Text _crossP1;
         private Text _crossP2;
@@ -47,6 +48,11 @@ namespace GravityReceipt.UI
                 rt.anchorMin = new Vector2(0.5f, 0.5f);
                 rt.anchorMax = new Vector2(0.5f, 0.5f);
             }
+
+            if (helpText is not null)
+            {
+                helpText.gameObject.SetActive(false);
+            }
         }
 
         private void Update()
@@ -57,9 +63,12 @@ namespace GravityReceipt.UI
             }
 
             var p1 = FindPlayer(LocalPlayerSlot.One);
+            var p2 = FindPlayer(LocalPlayerSlot.Two);
             var gravity = p1 is { Gravity: { } g } ? g : FindAnyObjectByType<GravityManager>();
-            var room = p1 is not null ? RoomRegistry.FindRoom(p1.transform.position) : null;
-            var roomName = room is { RoomId: { Length: > 0 } id } ? id : "—";
+            var room1 = p1 is not null ? RoomRegistry.FindRoom(p1.transform.position) : null;
+            var room2 = p2 is not null ? RoomRegistry.FindRoom(p2.transform.position) : null;
+            var roomName = room1 is { RoomId: { Length: > 0 } id } ? id : "—";
+            var room2Name = room2 is { RoomId: { Length: > 0 } id2 } ? id2 : null;
 
             var dominant = gravity is { Dominant: { } d } ? $"{d.name} (${d.Price})" : "ninguno";
             var telegraph = gravity is null
@@ -70,7 +79,9 @@ namespace GravityReceipt.UI
                         ? $"FLIP en {1f - gravity.TelegraphNormalized:0.0}s"
                         : "estable";
             var gDir = gravity is not null ? DirName(gravity.CurrentDirection) : "?";
-            statusText.text = $"Sala: {roomName}  |  g → {gDir}  |  Dominante: {dominant}  |  {telegraph}";
+            statusText.text = room2Name is { Length: > 0 }
+                ? $"P1 {roomName}  |  P2 {room2Name}  |  g → {gDir}  |  Dom: {dominant}  |  {telegraph}"
+                : $"Sala: {roomName}  |  g → {gDir}  |  Dominante: {dominant}  |  {telegraph}";
             statusText.color = gravity is { IsTelegraphing: true } ? new Color(1f, 0.9f, 0.2f) : Color.white;
 
             var match = MatchDirector.Instance;
@@ -90,14 +101,19 @@ namespace GravityReceipt.UI
                     $"{o1} Enchufar   {o2} Entregar   {o3} Sellar   ({match.ObjectivesDone}/{match.ObjectivesToWin})";
             }
 
-            if (helpText is not null)
+            if (helpP1Text is not null)
             {
                 var r1 = RoleOf(LocalPlayerSlot.One);
-                var r2 = RoleOf(LocalPlayerSlot.Two);
                 var wind = WindUp(p1);
-                helpText.text =
-                    $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  Shift sprint  F ancla  Tab rol{wind}\n" +
-                    $"P2 [{r2}] flechas+numpad  RShift agarrar  / ping  Alt sprint  KP0 ancla  KP7 rol";
+                helpP1Text.text = $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  Shift sprint  F ancla  Tab rol{wind}";
+            }
+
+            if (helpText is not null)
+            {
+                var r2 = RoleOf(LocalPlayerSlot.Two);
+                helpText.text = p2 is not null
+                    ? $"P2 [{r2}] flechas+numpad 8465  RShift agarrar  / ping  Alt sprint  KP0 ancla  KP7 rol"
+                    : $"P1 [{RoleOf(LocalPlayerSlot.One)}] WASD+ratón  E agarrar  Q ping  Shift sprint  F ancla";
             }
 
             if (centerText is not null && match is not null)
@@ -206,7 +222,9 @@ namespace GravityReceipt.UI
 
             statusText = MakeText(canvasGo.transform, "Status", new Vector2(0f, 18f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 36f), 20, TextAnchor.MiddleCenter);
             matchText = MakeText(canvasGo.transform, "Match", new Vector2(0f, -18f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 52f), 18, TextAnchor.MiddleCenter);
-            helpText = MakeText(canvasGo.transform, "Help", new Vector2(16f, 12f), new Vector2(0f, 0f), new Vector2(1600f, 56f), 16, TextAnchor.LowerLeft);
+            helpP1Text = MakeText(canvasGo.transform, "HelpP1", new Vector2(16f, -10f), new Vector2(0f, 1f), new Vector2(1600f, 28f), 16, TextAnchor.UpperLeft);
+            helpP1Text.color = new Color(0.7f, 0.85f, 1f);
+            helpText = MakeText(canvasGo.transform, "Help", new Vector2(16f, 12f), new Vector2(0f, 0f), new Vector2(1600f, 32f), 16, TextAnchor.LowerLeft);
             helpText.color = new Color(0.85f, 0.9f, 1f);
             centerText = MakeText(canvasGo.transform, "Center", new Vector2(0f, 80f), new Vector2(0.5f, 0.5f), new Vector2(900f, 240f), 34, TextAnchor.MiddleCenter);
             centerText.color = Color.white;
