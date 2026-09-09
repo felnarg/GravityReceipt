@@ -133,6 +133,7 @@ namespace GravityReceipt.Interaction
             _held.isKinematic = true;
             _held.useGravity = false;
             _heldValuable?.SetHeld(true);
+            IgnoreHeldCollision(true);
         }
 
         private void Drop()
@@ -144,10 +145,28 @@ namespace GravityReceipt.Interaction
 
             _held.isKinematic = false;
             _held.useGravity = false;
+            IgnoreHeldCollision(false);
             _heldValuable?.SetHeld(false);
             _heldValuable?.MarkMovedByPlayer();
             _held = null;
             _heldValuable = null;
+        }
+
+        private void IgnoreHeldCollision(bool ignore)
+        {
+            if (_held == null)
+            {
+                return;
+            }
+
+            var col = _held.GetComponent<Collider>();
+            var cc = GetComponent<CharacterController>();
+            if (col == null || cc == null)
+            {
+                return;
+            }
+
+            Physics.IgnoreCollision(col, cc, ignore);
         }
 
         private void SetFocus(Rigidbody body)
