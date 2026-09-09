@@ -114,12 +114,14 @@ namespace GravityReceipt.Mission
 
             if (Input.GetKeyDown(KeyCode.F4) && IsPlaying)
             {
+                SkipSplash();
                 DebugWarpCheckpoint();
                 return;
             }
 
             if (Input.GetKeyDown(KeyCode.F6) && IsPlaying)
             {
+                SkipSplash();
                 DebugSkipObjective();
                 return;
             }
@@ -176,6 +178,20 @@ namespace GravityReceipt.Mission
                 {
                     Rematch();
                 }
+            }
+        }
+
+        private void SkipSplash()
+        {
+            if (_splashLeft <= 0f)
+            {
+                return;
+            }
+
+            _splashLeft = 0f;
+            if (!_splashEnded)
+            {
+                _splashEnded = true;
             }
         }
 
