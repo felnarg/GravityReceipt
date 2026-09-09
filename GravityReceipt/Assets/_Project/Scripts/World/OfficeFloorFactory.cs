@@ -632,6 +632,7 @@ namespace GravityReceipt.World
             var motor = player.AddComponent<PlayerMotor>();
             motor.Configure(camGo.transform, gravity);
             player.AddComponent<GravityCompass>();
+            player.AddComponent<PredictedFlipWall>();
             player.AddComponent<ObjectiveWaypoint>();
 
             var interactor = player.AddComponent<PlayerInteractor>();
