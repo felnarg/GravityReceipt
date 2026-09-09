@@ -45,6 +45,12 @@ namespace GravityReceipt.World
             light.color = new Color(1f, 0.97f, 0.92f);
             lightGo.transform.rotation = Quaternion.Euler(48f, -25f, 0f);
 
+            AddPointLight(root.transform, HubC + Vector3.up, new Color(0.7f, 0.9f, 1f), 1.1f);
+            AddPointLight(root.transform, ArcC + Vector3.up, new Color(1f, 0.92f, 0.75f), 1.2f);
+            AddPointLight(root.transform, CorC + Vector3.up * 0.2f, new Color(1f, 0.45f, 0.4f), 0.8f);
+            AddPointLight(root.transform, OffC + Vector3.up, new Color(0.75f, 0.88f, 1f), 1.2f);
+            AddPointLight(root.transform, ExeC + Vector3.up, new Color(1f, 0.82f, 0.55f), 1.15f);
+
             var hubG = CreateGravity(root.transform, "Gravity_Hub", HubC);
             var arcG = CreateGravity(root.transform, "Gravity_Archive", ArcC);
             var offG = CreateGravity(root.transform, "Gravity_Office", OffC);
