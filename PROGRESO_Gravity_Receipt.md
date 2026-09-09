@@ -152,6 +152,7 @@ Documento vivo del prototipo.
 - Mancha de pared prevista dice **GIRA**. Aro naranja en la puerta hacia el objetivo (tras el splash).
 - **F10** comfort: reduce shake, FOV punch, roll, viñeta y flash (para mareo).
 - Comfort también **omite el hit-stop** de 80 ms al flippear.
+- F10 también baja el volumen del whoosh.
 - Paquete se aplasta al dent; aviso a 1 vida y a 30 s. Chispas al completar un objetivo.
 - Rigidbodies despiertan al flippear g (no se quedan dormidos en el suelo viejo).
 - Un `$` en el pasillo **ya no tira** de la g de la sala anterior (se desregistra; al volver a una sala se vuelve a listar).
@@ -637,6 +638,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Marcos oscuros alrededor de las ventanas unlit.
 - Pantalla del monitor Office pulsa (LED).
 - Placa **RECEPCIÓN** en el Hub y **CEO** en la mesa Executive.
+- Nota en el corkboard de Archive: **CAJA $80 → PARED**.
 
 ### 2026-09-09 — Overnight bloque 20 (física)
 - `GravityBody` hace WakeUp al cambiar el vector de g (props dormidos no se quedan pegados al suelo viejo).

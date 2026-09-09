@@ -196,6 +196,11 @@ namespace GravityReceipt.World
             DisableCollider(noteA);
             var noteB = CreateStaticCube(root.transform, "Furn_StickyB", new Vector3(6.66f, 1.85f, 7.7f), new Vector3(0.04f, 0.22f, 0.28f), new Color(0.95f, 0.55f, 0.55f));
             DisableCollider(noteB);
+            var corkHint = new GameObject("Furn_CorkHint");
+            corkHint.transform.SetParent(root.transform, false);
+            corkHint.transform.position = new Vector3(6.58f, 2.08f, 7.4f);
+            corkHint.transform.rotation = Quaternion.Euler(0f, -90f, 0f);
+            WorldLabel.Create(corkHint.transform, "Text", "CAJA $80 → PARED", Vector3.zero, new Color(0.15f, 0.08f, 0.02f), 0.055f);
             var tray = CreateStaticCube(root.transform, "Furn_Inbox", new Vector3(-5.4f, 0.46f, 34.55f), new Vector3(0.4f, 0.05f, 0.32f), new Color(0.72f, 0.22f, 0.18f));
             DisableCollider(tray);
 
