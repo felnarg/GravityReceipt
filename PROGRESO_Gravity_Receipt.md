@@ -133,6 +133,7 @@ Documento vivo del prototipo.
 - Chip `g → …` en cada viewport (P1/P2). Toast al entrar al pasillo con g de lado.
 - Umbrales de color en cada puerta. Reloj del Hub con agujas que giran.
 - Waypoint proyectado en el plano de g (útil tras un flip de pared).
+- LEDs del server Executive parpadean.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.

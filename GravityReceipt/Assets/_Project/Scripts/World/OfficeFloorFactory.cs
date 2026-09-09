@@ -105,8 +105,10 @@ namespace GravityReceipt.World
             AddLocalVisual(trophy.transform, PrimitiveType.Cube, new Vector3(-0.7f, 0.15f, 0f), new Vector3(0.18f, 0.7f, 0.18f), new Color(0.95f, 0.78f, 0.2f));
             AddLocalVisual(trophy.transform, PrimitiveType.Cube, new Vector3(0.7f, 0.15f, 0f), new Vector3(0.18f, 0.7f, 0.18f), new Color(0.95f, 0.78f, 0.2f));
             var server = CreateValuable(root.transform, "Valuable_Server_110", new Vector3(4.2f, 0.95f, 54f), new Vector3(0.7f, 1.7f, 0.55f), 110, exeG, new Color(0.28f, 0.32f, 0.42f), PrimitiveType.Cube);
-            AddLocalVisual(server.transform, PrimitiveType.Cube, new Vector3(0.52f, 0.25f, 0f), new Vector3(0.08f, 0.12f, 0.7f), new Color(0.2f, 0.95f, 0.35f));
-            AddLocalVisual(server.transform, PrimitiveType.Cube, new Vector3(0.52f, 0.05f, 0f), new Vector3(0.08f, 0.12f, 0.7f), new Color(0.95f, 0.25f, 0.15f));
+            var ledOk = AddLocalVisual(server.transform, PrimitiveType.Cube, new Vector3(0.52f, 0.25f, 0f), new Vector3(0.08f, 0.12f, 0.7f), new Color(0.2f, 0.95f, 0.35f));
+            ledOk.AddComponent<PulseColor>().Configure(new Color(0.15f, 0.95f, 0.3f), new Color(0.04f, 0.25f, 0.08f), 5.5f);
+            var ledErr = AddLocalVisual(server.transform, PrimitiveType.Cube, new Vector3(0.52f, 0.05f, 0f), new Vector3(0.08f, 0.12f, 0.7f), new Color(0.95f, 0.25f, 0.15f));
+            ledErr.AddComponent<PulseColor>().Configure(new Color(0.95f, 0.2f, 0.12f), new Color(0.25f, 0.05f, 0.04f), 3.2f);
             var plantaOro = CreateValuable(root.transform, "Valuable_PlantaOro_95", new Vector3(-4.4f, 0.85f, 46.5f), new Vector3(0.6f, 0.9f, 0.6f), 95, exeG, new Color(0.88f, 0.72f, 0.12f), PrimitiveType.Capsule);
             AddLocalVisual(plantaOro.transform, PrimitiveType.Cylinder, new Vector3(0f, -0.55f, 0f), new Vector3(1.15f, 0.28f, 1.15f), new Color(0.55f, 0.42f, 0.12f));
             AddLocalVisual(plantaOro.transform, PrimitiveType.Sphere, new Vector3(-0.32f, 0.4f, 0.12f), new Vector3(0.65f, 0.42f, 0.65f), new Color(0.95f, 0.78f, 0.18f));
@@ -519,7 +521,7 @@ namespace GravityReceipt.World
             return go;
         }
 
-        private static void AddLocalVisual(Transform parent, PrimitiveType type, Vector3 localPos, Vector3 localScale, Color color)
+        private static GameObject AddLocalVisual(Transform parent, PrimitiveType type, Vector3 localPos, Vector3 localScale, Color color)
         {
             var go = GameObject.CreatePrimitive(type);
             go.name = parent.name + "_Part";
@@ -528,6 +530,7 @@ namespace GravityReceipt.World
             go.transform.localScale = localScale;
             DisableCollider(go);
             SetColor(go, color);
+            return go;
         }
 
         private static GameObject CreateStaticCube(Transform parent, string name, Vector3 position, Vector3 scale, Color color)
