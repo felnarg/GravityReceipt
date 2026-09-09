@@ -50,7 +50,7 @@ Cheat de iteración (no sale en el HUD): **F3** desatasca · **F4** teleporta al
 5. Open Office: deja el paquete en la losa azul **ENTREGAR** (también cuenta si lo llevas en las manos sobre la losa).
 6. Executive: paquete + jugador en la losa dorada. Mantén **E** **o** quédate encima con el paquete agarrado = **SELLAR**.
 7. Timer 10:00 (no baja durante el splash de 9 s; **P** también pausa el splash). 3 destrucciones del paquete (impactos fuertes) = derrota. **R** recarga la escena.
-8. **Gravedad por sala:** Archive puede estar “de lado” mientras Office sigue normal.
+8. **Gravedad por sala:** Archive puede estar “de lado” mientras Office sigue normal. Si llevas un `$` al pasillo, **deja de tirar** de la sala que abandonaste. Tras un flip, Enchufar/Entregar/Sellar cuentan en el nuevo “arriba”.
 
 ### Si algo falla
 - **No hay split / mapa viejo:** menú Setup Office Floor A y guarda la escena.
