@@ -111,6 +111,7 @@ Documento vivo del prototipo.
 - Hub: dispensador de agua, reloj, alfombra de spawn; Office: impresora.
 - Los jugadores no empujan el paquete (IgnoreCollision): no se cae al vacío de un encontrón.
 - **F9** oculta también las etiquetas 3D (`$`, PAQUETE, carteles billboard) para el clip 1.11.
+- PNG automático al **ganar/perder** (además del primer flip).
 - Barandillas en el pasillo (dos alturas) para leer el vacío y frenar un poco con g de lado.
 
 ### A MEDIAS
@@ -545,6 +546,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Prompt “acércala a una PARED” al llevar el dominante; barandillas en el pasillo.
 - Mancha naranja en la pared prevista; paneles HUD; ding al acabar splash; toast de caída.
 - Jugadores no empujan el paquete.
+- PNG al ganar/perder; F9 oculta etiquetas 3D.
 
 ---
 
