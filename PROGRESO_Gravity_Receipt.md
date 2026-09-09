@@ -27,7 +27,7 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla/arte |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~00:55 COT (overnight, waypoints/pausa/arte) |
+| **Última actualización** | 2026-09-09 ~01:08 COT (overnight, waypoints/pared prevista/HUD) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
 | **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F3/F4/F6/F7, OOB AABB, waypoint objetivo, beacon paquete, pausa P, linger FLIP, roll de cámara |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete (sigue la flecha) + flip con caja dorada a una pared |
@@ -109,6 +109,7 @@ Documento vivo del prototipo.
 - Ding al terminar el splash de 9 s (el timer 10:00 arranca).
 - Paneles oscuros detrás del HUD (status, objetivos, splash/FLIP) para contraste.
 - Hub: dispensador de agua, reloj, alfombra de spawn; Office: impresora.
+- Los jugadores no empujan el paquete (IgnoreCollision): no se cae al vacío de un encontrón.
 - Barandillas en el pasillo (dos alturas) para leer el vacío y frenar un poco con g de lado.
 
 ### A MEDIAS
@@ -541,6 +542,8 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Siluetas extra en trofeo / maletín / cafetera / monitor / archivador.
 - Splash 9 s usa `deltaTime` (P lo congela para leer). Flecha naranja al paquete si está lejos.
 - Prompt “acércala a una PARED” al llevar el dominante; barandillas en el pasillo.
+- Mancha naranja en la pared prevista; paneles HUD; ding al acabar splash; toast de caída.
+- Jugadores no empujan el paquete.
 
 ---
 
