@@ -131,6 +131,7 @@ Documento vivo del prototipo.
 - Primer agarre de un `$` tostea “Llévalo a una PARED” (si agarrás durante el splash, el toast sale al terminar); el objeto no atraviesa paredes al llevarlo.
 - En el Hub la flecha apunta a la taza $15 (no a Archive) hasta que la agarras o sales.
 - Chip `g → …` en cada viewport (P1/P2). Toast al entrar al pasillo con g de lado.
+- Umbrales de color en cada puerta. Reloj del Hub con agujas que giran.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.

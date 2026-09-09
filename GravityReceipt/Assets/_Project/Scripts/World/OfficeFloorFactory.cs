@@ -138,6 +138,12 @@ namespace GravityReceipt.World
             AddLocalVisual(cooler.transform, PrimitiveType.Cylinder, new Vector3(0f, 0.55f, 0f), new Vector3(0.7f, 0.35f, 0.7f), new Color(0.45f, 0.75f, 0.95f));
             var clock = CreateStaticCube(root.transform, "Furn_HubClock", new Vector3(0f, 3.35f, -3.72f), new Vector3(0.7f, 0.7f, 0.08f), new Color(0.92f, 0.92f, 0.9f));
             DisableCollider(clock);
+            var hour = CreateStaticCube(root.transform, "Furn_ClockHour", new Vector3(0f, 3.35f, -3.66f), new Vector3(0.045f, 0.22f, 0.03f), new Color(0.12f, 0.12f, 0.14f));
+            DisableCollider(hour);
+            hour.AddComponent<SpinInPlace>().Configure(Vector3.forward, 8f);
+            var minute = CreateStaticCube(root.transform, "Furn_ClockMinute", new Vector3(0f, 3.35f, -3.64f), new Vector3(0.03f, 0.28f, 0.03f), new Color(0.18f, 0.18f, 0.2f));
+            DisableCollider(minute);
+            minute.AddComponent<SpinInPlace>().Configure(Vector3.forward, 48f);
             CreateStaticCube(root.transform, "Furn_Printer", new Vector3(6.4f, 0.45f, 38.5f), new Vector3(0.9f, 0.7f, 0.7f), new Color(0.28f, 0.3f, 0.34f));
             var mat = CreateStaticCube(root.transform, "Furn_SpawnMat", new Vector3(0f, 0.03f, -1.8f), new Vector3(3.4f, 0.04f, 1.6f), new Color(0.18f, 0.4f, 0.42f));
             DisableCollider(mat);
