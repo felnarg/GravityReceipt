@@ -199,26 +199,30 @@ namespace GravityReceipt.Player
             }
             var sprintTarget = _role != null && _role.MoveMultiplier > 1.05f ? 7f : 0f;
             _sprintFov = Mathf.MoveTowards(_sprintFov, sprintTarget, Time.deltaTime * 36f);
+            var comfort = MatchDirector.ComfortMode;
+            var feel = comfort ? 0.32f : 1f;
             if (_cam != null)
             {
-                _cam.fieldOfView = _baseFov + _fovPunch + _sprintFov;
+                _cam.fieldOfView = _baseFov + (_fovPunch * feel) + _sprintFov;
             }
 
-            var offset = _shake > 0.01f
+            var shakeAmt = _shake * feel;
+            var offset = shakeAmt > 0.01f
                 ? new Vector3(
-                    (Mathf.PerlinNoise(Time.time * 28f, 0.3f) - 0.5f) * _shake * 0.12f,
-                    (Mathf.PerlinNoise(0.7f, Time.time * 31f) - 0.5f) * _shake * 0.12f,
+                    (Mathf.PerlinNoise(Time.time * 28f, 0.3f) - 0.5f) * shakeAmt * 0.12f,
+                    (Mathf.PerlinNoise(0.7f, Time.time * 31f) - 0.5f) * shakeAmt * 0.12f,
                     0f)
                 : Vector3.zero;
             _landDip = Mathf.MoveTowards(_landDip, 0f, Time.deltaTime * 0.55f);
-            cameraPivot.localPosition = _camBaseLocal + offset + Vector3.down * _landDip;
+            cameraPivot.localPosition = _camBaseLocal + offset + Vector3.down * (_landDip * (comfort ? 0.4f : 1f));
 
             var rollTarget = 0f;
             if (gravityManager != null && gravityManager.IsTelegraphing)
             {
                 rollTarget = Vector3.Dot(gravityManager.PendingDirection, transform.right)
                              * -16f
-                             * gravityManager.TelegraphNormalized;
+                             * gravityManager.TelegraphNormalized
+                             * (comfort ? 0.22f : 1f);
             }
 
             _camRoll = Mathf.Lerp(_camRoll, rollTarget, 1f - Mathf.Exp(-12f * Time.deltaTime));

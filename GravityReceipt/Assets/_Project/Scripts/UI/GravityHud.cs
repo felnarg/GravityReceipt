@@ -247,7 +247,7 @@ namespace GravityReceipt.UI
             {
                 var r1 = RoleOf(LocalPlayerSlot.One);
                 var wind = WindUp(p1);
-                helpP1Text.text = $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  1-4 emote  Shift sprint  F ancla  Tab rol  P pausa  F5 restart  F9 HUD{wind}";
+                helpP1Text.text = $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  1-4 emote  Shift sprint  F ancla  Tab rol  P pausa  F10 comfort  F5 restart  F9 HUD{wind}";
             }
 
             if (helpText != null)
@@ -346,12 +346,16 @@ namespace GravityReceipt.UI
                     a = 0.16f;
                 }
 
-                _vignette.color = new Color(0.15f, 0.04f, 0f, a);
+                _vignette.color = new Color(0.15f, 0.04f, 0f, a * (MatchDirector.ComfortMode ? 0.35f : 1f));
             }
 
             if (_flash != null)
             {
                 var flashA = Time.unscaledTime < _flashUntil ? 0.32f : 0f;
+                if (MatchDirector.ComfortMode)
+                {
+                    flashA *= 0.35f;
+                }
                 _flash.color = new Color(1f, 0.72f, 0.28f, flashA);
             }
         }

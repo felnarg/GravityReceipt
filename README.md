@@ -34,11 +34,12 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 | Screenshot PNG | **F8** | **F8** |
 | Ocultar chrome HUD | **F9** (también etiquetas 3D) | **F9** |
 | Pausa | **P** | **P** |
+| Comfort (menos mareo) | **F10** | **F10** |
 | Unstuck (cheat) | **F3** | **F3** |
 | Warp checkpoint (cheat) | **F4** | **F4** |
 | Respawn paquete (cheat) | **F7** | **F7** |
 
-Cheat de iteración (no sale en el HUD): **F3** desatasca · **F4** teleporta al checkpoint (salta el splash) · **F6** completa el siguiente objetivo y teleporta (salta el splash) · **F7** respawnea el paquete.
+Cheat de iteración (no sale en el HUD): **F3** desatasca · **F4** teleporta al checkpoint (salta el splash) · **F6** completa el siguiente objetivo y teleporta (salta el splash) · **F7** respawnea el paquete · **F10** comfort (menos shake/FOV).
 
 ### Qué probar (loop corto)
 

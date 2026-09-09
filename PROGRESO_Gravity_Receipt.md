@@ -27,7 +27,7 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla/arte |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~02:20 COT (overnight, ruta de puertas + orbes en g-up) |
+| **Última actualización** | 2026-09-09 ~02:30 COT (overnight, F10 comfort + ruta de puertas) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
 | **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F3/F4/F6/F7, OOB AABB, waypoint, beacon paquete, pausa P, linger FLIP, pad cian **ABAJO**, etiquetas de losa siguen g, flecha HUD si el objetivo está fuera de cámara |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete (sigue la flecha) + flip con caja dorada a una pared · mira el sello ABAJO y las etiquetas ENCHUFAR/ENTREGAR/SELLAR |
@@ -148,6 +148,7 @@ Documento vivo del prototipo.
 - Pasillo: neón en bordillos + glow rojo en el vacío. Office: laptop/papeles; Hub: planta.
 - Orbes de paquete/taza y beacon “¡ESTE TIRA DE G!” usan el arriba de g (no el local del objeto al tumbarse).
 - Mancha de pared prevista dice **GIRA**. Aro naranja en la puerta hacia el objetivo (tras el splash).
+- **F10** comfort: reduce shake, FOV punch, roll, viñeta y flash (para mareo).
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -177,7 +178,7 @@ Documento vivo del prototipo.
 10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre. El cronómetro no baja durante el splash inicial. **P** pausa.
 11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
 12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). **F9** oculta help/status **y** etiquetas `$` para un clip más limpio. Graba 8–10 s mudos del paso 7, o usa el PNG automático del primer flip.
-13. Cheats playtest: **F3** unstuck · **F4** warp al checkpoint · **F6** skip objetivo + warp · **F7** solo respawnea el paquete.
+13. Cheats playtest: **F3** unstuck · **F4** warp al checkpoint · **F6** skip objetivo + warp · **F7** solo respawnea el paquete · **F10** comfort.
 14. Emotes: P1 teclas **1–4**, P2 **KP1 / KP2 / KP3 / KP9**. Apunta a un cubo gris: el prompt debe decir “(sin $)”.
 
 ---
@@ -321,7 +322,7 @@ Documento vivo del prototipo.
 | 5.2 | Medir rematch % | [ ] | Meta ≥ 55% |
 | 5.3 | Medir mareo % | [ ] | Meta < 10% |
 | 5.4 | Medir comprensión de la regla | [ ] | Meta ≥ 80% en 1ª partida |
-| 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + roll + linger + hit-stop + viñeta + 4 ticks + flash + chispas + land dip + toast ABAJO; falta mareo real |
+| 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + roll + linger + hit-stop + viñeta + 4 ticks + flash + chispas + land dip + toast ABAJO + **F10 comfort**; falta mareo real |
 | 5.6 | Pass siluetas/colores valuables | [~] | Primitivas + piezas (asa, pomo, peana, pico, LEDs, maceta, asas trofeo, pestillos, tapa, hojas); falta arte |
 | 5.7 | Emotes (4) + whoosh final | [x] | Whoosh en cada flip; emotes billboard OK/NO/?/¡AQUÍ! (sin animación de avatar) |
 | 5.8 | Decisión go / no-go | [ ] | Ver métricas abajo |
@@ -614,6 +615,9 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - `RoomRegistry.UpAt` unifica el “arriba” de g.
 - Orbes paquete/taza y “¡ESTE TIRA DE G!” flotan en g-up.
 - Pared prevista: texto **GIRA**. `ObjectiveRouteHint`: aro en la puerta al siguiente cuarto.
+
+### 2026-09-09 — Overnight bloque 17 (comfort)
+- **F10** activa Comfort: menos FOV punch, shake, roll de cámara, viñeta y flash. Toast ON/OFF.
 
 ---
 

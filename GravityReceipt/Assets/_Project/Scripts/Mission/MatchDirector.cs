@@ -39,6 +39,7 @@ namespace GravityReceipt.Mission
         public bool IsPaused => _paused;
         public bool IsInSplash => _splashLeft > 0f;
         public float SplashSecondsLeft => Mathf.Max(0f, _splashLeft);
+        public static bool ComfortMode { get; private set; }
         public int ObjectivesDone
         {
             get
@@ -154,6 +155,16 @@ namespace GravityReceipt.Mission
             if (Input.GetKeyDown(KeyCode.P) && IsPlaying)
             {
                 TogglePause();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.F10) && IsPlaying)
+            {
+                ComfortMode = !ComfortMode;
+                PushHint(ComfortMode
+                    ? "Comfort ON · menos shake / FOV / viñeta"
+                    : "Comfort OFF");
+                Debug.Log("[GravityReceipt] Comfort " + (ComfortMode ? "ON" : "OFF"));
                 return;
             }
 

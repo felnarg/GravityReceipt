@@ -20,7 +20,7 @@ namespace GravityReceipt.EditorTools
             BuildAndSave(2);
             EditorUtility.DisplayDialog(
                 "Gravity Receipt",
-                "Escena 2P regenerada (split).\n\nP1 arriba: WASD + ratón, E agarrar, Q ping, 1-4 emote, Shift sprint, F ancla.\nP2 abajo: flechas + J/L e I/K (o numpad 4/6/8/5), RShift agarrar, / ping, KP1/2/3/9 emote.\n\n1) Play — splash 9 s (P pausa). En Hub la flecha apunta a la TAZA $15.\n2) Agarra la taza o el paquete NARANJA (orbe + franja verde)\n3) Enchúfalo en Archive (zona verde, pared este)\n4) Caja DORADA a una pared → flip (~1 s; cian ABAJO = nueva abajo)\n\nR = rematch. P = pausa. F5 = restart. F3 = unstuck. F7 = paquete. F8 = PNG. F9 = HUD. F6 = skip.",
+                "Escena 2P regenerada (split).\n\nP1 arriba: WASD + ratón, E agarrar, Q ping, 1-4 emote, Shift sprint, F ancla.\nP2 abajo: flechas + J/L e I/K (o numpad 4/6/8/5), RShift agarrar, / ping, KP1/2/3/9 emote.\n\n1) Play — splash 9 s (P pausa). En Hub la flecha apunta a la TAZA $15.\n2) Agarra la taza o el paquete NARANJA (orbe + franja verde)\n3) Enchúfalo en Archive (zona verde, pared este)\n4) Caja DORADA a una pared → flip (~1 s; cian ABAJO = nueva abajo)\n\nR = rematch. P = pausa. F10 = comfort. F5 = restart. F3 = unstuck. F7 = paquete. F8 = PNG. F9 = HUD. F6 = skip.",
                 "OK");
         }
 
@@ -30,7 +30,7 @@ namespace GravityReceipt.EditorTools
             BuildAndSave(1);
             EditorUtility.DisplayDialog(
                 "Gravity Receipt",
-                "Escena 1P regenerada.\n\nWASD + ratón, E agarrar, Q ping, 1-4 emote, Shift sprint, F ancla.\nPlay → taza $15 (flecha en Hub) o paquete naranja → enchufar en Archive → flip con la caja dorada.\nP pausa · F5 restart · F3 unstuck · F7 paquete · F8 PNG · F9 HUD · F6 skip.",
+                "Escena 1P regenerada.\n\nWASD + ratón, E agarrar, Q ping, 1-4 emote, Shift sprint, F ancla.\nPlay → taza $15 (flecha en Hub) o paquete naranja → enchufar en Archive → flip con la caja dorada.\nP pausa · F10 comfort · F5 restart · F3 unstuck · F7 paquete · F8 PNG · F9 HUD · F6 skip.",
                 "OK");
         }
 
