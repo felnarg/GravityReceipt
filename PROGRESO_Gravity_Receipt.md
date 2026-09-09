@@ -579,6 +579,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Chip `g →` por viewport; toast al cruzar el pasillo con g heredada de lado.
 - Primer agarre de un `$` tostea “Llévalo a una PARED” (si agarrás durante el splash, el toast sale al terminar); el objeto no atraviesa paredes al llevarlo.
 - En el Hub la flecha apunta a la taza $15 (no a Archive) hasta que la agarras o sales.
+- Reloj del Hub con agujas (siguen girando en pausa). Umbrales de color en puertas.
 
 ### 2026-09-09 — Overnight bloque 13 (regla visible)
 - Waypoint paquete/objetivo, beacon, linger FLIP, roll, P/F3, arte de salas.
