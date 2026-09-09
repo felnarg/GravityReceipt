@@ -25,15 +25,15 @@ Documento vivo del prototipo.
 
 | Campo | Valor |
 |-------|--------|
-| **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla/arte |
+| **Fase** | 1–2 proto + 3–6 mapa + **pass UX** (menos texto, misión visible) |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 07:55 COT — HARD STOP WIND-DOWN (para 08:00 COT) |
-| **En curso ahora** | Parada overnight. Siguiente: playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
-| **Hecho relevante** | Split 2p, g por sala, HUD P1/P2, emotes, F3–F10, OOB, waypoint, beacon, pausa P, pad **ABAJO**, toasts primer `$` / gris / paquete, pasillo no tira, objetivos en eje de g |
-| **Siguiente acción concreta** | Unity local: GravityReceipt → Setup Office Floor A → Play → agarrar cubo gris (toast “Sin $”) + paquete (toast “no tira”) + taza/caja a una PARED |
-| **Build jugable** | Sí (Editor Play Mode, 1p o 2p local). **Hay que regenerar la escena con el menú Setup.** |
-| **Online 4p** | No (no empezar hasta que el playtest offline sea sólido) |
-| **Bloqueadores** | Este entorno Linux no tiene Unity Editor: no se pudo Play Mode ni grabar el vídeo 1.11 |
+| **Última actualización** | 2026-09-09 15:30 COT — pass UX (feedback: no se entendía el objetivo, HUD saturado) |
+| **En curso ahora** | Playtest humano 2p con HUD limpio + vídeo 1.11 |
+| **Hecho relevante** | Misión en una línea (`PAQUETE → VERDE`); splash 5 s; help solo en pausa; carteles de tutorial recortados |
+| **Siguiente acción concreta** | Unity: Setup Office Floor A → Play → sigue la flecha al paquete naranja → zona verde. No leas el HUD de ayuda (está en **P**). |
+| **Build jugable** | Sí (Editor Play Mode). **Regenerar escena con Setup.** |
+| **Online 4p** | No |
+| **Bloqueadores** | Sin Unity Editor en este entorno |
 
 ---
 
@@ -160,6 +160,7 @@ Documento vivo del prototipo.
 - Primer agarre de un gris: toast **“Sin $ · no tira de g”** (si es durante el splash, sale al terminar). El prompt al llevarlo dice lo mismo.
 - Primer agarre del paquete: toast **“PAQUETE no tira de g · enchúfalo”**. El prompt al llevarlo: “soltar · enchúfalo (no tira de g)”.
 - Si agarrás `$` y gris/paquete durante el splash, gana el toast de pared (la regla).
+- **Pass UX (post playtest del autor):** se recortó el muro de texto. Misión = una línea. Splash 5 s. Help/controles **solo en pausa (P)**. Flecha al **paquete**, no a la taza. Labels 3D solo en el objetivo actual. Beacon dominante = `$ MÁX`.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -167,8 +168,8 @@ Documento vivo del prototipo.
 - Outline dominante sigue siendo pulso de escala + tint, no un outline URP de verdad.
 - Whoosh de flip listo; emotes son billboard (sin animación de avatar).
 - Arte de salas: primitivas de color (ventanas/lámparas/cubículos/losas de techo), no texturas.
-- Etiquetas 3D **“sin $”** sobre props grises: planeadas, **no arrancadas** (el toast + prompt cubren la enseñanza).
-- Toasts al entrar a Office/Executive (“g de ESTA sala”): planeados, **no arrancados** (corte 07:50 COT).
+- Etiquetas 3D **“sin $”** sobre props grises: planeadas, **descartadas** (más texto).
+- Toasts al entrar a Office/Executive (“g de ESTA sala”): planeados, **descartados** (saturaban).
 
 ### FALTA
 - 1.11 Vídeo mudo 8–10 s del flip (grabar en Unity local).
@@ -182,17 +183,13 @@ Documento vivo del prototipo.
 2. Espera a que compile (scripts nuevos en `Assets/_Project/Scripts/...`).
 3. Opción A (recomendada): menú **GravityReceipt → Setup Office Floor A** → OK.  
    Opción B: pulsa **Play** directo; si la escena es la vieja, se reconstruye sola (2p).
-4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja). Los valuables muestran `$` encima. Splash 9 s: “LA GRAVEDAD SIGUE AL OBJETO MÁS CARO” (puedes pulsar **P** para leerlo). El paquete tiene un orbe naranja. La taza $15 tiene un orbe dorado. En el Hub la flecha apunta a la taza. En el suelo lee **HUB**. Si miras al techo, el HUD puede mostrar `↓ TAZA $15`.
-5. **P1:** WASD + ratón. Agarra un cubo **gris** (toast “Sin $ · no tira de g”). Suéltalo. Agarra el cubo naranja / paquete (mantener E ~0.4 s; toast “PAQUETE no tira de g · enchúfalo”).
-6. Entra a Archive (norte). El aro naranja de la puerta te guía si aún no cruzaste. Sigue la flecha / columna verde en la pared este: paquete dentro → objetivo Enchufar.
-7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y llévala a una **pared** (en manos o suelta). Espera ~1 s: banner **¡FLIP ARCHIVE!** (se queda un instante al voltear), whoosh, FOV, flash, chispas, la cámara se inclina, g cambia. Un cuadrado cian con **ABAJO** marca la nueva “abajo”; un toast lo dice. La etiqueta ENCHUFAR se queda encima de la zona (no en Y mundo). El primer flip guarda un PNG solo.
-8. Cruza el pasillo (bordillos rojos altos; vacío a los lados). Si caes **o sales volando a los lados** (g heredada), respawneas. Si un valuable cae, vuelve a su sitio.
-9. Losa azul Open Office = Entregar. Losa dorada Executive + paquete en manos o mantener E = Sellar.
-10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre. El cronómetro no baja durante el splash inicial. **P** pausa.
-11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
-12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). **F9** oculta help/status **y** etiquetas `$` para un clip más limpio. Graba 8–10 s mudos del paso 7, o usa el PNG automático del primer flip.
-13. Cheats playtest: **F3** unstuck · **F4** warp al checkpoint · **F6** skip objetivo + warp · **F7** solo respawnea el paquete · **F10** comfort.
-14. Emotes: P1 teclas **1–4**, P2 **KP1 / KP2 / KP3 / KP9**. Apunta a un cubo gris: el prompt debe decir “(sin $)”.
+4. Pulsa **Play**. Split P1/P2. Splash **5 s**, 2 líneas: paquete a 3 zonas + el $ voltea la sala. Arriba: `10:00  ♥♥♥  PAQUETE → zona VERDE`. La flecha apunta al **paquete naranja**.
+5. **P1:** WASD + ratón. Agarra el paquete (**E**). Llévalo a la zona **verde** de Archive (pared este, pulsa). No hay lista de “Enchufar/Entregar/Sellar” en pantalla: el color es el objetivo.
+6. El aro de la puerta guía a Archive. Zona verde que pulsa = deja el paquete ahí.
+7. (Opcional) Caja `$80` a una **pared** → flip. El beacon dice `$ MÁX`. Pad cian = ABAJO. El objetivo sigue siendo el paquete.
+8. Pasillo (vacío a los lados) → losa **azul** → losa **dorada** (mantén E).
+9. **R** rematch. **P** pausa (controles). **F10** comfort. **F5** restart.
+10. 1P: menú Setup (1 jugador). **F8** PNG · **F9** oculta `$` para clip.
 
 ---
 
@@ -200,7 +197,7 @@ Documento vivo del prototipo.
 
 - **Nombre:** Gravity Receipt  
 - **Género:** Coop party caótico (PC / Steam)  
-- **Hook:** la gravedad sigue al objeto más caro de la sala  
+- **Hook:** llevas un paquete; el `$` más caro de la sala voltea la gravedad (el caos es el contenido)  
 - **Jugadores MVP:** 4 · **Partida:** 8–12 min  
 - **Motor:** Unity 6 (URP) · **Netcode (más adelante):** Fish-Net o Photon Fusion  
 - **Mapa MVP:** `Office_Floor_A` (Hub → Archive → Pasillo → Open Office → Executive)
@@ -352,7 +349,7 @@ Documento vivo del prototipo.
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
 | 6.1 | Pass de arte (no final, salir de gris total) | [~] | Ventanas unlit **con marco**, lámparas, zócalos, cubículos, losas de techo, paletas, sellos de suelo, neón de vacío, laptop/planta/corkboard; falta texturas |
-| 6.2 | Pulido UI mínima | [~] | Splash, FLIP linger, toast `$`/gris/paquete, `[>]` objetivo, waypoint 3D, distancias, pausa P, paneles HUD, flash, cruceta dominante, chip g, flecha HUD fuera de cámara, ABAJO en pad |
+| 6.2 | Pulido UI mínima | [~] | Pass UX 2026-09-09: una línea de misión, splash 5 s, help solo en pausa, menos carteles. Falta playtest |
 | 6.3 | Build Steam o itch privada | [ ] | |
 | 6.4 | Trailer 15–20 s del mejor clip | [ ] | |
 | 6.5 | Lista bugs P0 cerrada | [ ] | Gravedad, softlock, desync |
@@ -668,15 +665,22 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Prompt al llevar gris/paquete aclara que no tiran de g.
 - Parada completa 08:00 COT. Playtest humano y vídeo 1.11 siguen pendientes (sin Unity en este entorno).
 
+### 2026-09-09 — Pass UX (feedback: no se entiende el juego)
+- El HUD enseñaba el **flip** como si fuera el objetivo; el paquete quedaba enterrado en toasts/carteles/help.
+- Splash 5 s, 2 líneas. Barra: `PAQUETE → zona VERDE`. Help solo con **P**.
+- Fuera: carteles de “ENCHUFA / SUELTA LA CAJA / MANTÉN E”. Labels 3D solo del objetivo actual (`AQUÍ` / `MANTÉN E`).
+- Flecha al paquete (ya no a la taza). Beacon `$ MÁX`. Toasts de gris/paquete/pasillo/Archive apagados.
+- Gate 1–2: simplificar UI, no añadir features.
+
 ---
 
 ## Checklist del día (copiar al empezar una sesión)
 
 ```
 Fecha: 2026-09-09
-Enfoque de hoy (1–3 IDs del plan): pulido 5.5/5.6/6.1/6.2 (sin Unity) + playtest mañana
-Hecho: factory order, pad cian ABAJO, burst/flash, GravityUpFollow, flecha HUD, toast gris/paquete
-Pendiente al cerrar: playtest Unity local, vídeo 1.11, no online
-Bloqueadores: Unity Editor ausente en el cloud agent
-Actualicé "Estado actual": sí (wind-down 07:55 COT)
+Enfoque de hoy: pass UX (misión visible, menos texto)
+Hecho: splash 5s, HUD 1 línea, help en pausa, flecha al paquete
+Pendiente al cerrar: playtest Unity local
+Bloqueadores: Unity Editor ausente en el cloud
+Actualicé "Estado actual": sí
 ```

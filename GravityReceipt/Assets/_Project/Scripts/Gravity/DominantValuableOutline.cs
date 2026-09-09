@@ -130,7 +130,7 @@ namespace GravityReceipt.Gravity
             var height = _baseScale.y * 0.5f + 0.55f;
             var upFollow = _beacon.AddComponent<GravityUpFollow>();
             upFollow.Configure(item.transform, height);
-            WorldLabel.Create(_beacon.transform, "Text", "¡ESTE TIRA DE G!", Vector3.zero, new Color(1f, 0.9f, 0.25f), 0.09f);
+            WorldLabel.Create(_beacon.transform, "Text", "$ MÁX", Vector3.zero, new Color(1f, 0.9f, 0.25f), 0.09f);
         }
 
         private void Clear()

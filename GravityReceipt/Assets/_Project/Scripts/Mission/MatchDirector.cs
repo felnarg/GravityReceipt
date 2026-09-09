@@ -28,15 +28,10 @@ namespace GravityReceipt.Mission
         private readonly bool[] _objectives = new bool[3];
         private string _endReason = string.Empty;
         private bool _paused;
-        private float _splashLeft = 9f;
+        private float _splashLeft = 5f;
         private bool _splashEnded;
-        private bool _ruleNudgeSent;
         private bool _carryHintSent;
         private bool _pendingCarryHint;
-        private bool _grayHintSent;
-        private bool _pendingGrayHint;
-        private bool _packageHintSent;
-        private bool _pendingPackageHint;
 
         public MatchPhase Phase => _phase;
         public float RemainingSeconds => Mathf.Max(0f, _remaining);
@@ -92,16 +87,11 @@ namespace GravityReceipt.Mission
             Instance = this;
             _phase = MatchPhase.Playing;
             _remaining = matchSeconds;
-            _splashLeft = 9f;
+            _splashLeft = 5f;
             _paused = false;
             _splashEnded = false;
-            _ruleNudgeSent = false;
             _carryHintSent = false;
             _pendingCarryHint = false;
-            _grayHintSent = false;
-            _pendingGrayHint = false;
-            _packageHintSent = false;
-            _pendingPackageHint = false;
             Physics.gravity = Vector3.zero;
             Physics.defaultSolverIterations = 10;
             Physics.defaultSolverVelocityIterations = 4;
@@ -191,15 +181,6 @@ namespace GravityReceipt.Mission
                         FlushPendingHints();
                     }
 
-                    if (!_ruleNudgeSent && matchSeconds - _remaining >= 8f)
-                    {
-                        _ruleNudgeSent = true;
-                        if (ObjectivesDone == 0 && !AnyRoomTelegraphing() && !AnyRoomFlippedFromDefault())
-                        {
-                            Hint?.Invoke("Agarrá la taza $15 o la caja $80 · a una PARED");
-                        }
-                    }
-
                     _remaining -= Time.deltaTime;
                     if (_remaining <= 0f)
                     {
@@ -230,34 +211,6 @@ namespace GravityReceipt.Mission
                 _splashEnded = true;
                 FlushPendingHints();
             }
-        }
-
-        private static bool AnyRoomTelegraphing()
-        {
-            var managers = FindObjectsByType<GravityReceipt.Gravity.GravityManager>(FindObjectsSortMode.None);
-            foreach (var g in managers)
-            {
-                if (g != null && g.ShowFlipBanner)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool AnyRoomFlippedFromDefault()
-        {
-            var managers = FindObjectsByType<GravityReceipt.Gravity.GravityManager>(FindObjectsSortMode.None);
-            foreach (var g in managers)
-            {
-                if (g != null && Vector3.Dot(g.CurrentDirection, Vector3.down) < 0.92f)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         public bool IsObjectiveComplete(int index)
@@ -334,69 +287,26 @@ namespace GravityReceipt.Mission
                 return;
             }
 
-            PushHint("Llévalo a una PARED · espera 1 s");
+            PushHint("Este $ voltea la sala · a una PARED");
         }
 
         public void NotifyFirstGrayGrab()
         {
-            if (_grayHintSent)
-            {
-                return;
-            }
-
-            _grayHintSent = true;
-            if (IsInSplash)
-            {
-                _pendingGrayHint = true;
-                return;
-            }
-
-            PushHint("Sin $ · no tira de g");
         }
 
         public void NotifyFirstPackageGrab()
         {
-            if (_packageHintSent)
-            {
-                return;
-            }
-
-            _packageHintSent = true;
-            if (IsInSplash)
-            {
-                _pendingPackageHint = true;
-                return;
-            }
-
-            PushHint("PAQUETE no tira de g · enchúfalo");
         }
 
         private void FlushPendingHints()
         {
-            if (_pendingCarryHint)
-            {
-                _pendingCarryHint = false;
-                _pendingGrayHint = false;
-                _pendingPackageHint = false;
-                PushHint("Llévalo a una PARED · espera 1 s");
-                return;
-            }
-
-            if (_pendingPackageHint)
-            {
-                _pendingPackageHint = false;
-                _pendingGrayHint = false;
-                PushHint("PAQUETE no tira de g · enchúfalo");
-                return;
-            }
-
-            if (!_pendingGrayHint)
+            if (!_pendingCarryHint)
             {
                 return;
             }
 
-            _pendingGrayHint = false;
-            PushHint("Sin $ · no tira de g");
+            _pendingCarryHint = false;
+            PushHint("Este $ voltea la sala · a una PARED");
         }
 
         public void Rematch()
