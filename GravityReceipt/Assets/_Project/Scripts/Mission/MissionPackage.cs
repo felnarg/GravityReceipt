@@ -50,7 +50,12 @@ namespace GravityReceipt.Mission
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision is null || _spawnGrace > 0f)
+            if (_body != null && _body.isKinematic)
+            {
+                return;
+            }
+
+            if (collision == null || _spawnGrace > 0f)
             {
                 return;
             }

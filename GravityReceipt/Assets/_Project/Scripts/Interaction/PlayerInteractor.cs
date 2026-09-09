@@ -20,7 +20,7 @@ namespace GravityReceipt.Interaction
 
         public float WindUpNormalized =>
             grabWindUpSeconds <= 0f ? 0f : Mathf.Clamp01(_windUp / grabWindUpSeconds);
-        public bool IsHolding => _held is not null;
+        public bool IsHolding => _held != null;
 
         public void Configure(Transform hold)
         {
@@ -34,12 +34,16 @@ namespace GravityReceipt.Interaction
 
         private void Update()
         {
-            if (_input is null)
+            if (_input == null)
             {
                 return;
             }
 
-            if (_held is not null)
+            if (_held == null)
+            {
+                _heldValuable = null;
+            }
+            else
             {
                 ClearFocus();
                 if (_input.DropPressed())
@@ -77,7 +81,7 @@ namespace GravityReceipt.Interaction
 
         private void FixedUpdate()
         {
-            if (_held is null || holdPoint is null)
+            if (_held == null || holdPoint == null)
             {
                 return;
             }
@@ -90,8 +94,8 @@ namespace GravityReceipt.Interaction
         {
             body = null;
             valuable = null;
-            var cam = _input is { PlayerCamera: { } c } ? c : Camera.main;
-            if (cam is null)
+            var cam = _input != null && _input.PlayerCamera != null ? _input.PlayerCamera : Camera.main;
+            if (cam == null)
             {
                 return false;
             }
@@ -129,7 +133,7 @@ namespace GravityReceipt.Interaction
 
         private void Drop()
         {
-            if (_held is null)
+            if (_held == null)
             {
                 return;
             }
@@ -151,7 +155,7 @@ namespace GravityReceipt.Interaction
             }
 
             ClearFocus();
-            if (renderer is null)
+            if (renderer == null)
             {
                 return;
             }
@@ -163,7 +167,7 @@ namespace GravityReceipt.Interaction
 
         private void ClearFocus()
         {
-            if (_focus is not null)
+            if (_focus != null)
             {
                 _focus.material.color = _focusColor;
             }

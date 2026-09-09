@@ -386,7 +386,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Roles Runner/Anchor stub. Highlight de mayor caída.
 - Play en escena vieja ahora **auto-reconstruye** el piso 2p (`OfficeFloorPlayGuard`).
 - Chevrones amarillos de ruta, marcos de puerta, etiquetas `$` en valuables y “PAQUETE”.
-- PlayerMotor: unstuck suave al flip de g (si queda solapado con geometría).
+- Robustez: comparaciones `== null` de Unity (objetos destruidos), .meta del outline, paquete no recibe dents si está agarrado.
 - Hard stop programado 08:00 America/Bogota; esta entrega es el avance de código.
 
 ---
