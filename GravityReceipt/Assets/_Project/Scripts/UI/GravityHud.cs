@@ -486,6 +486,7 @@ namespace GravityReceipt.UI
             if (_boundMatch != null)
             {
                 _boundMatch.ObjectiveCompleted += OnObjectiveCompleted;
+                _boundMatch.PackageDented += OnPackageDented;
             }
         }
 
@@ -494,9 +495,16 @@ namespace GravityReceipt.UI
             if (_boundMatch != null)
             {
                 _boundMatch.ObjectiveCompleted -= OnObjectiveCompleted;
+                _boundMatch.PackageDented -= OnPackageDented;
             }
 
             _boundMatch = null;
+        }
+
+        private void OnPackageDented()
+        {
+            _toast = "¡PAQUETE ABOLLADO!";
+            _toastUntil = Time.unscaledTime + 1.6f;
         }
 
         private void OnObjectiveCompleted(int _, string label)

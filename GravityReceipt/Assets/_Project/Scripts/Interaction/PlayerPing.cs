@@ -14,7 +14,7 @@ namespace GravityReceipt.Interaction
         [SerializeField] private LayerMask mask = ~0;
 
         private LocalPlayerInput _input;
-        private static PingMarker _active;
+        private PingMarker _mine;
 
         private void Awake()
         {
@@ -44,11 +44,11 @@ namespace GravityReceipt.Interaction
             SpawnMarker(point);
         }
 
-        private static void SpawnMarker(Vector3 point)
+        private void SpawnMarker(Vector3 point)
         {
-            if (_active != null)
+            if (_mine != null)
             {
-                Destroy(_active.gameObject);
+                Destroy(_mine.gameObject);
             }
 
             var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -62,12 +62,15 @@ namespace GravityReceipt.Interaction
             go.transform.localScale = Vector3.one * 0.45f;
             Object.Destroy(go.GetComponent<Collider>());
             var renderer = go.GetComponent<Renderer>();
+            var color = _input != null && _input.Slot == LocalPlayerSlot.Two
+                ? new Color(1f, 0.55f, 0.2f)
+                : new Color(1f, 0.85f, 0.15f);
             if (renderer != null)
             {
                 var shader = Shader.Find("Unlit/Color") ?? Shader.Find("Standard");
                 if (shader != null)
                 {
-                    renderer.sharedMaterial = new Material(shader) { color = new Color(1f, 0.85f, 0.15f) };
+                    renderer.sharedMaterial = new Material(shader) { color = color };
                 }
             }
 
@@ -75,15 +78,26 @@ namespace GravityReceipt.Interaction
             labelGo.transform.SetParent(go.transform, false);
             labelGo.transform.localPosition = new Vector3(0f, 0.8f, 0f);
             var tm = labelGo.AddComponent<TextMesh>();
-            tm.text = "¡NO TOQUES ESO!";
+            tm.text = _input != null && _input.Slot == LocalPlayerSlot.Two
+                ? "P2 ¡NO TOQUES ESO!"
+                : "P1 ¡NO TOQUES ESO!";
             tm.characterSize = 0.08f;
             tm.fontSize = 42;
             tm.anchor = TextAnchor.MiddleCenter;
             tm.alignment = TextAlignment.Center;
-            tm.color = new Color(1f, 0.95f, 0.35f);
+            tm.color = color;
 
-            _active = go.AddComponent<PingMarker>();
-            _active.Begin(lifetime);
+            _mine = go.AddComponent<PingMarker>();
+            _mine.Begin(lifetime);
+        }
+
+        private void OnDisable()
+        {
+            if (_mine != null)
+            {
+                Destroy(_mine.gameObject);
+                _mine = null;
+            }
         }
 
         private sealed class PingMarker : MonoBehaviour

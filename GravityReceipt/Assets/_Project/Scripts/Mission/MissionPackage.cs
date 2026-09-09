@@ -85,6 +85,8 @@ namespace GravityReceipt.Mission
 
             _lives = Mathf.Max(0, _lives - Mathf.Max(1, amount));
             RefreshTint();
+            MissionSfx.PlayDent();
+            MatchDirector.Instance.NotifyPackageDented();
             if (_lives > 0)
             {
                 return;

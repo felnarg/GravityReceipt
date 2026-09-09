@@ -65,13 +65,15 @@ Documento vivo del prototipo.
 - HUD `[>]` + línea “Siguiente: …” para el objetivo en curso.
 - 4 emotes (P1: 1–4 · P2: KP1/2/3/9): OK / NO / ? / ¡AQUÍ!
 - Muebles estáticos (mostrador, estantería, escritorio, mesa) para leer cada sala.
-- Paquete naranja con franja verde.
+- Pings 2p independientes (P1 amarillo / P2 naranja).
+- OOB: AABB de mapa (cae de lado en el pasillo con g heredada ya no vuela al infinito).
+- Toast + thud si el paquete se abolla.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
 - 1.10 / 2.7 playtest: código listo, **cero playtests reales** (no hay Unity aquí).
 - Outline dominante sigue siendo pulso de escala + tint, no un outline URP de verdad.
-- Whoosh de flip listo; emotes (5.7) no.
+- Whoosh de flip listo; emotes son billboard (sin animación de avatar).
 
 ### FALTA
 - 1.11 Vídeo mudo 8–10 s del flip (grabar en Unity local).
@@ -89,7 +91,7 @@ Documento vivo del prototipo.
 5. **P1:** WASD + ratón. Agarra el cubo naranja (mantener E ~0.4 s).
 6. Entra a Archive (norte). Zona verde en la pared este: paquete dentro → objetivo Enchufar.
 7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y déjala pegada a una **pared**. Espera ~1 s: banner **¡FLIP!**, whoosh, FOV, g cambia.
-8. Cruza el pasillo (bordillos rojos altos; vacío a los lados). Si caes, respawneas. Si un valuable cae, vuelve a su sitio.
+8. Cruza el pasillo (bordillos rojos altos; vacío a los lados). Si caes **o sales volando a los lados** (g heredada), respawneas. Si un valuable cae, vuelve a su sitio.
 9. Losa azul Open Office = Entregar. Losa dorada Executive + paquete en manos o mantener E = Sellar.
 10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre.
 11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
@@ -460,6 +462,12 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - 4 emotes locales (billboard + beep). P1: 1–4. P2: KP1/2/3/9.
 - Muebles estáticos en Hub/Archive/Office/Executive (no vuelan con g).
 - Paquete con franja verde para distinguirlo de las cajas.
+
+### 2026-09-09 — Overnight bloque 7 (OOB lateral + ping 2p)
+- `VoidKillZone` mata si |x|>9.5 o z fuera del piso (caída con g hacia la pared en el pasillo).
+- Volumen del pasillo más ancho para el HUD “g hereda”.
+- Ping por jugador (ya no se pisan el marcador).
+- Toast “¡PAQUETE ABOLLADO!” + thud al dent.
 
 ---
 

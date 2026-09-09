@@ -18,7 +18,10 @@ namespace GravityReceipt.Mission
                 ? _win ??= MakeClip("WinFanfare", 523f, 784f, 0.45f)
                 : _lose ??= MakeClip("LoseThud", 110f, 73f, 0.4f));
 
+        private static AudioClip _dent;
         private static AudioClip[] _emotes;
+
+        public static void PlayDent() => Play(_dent ??= MakeClip("PackageDent", 180f, 90f, 0.18f), 0.5f);
 
         public static void PlayEmote(int index)
         {

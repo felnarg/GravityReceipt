@@ -26,14 +26,14 @@ namespace GravityReceipt.Mission
                 }
 
                 var p = motor.transform.position;
-                if (p.y < killY || p.magnitude > maxDistanceFromOrigin)
+                if (IsLost(p))
                 {
                     RespawnPlayer(motor);
                 }
             }
 
             var pkg = FindAnyObjectByType<MissionPackage>();
-            if (pkg != null && (pkg.transform.position.y < killY || pkg.transform.position.magnitude > maxDistanceFromOrigin))
+            if (pkg != null && IsLost(pkg.transform.position))
             {
                 pkg.Respawn();
             }
@@ -47,7 +47,7 @@ namespace GravityReceipt.Mission
                 }
 
                 var p = item.transform.position;
-                if (p.y < killY || p.magnitude > maxDistanceFromOrigin)
+                if (IsLost(p))
                 {
                     item.ResetToHome();
                 }
@@ -62,11 +62,26 @@ namespace GravityReceipt.Mission
                 }
 
                 var p = home.transform.position;
-                if (p.y < killY || p.magnitude > maxDistanceFromOrigin)
+                if (IsLost(p))
                 {
                     home.ReturnHome();
                 }
             }
+        }
+
+        private bool IsLost(Vector3 p)
+        {
+            if (p.y < killY || p.y > 16f || p.magnitude > maxDistanceFromOrigin)
+            {
+                return true;
+            }
+
+            if (Mathf.Abs(p.x) > 9.5f || p.z < -12f || p.z > 68f)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void OnTriggerEnter(Collider other)

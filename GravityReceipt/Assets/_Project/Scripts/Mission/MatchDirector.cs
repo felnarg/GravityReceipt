@@ -15,6 +15,7 @@ namespace GravityReceipt.Mission
 
         public event Action<int, string> ObjectiveCompleted;
         public event Action<MatchPhase, string> MatchEnded;
+        public event Action PackageDented;
 
         [SerializeField] private float matchSeconds = 600f;
         [SerializeField] private int objectivesToWin = 3;
@@ -160,6 +161,11 @@ namespace GravityReceipt.Mission
         public void NotifyPackageDestroyed()
         {
             End(MatchPhase.Lost, "El paquete se destruyó 3 veces");
+        }
+
+        public void NotifyPackageDented()
+        {
+            PackageDented?.Invoke();
         }
 
         public void Rematch()

@@ -70,7 +70,7 @@ namespace GravityReceipt.World
 
             CreateRoomVolume(root.transform, "Hub", HubC, HubS, hubG, inherit: false);
             CreateRoomVolume(root.transform, "Archive", ArcC, ArcS, arcG, inherit: false);
-            CreateRoomVolume(root.transform, "Pasillo", CorC, new Vector3(CorS.x, CorS.y, CorS.z), null, inherit: true);
+            CreateRoomVolume(root.transform, "Pasillo", CorC, new Vector3(6.4f, CorS.y * 1.1f, CorS.z), null, inherit: true);
             CreateRoomVolume(root.transform, "OpenOffice", OffC, OffS, offG, inherit: false);
             CreateRoomVolume(root.transform, "Executive", ExeC, ExeS, exeG, inherit: false);
 
