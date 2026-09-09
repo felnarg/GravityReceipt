@@ -93,6 +93,11 @@ namespace GravityReceipt.Gravity
 
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             go.name = "PredictedFlipWall";
+            var floor = GameObject.Find("OfficeFloor");
+            if (floor != null)
+            {
+                go.transform.SetParent(floor.transform, true);
+            }
             var col = go.GetComponent<Collider>();
             if (col != null)
             {
