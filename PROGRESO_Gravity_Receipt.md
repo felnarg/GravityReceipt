@@ -92,14 +92,14 @@ Documento vivo del prototipo.
 - G se recalcula al **parar** un valuable (no solo al empezar a moverse): el flip usa la posición en la pared.
 - Llevar el dominante a una pared **también** telegráfa (el timer no se reinicia si g pendiente no cambia).
 - Bias vertical extra si el valuable está en las manos (no flippea andando por el centro).
-- Flecha 3D a los pies hacia el objetivo actual (se oculta a < ~3.5 m).
+- Flecha 3D: si el paquete está lejos, apunta al paquete (naranja); si no, al objetivo.
 - Columna luminosa en la losa/zona del objetivo en curso.
 - Orbe naranja pulsante sobre el paquete (no se pierde tras un flip).
 - HUD: distancia al objetivo y al paquete; banner ¡FLIP! se queda 0.85 s al aplicar.
 - PNG automático del primer flip **después** del banner (0.16 s).
 - Cámara se inclina (roll) hacia la g pendiente durante el telegráfo.
 - Thud al aterrizar de una caída > 2.2 m.
-- **P** pausa (timescale 0) · **F3** desatasca jugadores.
+- **P** pausa (timescale 0; también congela el splash) · **F3** desatasca jugadores.
 - Puertas 2.6 m; ventanas unlit, lámparas de techo, zócalos E/W, cubículos Office, cuadro Executive.
 - Siluetas extra: asas del trofeo, pestillos del maletín, tapa de cafetera, pantalla del monitor, 3.er cajón.
 
@@ -122,7 +122,7 @@ Documento vivo del prototipo.
 2. Espera a que compile (scripts nuevos en `Assets/_Project/Scripts/...`).
 3. Opción A (recomendada): menú **GravityReceipt → Setup Office Floor A** → OK.  
    Opción B: pulsa **Play** directo; si la escena es la vieja, se reconstruye sola (2p).
-4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja). Los valuables muestran `$` encima. Splash 9 s: “LA GRAVEDAD SIGUE AL OBJETO MÁS CARO”. El paquete tiene un orbe naranja. Una flecha en el suelo apunta a Enchufar.
+4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja). Los valuables muestran `$` encima. Splash 9 s: “LA GRAVEDAD SIGUE AL OBJETO MÁS CARO” (puedes pulsar **P** para leerlo). El paquete tiene un orbe naranja. La flecha apunta al paquete si está lejos, si no a Enchufar.
 5. **P1:** WASD + ratón. Agarra el cubo naranja (mantener E ~0.4 s).
 6. Entra a Archive (norte). Sigue la flecha / columna verde en la pared este: paquete dentro → objetivo Enchufar.
 7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y llévala a una **pared** (en manos o suelta). Espera ~1 s: banner **¡FLIP ARCHIVE!** (se queda un instante al voltear), whoosh, FOV, la cámara se inclina, g cambia. El primer flip guarda un PNG solo.
@@ -236,7 +236,7 @@ Documento vivo del prototipo.
 | 3.3 | Blockout Sala C Executive | [x] | Maletín $200, Trofeo $150, Server $110, Planta oro $95 |
 | 3.4 | Objetivo 2: entregar paquete | [x] | Losa azul Open Office |
 | 3.5 | Objetivo 3: sellar contrato | [x] | Losa dorada + hold E ~1 s |
-| 3.6 | Timer de partida ~10:00 | [x] | `MatchDirector` 600 s; no descuenta durante el splash 9 s |
+| 3.6 | Timer de partida ~10:00 | [x] | `MatchDirector` 600 s; splash 9 s usa deltaTime (P lo pausa) |
 | 3.7 | Roles stub: Runner (sprint) / Anchor (fix 3 s) | [x] | P1 Runner / P2 Anchor por defecto |
 | 3.8 | Muerte por vacío + respawn en checkpoint | [x] | `VoidKillZone` multi-jugador + paquete |
 | 3.9 | Moment of the Match (mayor caída) | [x] | Local; se muestra al terminar |
@@ -531,6 +531,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - **P** pausa · **F3** unstuck. Puertas 2.6 m.
 - Dress de salas: ventanas, lámparas, zócalos E/W, cubículos, cuadro.
 - Siluetas extra en trofeo / maletín / cafetera / monitor / archivador.
+- Splash 9 s usa `deltaTime` (P lo congela para leer). Flecha naranja al paquete si está lejos.
 
 ---
 

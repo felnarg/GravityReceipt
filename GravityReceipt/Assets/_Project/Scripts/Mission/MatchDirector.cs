@@ -25,10 +25,12 @@ namespace GravityReceipt.Mission
         private readonly bool[] _objectives = new bool[3];
         private string _endReason = string.Empty;
         private bool _paused;
+        private float _splashLeft = 9f;
 
         public MatchPhase Phase => _phase;
         public float RemainingSeconds => Mathf.Max(0f, _remaining);
         public bool IsPaused => _paused;
+        public bool IsInSplash => _splashLeft > 0f;
         public int ObjectivesDone
         {
             get
@@ -77,6 +79,8 @@ namespace GravityReceipt.Mission
             Instance = this;
             _phase = MatchPhase.Playing;
             _remaining = matchSeconds;
+            _splashLeft = 9f;
+            _paused = false;
             Physics.gravity = Vector3.zero;
             Physics.defaultSolverIterations = 10;
             Physics.defaultSolverVelocityIterations = 4;
@@ -138,12 +142,19 @@ namespace GravityReceipt.Mission
                 return;
             }
 
-            if (_phase == MatchPhase.Playing && Time.timeSinceLevelLoad >= 9f)
+            if (_phase == MatchPhase.Playing)
             {
-                _remaining -= Time.deltaTime;
-                if (_remaining <= 0f)
+                if (_splashLeft > 0f)
                 {
-                    End(MatchPhase.Lost, "Tiempo agotado");
+                    _splashLeft -= Time.deltaTime;
+                }
+                else
+                {
+                    _remaining -= Time.deltaTime;
+                    if (_remaining <= 0f)
+                    {
+                        End(MatchPhase.Lost, "Tiempo agotado");
+                    }
                 }
             }
 

@@ -105,6 +105,7 @@ namespace GravityReceipt.UI
 
             var p1 = FindPlayer(LocalPlayerSlot.One);
             var p2 = FindPlayer(LocalPlayerSlot.Two);
+            var match = MatchDirector.Instance;
             if (statusText != null)
             {
                 statusText.gameObject.SetActive(!_chromeHidden);
@@ -122,7 +123,7 @@ namespace GravityReceipt.UI
 
             if (matchText != null)
             {
-                matchText.gameObject.SetActive(!_chromeHidden && Time.timeSinceLevelLoad >= 9f);
+                matchText.gameObject.SetActive(!_chromeHidden && (match == null || !match.IsInSplash));
             }
 
             if (_promptP1 != null)
@@ -150,7 +151,6 @@ namespace GravityReceipt.UI
                 ? new Color(1f, 0.9f, 0.2f)
                 : Color.white;
 
-            var match = MatchDirector.Instance;
             var pkg = FindAnyObjectByType<MissionPackage>();
             var rec = MatchHighlightRecorder.Instance;
             if (matchText != null && match != null)
@@ -210,9 +210,9 @@ namespace GravityReceipt.UI
                     centerText.text = _toast;
                     centerText.color = new Color(0.55f, 1f, 0.65f);
                 }
-                else if (Time.timeSinceLevelLoad < 9f)
+                else if (match.IsInSplash)
                 {
-                    centerText.text = "LA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nGrises sin $ no cuentan · taza $15 o caja $80 a una PARED";
+                    centerText.text = "LA GRAVEDAD SIGUE AL OBJETO MÁS CARO\nGrises sin $ no cuentan · taza $15 o caja $80 a una PARED\nSigue la flecha · P pausa para leer";
                     centerText.color = new Color(1f, 0.92f, 0.4f);
                 }
                 else if (CursorUnlockedHint(p1))
