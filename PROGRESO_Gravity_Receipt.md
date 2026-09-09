@@ -151,6 +151,7 @@ Documento vivo del prototipo.
 - Orbes de paquete/taza y beacon “¡ESTE TIRA DE G!” usan el arriba de g (no el local del objeto al tumbarse).
 - Mancha de pared prevista dice **GIRA**. Aro naranja en la puerta hacia el objetivo (tras el splash).
 - **F10** comfort: reduce shake, FOV punch, roll, viñeta y flash (para mareo).
+- Comfort también **omite el hit-stop** de 80 ms al flippear.
 - Paquete se aplasta al dent; aviso a 1 vida y a 30 s. Chispas al completar un objetivo.
 - Rigidbodies despiertan al flippear g (no se quedan dormidos en el suelo viejo).
 - Un `$` en el pasillo **ya no tira** de la g de la sala anterior (se desregistra; al volver a una sala se vuelve a listar).

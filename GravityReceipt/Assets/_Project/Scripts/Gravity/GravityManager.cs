@@ -227,12 +227,16 @@ namespace GravityReceipt.Gravity
                 {
                     var origin = roomCenter != null ? roomCenter.position : transform.position;
                     GravityFlipBurst.Spawn(origin, _currentGravityDirection);
-                    if (_hitStop != null)
+                    if (!MatchDirector.ComfortMode)
                     {
-                        StopCoroutine(_hitStop);
+                        if (_hitStop != null)
+                        {
+                            StopCoroutine(_hitStop);
+                        }
+
+                        _hitStop = StartCoroutine(HitStop());
                     }
 
-                    _hitStop = StartCoroutine(HitStop());
                     StartCoroutine(CaptureFirstFlipDelayed());
                 }
             }
