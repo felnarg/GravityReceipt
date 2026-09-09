@@ -42,7 +42,7 @@ Cheat de iteración (no sale en el HUD): **F4** teleporta al checkpoint · **F6*
 
 1. Cartel del Hub: **LA GRAVEDAD SIGUE LO MÁS CARO**. Cubos grises **no** tienen `$` (no tiran de g). Taza `$15` sí.
 2. Agarra el paquete **naranja**. En Archive, llévalo a la zona verde **ENCHUFA EL PAQUETE** (pared este).
-3. Caja fuerte **dorada $80**: llévala cerca de una **pared** y suéltala. Tras ~1 s la gravedad de Archive tira hacia esa pared.
+3. Caja fuerte **dorada $80**: llévala a una **pared** (puedes **mantenerla en las manos**). Tras ~1 s la gravedad de Archive tira hacia esa pared. Si la sueltas, espera a que se detenga.
 4. Cruza el pasillo (vacío a los lados; bordillos rojos). Si caes, respawneas en el último checkpoint.
 5. Open Office: deja el paquete en la losa azul **ENTREGAR** (también cuenta si lo llevas en las manos sobre la losa).
 6. Executive: paquete + jugador en la losa dorada. Mantén **E** **o** quédate encima con el paquete agarrado = **SELLAR**.

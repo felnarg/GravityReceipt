@@ -113,7 +113,7 @@ Documento vivo del prototipo.
 4. Pulsa **Play**. Debes ver split: P1 arriba (cápsula azul), P2 abajo (naranja). Los valuables muestran `$` encima. Splash 9 s: “LA GRAVEDAD SIGUE AL OBJETO MÁS CARO”.
 5. **P1:** WASD + ratón. Agarra el cubo naranja (mantener E ~0.4 s).
 6. Entra a Archive (norte). Zona verde en la pared este: paquete dentro → objetivo Enchufar.
-7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y déjala pegada a una **pared**. Espera ~1 s: banner **¡FLIP!**, whoosh, FOV, g cambia.
+7. Agarra la **caja dorada** (etiqueta ¡ESTE TIRA DE G! si es la dominante) y llévala a una **pared** (en manos o suelta). Espera ~1 s: banner **¡FLIP ARCHIVE!**, whoosh, FOV, g cambia.
 8. Cruza el pasillo (bordillos rojos altos; vacío a los lados). Si caes **o sales volando a los lados** (g heredada), respawneas. Si un valuable cae, vuelve a su sitio.
 9. Losa azul Open Office = Entregar. Losa dorada Executive + paquete en manos o mantener E = Sellar.
 10. Al ganar/perder: pulsa **R**. Debería recargar en <15 s. **F5** reinicia siempre. El cronómetro no baja durante el splash inicial.
