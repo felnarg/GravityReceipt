@@ -18,7 +18,32 @@ namespace GravityReceipt.Mission
                 ? _win ??= MakeClip("WinFanfare", 523f, 784f, 0.45f)
                 : _lose ??= MakeClip("LoseThud", 110f, 73f, 0.4f));
 
-        private static void Play(AudioClip clip)
+        private static AudioClip[] _emotes;
+
+        public static void PlayEmote(int index)
+        {
+            _emotes ??= new AudioClip[4];
+            if (index < 0 || index > 3)
+            {
+                index = 3;
+            }
+
+            if (_emotes[index] == null)
+            {
+                var freq = index switch
+                {
+                    0 => 660f,
+                    1 => 220f,
+                    2 => 990f,
+                    _ => 520f
+                };
+                _emotes[index] = MakeClip("Emote" + index, freq, freq * 1.5f, 0.16f);
+            }
+
+            Play(_emotes[index], 0.4f);
+        }
+
+        private static void Play(AudioClip clip, float volume = 0.55f)
         {
             if (clip == null)
             {
@@ -27,7 +52,7 @@ namespace GravityReceipt.Mission
 
             var listener = Object.FindAnyObjectByType<AudioListener>();
             var pos = listener != null ? listener.transform.position : Vector3.zero;
-            AudioSource.PlayClipAtPoint(clip, pos, 0.55f);
+            AudioSource.PlayClipAtPoint(clip, pos, volume);
         }
 
         private static AudioClip MakeClip(string name, float freqA, float freqB, float duration)

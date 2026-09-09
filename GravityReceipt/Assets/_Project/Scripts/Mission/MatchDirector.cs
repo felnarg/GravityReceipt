@@ -47,6 +47,22 @@ namespace GravityReceipt.Mission
         public string EndReason => _endReason;
         public bool IsPlaying => _phase == MatchPhase.Playing;
 
+        public int CurrentObjectiveIndex
+        {
+            get
+            {
+                for (var i = 0; i < _objectives.Length; i++)
+                {
+                    if (!_objectives[i])
+                    {
+                        return i;
+                    }
+                }
+
+                return -1;
+            }
+        }
+
         public void Configure(float seconds, int needed)
         {
             matchSeconds = seconds;

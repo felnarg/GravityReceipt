@@ -95,6 +95,13 @@ namespace GravityReceipt.World
             CreateProp(root.transform, "Prop_Sillon", new Vector3(-1.8f, 0.45f, 48.2f), new Vector3(1.1f, 0.7f, 0.7f), new Color(0.28f, 0.2f, 0.16f), exeG);
             CreateProp(root.transform, "Prop_SillaOffice", new Vector3(-4.2f, 0.45f, 33.5f), new Vector3(0.5f, 0.85f, 0.5f), new Color(0.3f, 0.34f, 0.4f), offG);
 
+            CreateStaticCube(root.transform, "Furn_ArchiveShelf", new Vector3(-6.2f, 1.35f, 7.2f), new Vector3(0.35f, 2.6f, 3.4f), new Color(0.42f, 0.32f, 0.22f));
+            CreateStaticCube(root.transform, "Furn_OfficeDesk", new Vector3(-6.2f, 0.38f, 34.2f), new Vector3(2.2f, 0.12f, 1.0f), new Color(0.55f, 0.48f, 0.38f));
+            CreateStaticCube(root.transform, "Furn_OfficeDeskLegL", new Vector3(-7.05f, 0.18f, 34.2f), new Vector3(0.12f, 0.36f, 0.85f), new Color(0.28f, 0.26f, 0.24f));
+            CreateStaticCube(root.transform, "Furn_OfficeDeskLegR", new Vector3(-5.35f, 0.18f, 34.2f), new Vector3(0.12f, 0.36f, 0.85f), new Color(0.28f, 0.26f, 0.24f));
+            CreateStaticCube(root.transform, "Furn_ExeTable", new Vector3(0f, 0.38f, 50.2f), new Vector3(3.6f, 0.12f, 1.6f), new Color(0.28f, 0.16f, 0.1f));
+            CreateStaticCube(root.transform, "Furn_HubCounter", new Vector3(0f, 0.42f, -3.45f), new Vector3(3.4f, 0.14f, 0.55f), new Color(0.22f, 0.34f, 0.36f));
+
             var matchGo = new GameObject("MatchDirector");
             matchGo.transform.SetParent(root.transform, false);
             var match = matchGo.AddComponent<MatchDirector>();
@@ -342,6 +349,17 @@ namespace GravityReceipt.World
             return go;
         }
 
+        private static GameObject CreateStaticCube(Transform parent, string name, Vector3 position, Vector3 scale, Color color)
+        {
+            var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            go.name = name;
+            go.transform.SetParent(parent, false);
+            go.transform.position = position;
+            go.transform.localScale = scale;
+            SetColor(go, color);
+            return go;
+        }
+
         private static GameObject CreatePackage(Transform parent, Vector3 position, GravityManager gravity)
         {
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -350,6 +368,13 @@ namespace GravityReceipt.World
             go.transform.position = position;
             go.transform.localScale = new Vector3(0.7f, 0.45f, 0.55f);
             SetColor(go, new Color(0.95f, 0.55f, 0.12f));
+            var stripe = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            stripe.name = "PackageStripe";
+            stripe.transform.SetParent(go.transform, false);
+            stripe.transform.localPosition = new Vector3(0f, 0.02f, 0f);
+            stripe.transform.localScale = new Vector3(1.02f, 0.22f, 1.02f);
+            DisableCollider(stripe);
+            SetColor(stripe, new Color(0.12f, 0.55f, 0.28f));
 
             var rb = go.AddComponent<Rigidbody>();
             rb.mass = 5f;
@@ -497,6 +522,7 @@ namespace GravityReceipt.World
             interactor.Configure(hold.transform);
 
             player.AddComponent<PlayerPing>();
+            player.AddComponent<PlayerEmote>();
             var roleCmp = player.AddComponent<PlayerRole>();
             roleCmp.Configure(role);
 

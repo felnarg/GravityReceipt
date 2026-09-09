@@ -52,8 +52,16 @@ namespace GravityReceipt.Mission
 
         private void Update()
         {
+            TickVisual();
+
             if (_done || MatchDirector.Instance == null || !MatchDirector.Instance.IsPlaying)
             {
+                return;
+            }
+
+            if (MatchDirector.Instance.IsObjectiveComplete(objectiveIndex))
+            {
+                MarkCompleteVisual();
                 return;
             }
 
@@ -76,12 +84,42 @@ namespace GravityReceipt.Mission
             }
 
             _done = true;
+            MarkCompleteVisual();
+            MatchDirector.Instance.CompleteObjective(objectiveIndex, objectiveLabel);
+        }
+
+        private void TickVisual()
+        {
+            if (_renderer == null)
+            {
+                return;
+            }
+
+            if (_done || (MatchDirector.Instance != null && MatchDirector.Instance.IsObjectiveComplete(objectiveIndex)))
+            {
+                MarkCompleteVisual();
+                return;
+            }
+
+            var current = MatchDirector.Instance != null
+                          && MatchDirector.Instance.CurrentObjectiveIndex == objectiveIndex;
+            if (current)
+            {
+                var pulse = 0.5f + 0.5f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 3.2f));
+                _renderer.material.color = Color.Lerp(_baseColor, Color.white, pulse * 0.5f);
+                return;
+            }
+
+            _renderer.material.color = Color.Lerp(_baseColor, new Color(0.12f, 0.12f, 0.14f), 0.45f);
+        }
+
+        private void MarkCompleteVisual()
+        {
+            _done = true;
             if (_renderer != null)
             {
                 _renderer.material.color = Color.Lerp(_baseColor, new Color(0.15f, 0.15f, 0.15f), 0.65f);
             }
-
-            MatchDirector.Instance.CompleteObjective(objectiveIndex, objectiveLabel);
         }
 
         private bool ConditionsMet()

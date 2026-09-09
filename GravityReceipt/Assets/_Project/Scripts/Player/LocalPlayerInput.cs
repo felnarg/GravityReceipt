@@ -127,6 +127,27 @@ namespace GravityReceipt.Player
                 : Input.GetKeyDown(KeyCode.Keypad7);
         }
 
+        /// <summary>
+        /// 4 emotes. P1: 1–4. P2: KP1 / KP2 / KP3 / KP9 (evita teclas de mirada).
+        /// </summary>
+        public int EmotePressed()
+        {
+            if (slot == LocalPlayerSlot.One)
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha1)) return 0;
+                if (Input.GetKeyDown(KeyCode.Alpha2)) return 1;
+                if (Input.GetKeyDown(KeyCode.Alpha3)) return 2;
+                if (Input.GetKeyDown(KeyCode.Alpha4)) return 3;
+                return -1;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Keypad1)) return 0;
+            if (Input.GetKeyDown(KeyCode.Keypad2)) return 1;
+            if (Input.GetKeyDown(KeyCode.Keypad3)) return 2;
+            if (Input.GetKeyDown(KeyCode.Keypad9)) return 3;
+            return -1;
+        }
+
         private static float KeyAxis(KeyCode negative, KeyCode positive)
         {
             var v = 0f;

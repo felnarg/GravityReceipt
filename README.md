@@ -25,6 +25,7 @@ La escena commiteada puede estar **desactualizada**. Al pulsar **Play**, si no h
 | Saltar | Space | Right Ctrl / Keypad Enter / botón A |
 | Agarrar (0.4 s) | Mantener **E** o clic izq | Right Shift / Keypad . / botón B |
 | Soltar | **E** o clic der | Right Shift |
+| Emote (OK / NO / ? / ¡AQUÍ!) | **1 2 3 4** | Keypad **1 2 3 9** |
 | Ping | **Q** | **/** |
 | Sprint (Runner) | Left Shift | Right Alt |
 | Ancla g 3 s (Anchor) | **F** | Keypad 0 |

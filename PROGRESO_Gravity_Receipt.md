@@ -27,9 +27,9 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto cerrado en código + 3–6 mapa offline + pulido de feel/regla |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 ~00:05 COT (overnight, bloque compass/F6) |
+| **Última actualización** | 2026-09-09 ~00:20 COT (overnight, bloque emotes/HUD) |
 | **En curso ahora** | Playtest humano 2p + vídeo del flip (1.10 / 1.11 / 2.7) |
-| **Hecho relevante** | Split 2p, g por sala, misión, mapa, HUD regla/FLIP, whoosh, brújula, F6 skip, grab FSM |
+| **Hecho relevante** | Split 2p, g por sala, misión, mapa, HUD regla/FLIP, whoosh, brújula, F6 skip, grab FSM, emotes 1-4, prompt de mirada |
 | **Siguiente acción concreta** | Unity: GravityReceipt → Setup Office Floor A → Play → enchufar paquete + flip con caja dorada a una pared |
 | **Build jugable** | Sí (Editor Play Mode, 1p o 2p local). **Hay que regenerar la escena con el menú Setup.** |
 | **Online 4p** | No (no empezar hasta que el playtest offline sea sólido) |
@@ -60,6 +60,12 @@ Documento vivo del prototipo.
 - Franja naranja en techos (si g apunta arriba, estás en el techo).
 - Damping en props para que se asienten tras un flip.
 - Menú Setup 2p (default) y 1p.
+- Losa del objetivo **actual** pulsa en blanco; las otras se atenúan; F6 también las apaga.
+- Prompt de mirada bajo la cruceta: nombre + `$` o “(sin $)”.
+- HUD `[>]` + línea “Siguiente: …” para el objetivo en curso.
+- 4 emotes (P1: 1–4 · P2: KP1/2/3/9): OK / NO / ? / ¡AQUÍ!
+- Muebles estáticos (mostrador, estantería, escritorio, mesa) para leer cada sala.
+- Paquete naranja con franja verde.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -89,6 +95,7 @@ Documento vivo del prototipo.
 11. (Opcional) **GravityReceipt → Setup Office Floor A (1 jugador)** para probar solo.
 12. Para 1.11: **F8** captura un PNG (carpeta del proyecto en Editor). **F9** oculta help/status para un clip más limpio. Graba 8–10 s mudos del paso 7, o dispara F8 durante el FLIP.
 13. Cheat playtest: **F6** completa el siguiente objetivo y teletea al checkpoint (no está en el HUD a propósito).
+14. Emotes: P1 teclas **1–4**, P2 **KP1 / KP2 / KP3 / KP9**. Apunta a un cubo gris: el prompt debe decir “(sin $)”.
 
 ---
 
@@ -233,7 +240,7 @@ Documento vivo del prototipo.
 | 5.4 | Medir comprensión de la regla | [ ] | Meta ≥ 80% en 1ª partida |
 | 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + banner FLIP; falta ajustar con mareo real |
 | 5.6 | Pass siluetas/colores valuables | [~] | Primitivas distintas (caja/cápsula/cilindro) + masa por precio; falta arte |
-| 5.7 | Emotes (4) + whoosh final | [~] | Whoosh procedural en cada flip; emotes no |
+| 5.7 | Emotes (4) + whoosh final | [x] | Whoosh en cada flip; emotes billboard OK/NO/?/¡AQUÍ! (sin animación de avatar) |
 | 5.8 | Decisión go / no-go | [ ] | Ver métricas abajo |
 
 **Gate go:** rematch ≥ 55% **o** ≥ 40% de grupos envían clip solos.  
@@ -248,7 +255,7 @@ Documento vivo del prototipo.
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
 | 6.1 | Pass de arte (no final, salir de gris total) | [ ] | |
-| 6.2 | Pulido UI mínima | [~] | Splash regla, banner FLIP, toast de objetivo |
+| 6.2 | Pulido UI mínima | [~] | Splash, FLIP, toast, `[>]` objetivo, prompt de mirada, pista “Siguiente” |
 | 6.3 | Build Steam o itch privada | [ ] | |
 | 6.4 | Trailer 15–20 s del mejor clip | [ ] | |
 | 6.5 | Lista bugs P0 cerrada | [ ] | Gravedad, softlock, desync |
@@ -369,6 +376,7 @@ Eje +Z (metros aprox.): Hub z=-4..4 → Archive 4..16 → Pasillo 16..27 → Off
 | 2026-09-08 | Push a GitHub `felnarg/GravityReceipt` (commit proto) | Lanzar Cloud Agent overnight con prompt del plan |
 | 2026-09-09 | Cloud Agent: 2p split + mapa offline + misión/timer/roles/rematch | Playtest humano + vídeo flip; no Unity en el cloud |
 | 2026-09-09 | Pulido overnight: curbs, grab exclusivo, HUD regla/FLIP, FOV+whoosh, valuables home | Playtest Unity local + vídeo 1.11; no online |
+| 2026-09-09 | Emotes 4 + prompt mirada + pulso losa actual + muebles estáticos | Playtest humano; vídeo 1.11 |
 
 ---
 
@@ -445,14 +453,22 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Franja azul en el suelo original de cada sala (orientación tras un flip).
 - SFX: ding objetivo, fanfarria al ganar, thud al perder.
 
+### 2026-09-09 — Overnight bloque 6 (emotes + HUD objetivo)
+- F6 apaga visualmente la losa completada; la losa **actual** pulsa; las futuras se atenúan.
+- Prompt bajo la cruceta: nombre del objeto + `$` o “(sin $)”.
+- HUD: `[>]` en el objetivo en curso + pista “Siguiente: …”.
+- 4 emotes locales (billboard + beep). P1: 1–4. P2: KP1/2/3/9.
+- Muebles estáticos en Hub/Archive/Office/Executive (no vuelan con g).
+- Paquete con franja verde para distinguirlo de las cajas.
+
 ---
 
 ## Checklist del día (copiar al empezar una sesión)
 
 ```
 Fecha: 2026-09-09
-Enfoque de hoy (1–3 IDs del plan): pulido 1.10/2.7 (sin Unity) + 5.5 feel + bugs 2p
-Hecho: curbs, HUD regla/FLIP, whoosh/FOV, grab exclusivo, valuables home
+Enfoque de hoy (1–3 IDs del plan): pulido 1.10/2.7 (sin Unity) + 5.7 emotes + 6.2 HUD
+Hecho: emotes, prompt mirada, pulso losa, muebles estáticos
 Pendiente al cerrar: playtest Unity local, vídeo 1.11, no online
 Bloqueadores: Unity Editor ausente en el cloud agent
 Actualicé "Estado actual": sí

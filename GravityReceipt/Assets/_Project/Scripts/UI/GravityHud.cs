@@ -21,6 +21,8 @@ namespace GravityReceipt.UI
         [SerializeField] private Text centerText;
         private Text _crossP1;
         private Text _crossP2;
+        private Text _promptP1;
+        private Text _promptP2;
         private GameObject _splitBar;
         private MatchDirector _boundMatch;
         private string _toast = string.Empty;
@@ -59,9 +61,21 @@ namespace GravityReceipt.UI
                 _crossP2.gameObject.SetActive(false);
             }
 
+            if (_promptP2 != null)
+            {
+                _promptP2.gameObject.SetActive(false);
+            }
+
             if (_crossP1 != null)
             {
                 var rt = _crossP1.rectTransform;
+                rt.anchorMin = new Vector2(0.5f, 0.5f);
+                rt.anchorMax = new Vector2(0.5f, 0.5f);
+            }
+
+            if (_promptP1 != null)
+            {
+                var rt = _promptP1.rectTransform;
                 rt.anchorMin = new Vector2(0.5f, 0.5f);
                 rt.anchorMax = new Vector2(0.5f, 0.5f);
             }
@@ -105,6 +119,21 @@ namespace GravityReceipt.UI
             {
                 helpText.gameObject.SetActive(!_chromeHidden && p2 != null);
             }
+
+            if (matchText != null)
+            {
+                matchText.gameObject.SetActive(!_chromeHidden);
+            }
+
+            if (_promptP1 != null)
+            {
+                _promptP1.gameObject.SetActive(!_chromeHidden);
+            }
+
+            if (_promptP2 != null)
+            {
+                _promptP2.gameObject.SetActive(!_chromeHidden && p2 != null);
+            }
             var gravity = p1 != null && p1.Gravity != null ? p1.Gravity : FindAnyObjectByType<GravityManager>();
             var room1 = p1 != null ? RoomRegistry.FindRoom(p1.transform.position) : null;
             var room2 = p2 != null ? RoomRegistry.FindRoom(p2.transform.position) : null;
@@ -136,15 +165,13 @@ namespace GravityReceipt.UI
                 var mm = t / 60;
                 var ss = t % 60;
                 var hearts = Hearts(pkg);
-                var o1 = Mark(match.IsObjectiveComplete(0));
-                var o2 = match.IsObjectiveComplete(0) ? Mark(match.IsObjectiveComplete(1)) : "[-]";
-                var o3 = match.IsObjectiveComplete(1) ? Mark(match.IsObjectiveComplete(2)) : "[-]";
                 matchText.color = t <= 60
                     ? new Color(1f, 0.45f, 0.4f)
                     : Color.white;
                 matchText.text =
                     $"⏱ {mm:00}:{ss:00}   Paquete {hearts}  dest {(pkg != null ? pkg.Destructions : 0)}/{(pkg != null ? pkg.MaxDestructions : 3)}\n" +
-                    $"{o1} Enchufar   {o2} Entregar   {o3} Sellar   ({match.ObjectivesDone}/{match.ObjectivesToWin})" +
+                    $"{ObjMark(match, 0)} Enchufar   {ObjMark(match, 1)} Entregar   {ObjMark(match, 2)} Sellar   ({match.ObjectivesDone}/{match.ObjectivesToWin})" +
+                    NextObjectiveHint(match) +
                     ObjectiveProgressSuffix();
             }
 
@@ -152,15 +179,15 @@ namespace GravityReceipt.UI
             {
                 var r1 = RoleOf(LocalPlayerSlot.One);
                 var wind = WindUp(p1);
-                helpP1Text.text = $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  Shift sprint  F ancla  Tab rol  F5 restart  F9 HUD{wind}";
+                helpP1Text.text = $"P1 [{r1}] WASD+ratón  E agarrar  Q ping  1-4 emote  Shift sprint  F ancla  Tab rol  F5 restart  F9 HUD{wind}";
             }
 
             if (helpText != null)
             {
                 var r2 = RoleOf(LocalPlayerSlot.Two);
                 helpText.text = p2 != null
-                    ? $"P2 [{r2}] flechas  J/L+I/K mirar  RShift agarrar  / ping  Alt sprint  KP0 ancla  KP7 rol"
-                    : $"P1 [{RoleOf(LocalPlayerSlot.One)}] WASD+ratón  E agarrar  Q ping  Shift sprint  F ancla";
+                    ? $"P2 [{r2}] flechas  J/L+I/K mirar  RShift agarrar  / ping  KP1-3/9 emote  Alt sprint  KP0 ancla  KP7 rol"
+                    : $"P1 [{RoleOf(LocalPlayerSlot.One)}] WASD+ratón  E agarrar  Q ping  1-4 emote  Shift sprint  F ancla";
             }
 
             if (centerText != null && match != null)
@@ -196,6 +223,8 @@ namespace GravityReceipt.UI
             }
             TintCross(_crossP1, p1);
             TintCross(_crossP2, p2);
+            UpdateLookPrompt(_promptP1, p1, "E");
+            UpdateLookPrompt(_promptP2, p2, "RShift");
 
             if (Input.GetKeyDown(KeyCode.F8))
             {
@@ -276,7 +305,80 @@ namespace GravityReceipt.UI
             return s;
         }
 
-        private static string Mark(bool done) => done ? "[x]" : "[ ]";
+        private static string ObjMark(MatchDirector match, int index)
+        {
+            if (match.IsObjectiveComplete(index))
+            {
+                return "[x]";
+            }
+
+            if (index > 0 && !match.IsObjectiveComplete(index - 1))
+            {
+                return "[-]";
+            }
+
+            return index == match.CurrentObjectiveIndex ? "[>]" : "[ ]";
+        }
+
+        private static string NextObjectiveHint(MatchDirector match)
+        {
+            if (match == null || !match.IsPlaying)
+            {
+                return string.Empty;
+            }
+
+            return match.CurrentObjectiveIndex switch
+            {
+                0 => "\nSiguiente: paquete a la zona VERDE de Archive",
+                1 => "\nSiguiente: suelta el paquete en la losa AZUL",
+                2 => "\nSiguiente: paquete + mantén E en la losa DORADA",
+                _ => string.Empty
+            };
+        }
+
+        private static void UpdateLookPrompt(Text prompt, PlayerMotor motor, string grabKey)
+        {
+            if (prompt == null)
+            {
+                return;
+            }
+
+            if (motor == null)
+            {
+                prompt.text = "";
+                return;
+            }
+
+            var inter = motor.GetComponent<PlayerInteractor>();
+            if (inter == null)
+            {
+                prompt.text = "";
+                return;
+            }
+
+            if (inter.IsHolding)
+            {
+                prompt.text = $"{grabKey}  soltar";
+                prompt.color = new Color(1f, 0.75f, 0.35f);
+                return;
+            }
+
+            if (inter.IsWinding || inter.WindUpNormalized > 0.05f)
+            {
+                prompt.text = $"agarrando… {inter.WindUpNormalized:0.0}";
+                prompt.color = new Color(1f, 0.55f, 0.2f);
+                return;
+            }
+
+            if (inter.LookHint is { Length: > 0 })
+            {
+                prompt.text = $"{grabKey}  {inter.LookHint}";
+                prompt.color = new Color(1f, 0.95f, 0.55f);
+                return;
+            }
+
+            prompt.text = "";
+        }
 
         private static string RoleOf(LocalPlayerSlot slot)
         {
@@ -417,7 +519,7 @@ namespace GravityReceipt.UI
             canvasGo.AddComponent<GraphicRaycaster>();
 
             statusText = MakeText(canvasGo.transform, "Status", new Vector2(0f, 18f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 36f), 20, TextAnchor.MiddleCenter);
-            matchText = MakeText(canvasGo.transform, "Match", new Vector2(0f, -18f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 52f), 18, TextAnchor.MiddleCenter);
+            matchText = MakeText(canvasGo.transform, "Match", new Vector2(0f, -28f), new Vector2(0.5f, 0.5f), new Vector2(1600f, 78f), 18, TextAnchor.MiddleCenter);
             helpP1Text = MakeText(canvasGo.transform, "HelpP1", new Vector2(16f, -10f), new Vector2(0f, 1f), new Vector2(1600f, 28f), 16, TextAnchor.UpperLeft);
             helpP1Text.color = new Color(0.7f, 0.85f, 1f);
             helpText = MakeText(canvasGo.transform, "Help", new Vector2(16f, 12f), new Vector2(0f, 0f), new Vector2(1600f, 32f), 16, TextAnchor.LowerLeft);
@@ -427,6 +529,10 @@ namespace GravityReceipt.UI
 
             _crossP1 = MakeCross(canvasGo.transform, "CrossP1", new Vector2(0.5f, 0.75f));
             _crossP2 = MakeCross(canvasGo.transform, "CrossP2", new Vector2(0.5f, 0.25f));
+            _promptP1 = MakeText(canvasGo.transform, "PromptP1", new Vector2(0f, -36f), new Vector2(0.5f, 0.75f), new Vector2(520f, 32f), 18, TextAnchor.UpperCenter);
+            _promptP1.color = new Color(1f, 0.95f, 0.55f);
+            _promptP2 = MakeText(canvasGo.transform, "PromptP2", new Vector2(0f, -36f), new Vector2(0.5f, 0.25f), new Vector2(520f, 32f), 18, TextAnchor.UpperCenter);
+            _promptP2.color = new Color(1f, 0.95f, 0.55f);
             _splitBar = MakeSplitBar(canvasGo.transform);
         }
 

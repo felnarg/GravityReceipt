@@ -34,8 +34,10 @@ namespace GravityReceipt.Interaction
                 ? 0f
                 : Mathf.Clamp01(_windUp / grabWindUpSeconds);
         public bool IsHolding => _phase == GrabPhase.Holding && _held != null;
+        public bool IsWinding => _phase == GrabPhase.Winding;
         public bool IsHoldingPackage => IsHolding && _held.GetComponent<MissionPackage>() != null;
         public bool HasLookTarget { get; private set; }
+        public string LookHint { get; private set; } = "";
 
         public void Configure(Transform hold)
         {
@@ -71,6 +73,7 @@ namespace GravityReceipt.Interaction
         private void TickHolding()
         {
             HasLookTarget = false;
+            LookHint = _held != null ? "soltar" : "";
             ClearFocus();
             if (_held == null || _input.DropPressed())
             {
@@ -81,6 +84,7 @@ namespace GravityReceipt.Interaction
         private void TickIdle()
         {
             HasLookTarget = false;
+            LookHint = "";
             _windUp = 0f;
             if (!TryGetTarget(out var body, out var valuable, out var grab))
             {
@@ -89,6 +93,7 @@ namespace GravityReceipt.Interaction
             }
 
             HasLookTarget = true;
+            LookHint = FormatHint(body, valuable);
             SetFocus(body);
             if (!_input.GrabHeld())
             {
@@ -107,11 +112,13 @@ namespace GravityReceipt.Interaction
                 _phase = GrabPhase.Idle;
                 _windUp = 0f;
                 HasLookTarget = false;
+                LookHint = "";
                 ClearFocus();
                 return;
             }
 
             HasLookTarget = true;
+            LookHint = FormatHint(body, valuable);
             SetFocus(body);
             _windUp += Time.deltaTime;
             if (_windUp < grabWindUpSeconds)
@@ -164,6 +171,44 @@ namespace GravityReceipt.Interaction
 
             valuable = body.GetComponent<ValuableItem>();
             return true;
+        }
+
+        private static string FormatHint(Rigidbody body, ValuableItem valuable)
+        {
+            if (body == null)
+            {
+                return "";
+            }
+
+            var pretty = PrettyName(body.name);
+            if (body.GetComponent<MissionPackage>() != null)
+            {
+                return "PAQUETE";
+            }
+
+            return valuable != null ? $"{pretty}  ${valuable.Price}" : $"{pretty}  (sin $)";
+        }
+
+        private static string PrettyName(string n)
+        {
+            if (n is not { Length: > 0 })
+            {
+                return "objeto";
+            }
+
+            if (n.StartsWith("Valuable_"))
+            {
+                var rest = n[9..];
+                var us = rest.LastIndexOf('_');
+                return us > 0 ? rest[..us] : rest;
+            }
+
+            if (n.StartsWith("Prop_"))
+            {
+                return n[5..];
+            }
+
+            return n;
         }
 
         private void Grab(Rigidbody body, ValuableItem valuable, Grabbable grab)
@@ -230,6 +275,8 @@ namespace GravityReceipt.Interaction
             _heldGrab = null;
             _phase = GrabPhase.Idle;
             _windUp = 0f;
+            LookHint = "";
+            HasLookTarget = false;
         }
 
         private void IgnoreHeldCollision(bool ignore)
