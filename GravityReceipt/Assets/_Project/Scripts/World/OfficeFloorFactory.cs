@@ -124,6 +124,13 @@ namespace GravityReceipt.World
             CreateStaticCube(root.transform, "Furn_OfficeDeskLegR", new Vector3(-5.35f, 0.18f, 34.2f), new Vector3(0.12f, 0.36f, 0.85f), new Color(0.28f, 0.26f, 0.24f));
             CreateStaticCube(root.transform, "Furn_ExeTable", new Vector3(0f, 0.38f, 50.2f), new Vector3(3.6f, 0.12f, 1.6f), new Color(0.28f, 0.16f, 0.1f));
             CreateStaticCube(root.transform, "Furn_HubCounter", new Vector3(0f, 0.42f, -3.45f), new Vector3(3.4f, 0.14f, 0.55f), new Color(0.22f, 0.34f, 0.36f));
+            var cooler = CreateStaticCube(root.transform, "Furn_WaterCooler", new Vector3(4.4f, 0.7f, -2.6f), new Vector3(0.45f, 1.2f, 0.45f), new Color(0.75f, 0.82f, 0.88f));
+            AddLocalVisual(cooler.transform, PrimitiveType.Cylinder, new Vector3(0f, 0.55f, 0f), new Vector3(0.7f, 0.35f, 0.7f), new Color(0.45f, 0.75f, 0.95f));
+            var clock = CreateStaticCube(root.transform, "Furn_HubClock", new Vector3(0f, 3.35f, -3.72f), new Vector3(0.7f, 0.7f, 0.08f), new Color(0.92f, 0.92f, 0.9f));
+            DisableCollider(clock);
+            CreateStaticCube(root.transform, "Furn_Printer", new Vector3(6.4f, 0.45f, 38.5f), new Vector3(0.9f, 0.7f, 0.7f), new Color(0.28f, 0.3f, 0.34f));
+            var mat = CreateStaticCube(root.transform, "Furn_SpawnMat", new Vector3(0f, 0.03f, -1.8f), new Vector3(3.4f, 0.04f, 1.6f), new Color(0.18f, 0.4f, 0.42f));
+            DisableCollider(mat);
             CreateStaticCube(root.transform, "Furn_ArchiveShelfB", new Vector3(6.2f, 1.35f, 12.6f), new Vector3(0.35f, 2.6f, 2.6f), new Color(0.4f, 0.3f, 0.2f));
             CreateStaticCube(root.transform, "Furn_CubicleL", new Vector3(-5.8f, 0.65f, 35.5f), new Vector3(0.1f, 1.3f, 3.6f), new Color(0.38f, 0.46f, 0.55f));
             CreateStaticCube(root.transform, "Furn_CubicleLFront", new Vector3(-4.2f, 0.65f, 33.75f), new Vector3(3.1f, 1.3f, 0.1f), new Color(0.38f, 0.46f, 0.55f));
