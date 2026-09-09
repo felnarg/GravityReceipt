@@ -175,7 +175,7 @@ namespace GravityReceipt.Mission
                     if (!_ruleNudgeSent && matchSeconds - _remaining >= 8f)
                     {
                         _ruleNudgeSent = true;
-                        if (ObjectivesDone == 0 && !AnyRoomTelegraphing())
+                        if (ObjectivesDone == 0 && !AnyRoomTelegraphing() && !AnyRoomFlippedFromDefault())
                         {
                             Hint?.Invoke("Agarrá la taza $15 o la caja $80 · a una PARED");
                         }
@@ -219,6 +219,20 @@ namespace GravityReceipt.Mission
             foreach (var g in managers)
             {
                 if (g != null && g.ShowFlipBanner)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool AnyRoomFlippedFromDefault()
+        {
+            var managers = FindObjectsByType<GravityReceipt.Gravity.GravityManager>(FindObjectsSortMode.None);
+            foreach (var g in managers)
+            {
+                if (g != null && Vector3.Dot(g.CurrentDirection, Vector3.down) < 0.92f)
                 {
                     return true;
                 }
