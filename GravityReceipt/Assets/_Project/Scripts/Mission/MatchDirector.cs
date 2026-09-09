@@ -62,6 +62,7 @@ namespace GravityReceipt.Mission
             Physics.defaultSolverIterations = 10;
             Physics.defaultSolverVelocityIterations = 4;
             Time.timeScale = 1f;
+            Application.targetFrameRate = 60;
             GravityReceipt.Gravity.GravityManager.ResetFlipScreenshotFlag();
         }
 
