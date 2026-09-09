@@ -104,6 +104,8 @@ Documento vivo del prototipo.
 - Siluetas extra: asas del trofeo, pestillos del maletín, tapa de cafetera, pantalla del monitor, 3.er cajón.
 - Prompt al llevar el dominante: “acércala a una PARED” / “¡FLIP en camino!”.
 - Brújula dorada mientras llevas el dominante: apunta a la g **prevista** (abajo en el centro, a la pared al acercarte).
+- Toast “Caíste · checkpoint” al respawnear por vacío.
+- Ding al terminar el splash de 9 s (el timer 10:00 arranca).
 - Barandillas en el pasillo (dos alturas) para leer el vacío y frenar un poco con g de lado.
 
 ### A MEDIAS

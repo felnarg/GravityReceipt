@@ -27,6 +27,7 @@ namespace GravityReceipt.Mission
         private string _endReason = string.Empty;
         private bool _paused;
         private float _splashLeft = 9f;
+        private bool _splashEnded;
 
         public MatchPhase Phase => _phase;
         public float RemainingSeconds => Mathf.Max(0f, _remaining);
