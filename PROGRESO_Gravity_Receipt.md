@@ -425,6 +425,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Moment of the Match cuenta flips además de caídas.
 - FOV extra al sprint Runner; cruceta crece al wind-up de agarre.
 - **F9** oculta help/status para grabar el clip 1.11.
+- Soltar un objeto le da un empujón hacia la mirada (menos clip en el jugador).
 
 ---
 
