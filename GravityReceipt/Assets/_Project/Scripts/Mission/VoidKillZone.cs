@@ -9,6 +9,7 @@ namespace GravityReceipt.Mission
     /// Si el jugador o un prop se aleja demasiado / cae al vacío, respawnea.
     /// Combina trigger + chequeo por distancia (CharacterController a veces falla triggers).
     /// </summary>
+    [DefaultExecutionOrder(50)]
     public sealed class VoidKillZone : MonoBehaviour
     {
         [SerializeField] private float maxDistanceFromOrigin = 80f;
