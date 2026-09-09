@@ -169,7 +169,13 @@ namespace GravityReceipt.Mission
                 return;
             }
 
-            CompleteObjective(next, "Skip");
+            CompleteObjective(next, next switch
+            {
+                0 => "Enchufar",
+                1 => "Entregar",
+                2 => "Sellar",
+                _ => "Objetivo"
+            });
             var checkpoints = CheckpointSystem.Instance;
             var motors = FindObjectsByType<PlayerMotor>(FindObjectsSortMode.None);
             foreach (var motor in motors)
