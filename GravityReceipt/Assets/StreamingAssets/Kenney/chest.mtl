@@ -1,0 +1,4 @@
+# Kenney Mini Dungeon (CC0)
+newmtl colormap
+Kd 1 1 1
+map_Kd mini_colormap.png

@@ -1,0 +1,4 @@
+# Kenney Food Kit (CC0)
+newmtl colormap
+Kd 1 1 1
+map_Kd food_colormap.png

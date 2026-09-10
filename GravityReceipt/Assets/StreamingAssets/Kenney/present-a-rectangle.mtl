@@ -1,0 +1,4 @@
+# Kenney Holiday Kit (CC0)
+newmtl colormap
+Kd 1 1 1
+map_Kd holiday_colormap.png
