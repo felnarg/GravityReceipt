@@ -123,9 +123,9 @@ namespace GravityReceipt.World
             Texture2D[] textures,
             Color? tintMix)
         {
-            var filter = root.GetComponent<MeshFilter>() ?? root.AddComponent<MeshFilter>();
+            var filter = root.AddComponent<MeshFilter>();
             filter.sharedMesh = mesh;
-            var rend = root.GetComponent<MeshRenderer>() ?? root.AddComponent<MeshRenderer>();
+            var rend = root.AddComponent<MeshRenderer>();
             var mats = new Material[mesh.subMeshCount];
             for (var i = 0; i < mats.Length; i++)
             {
