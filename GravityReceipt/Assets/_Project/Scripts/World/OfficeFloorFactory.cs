@@ -220,24 +220,14 @@ namespace GravityReceipt.World
             checkpoints.SetStageSpawns(2, new[] { new Vector3(-1.2f, 0.3f, 40f), new Vector3(1.2f, 0.3f, 40f) }, new Vector3(0f, 0.5f, 40f));
             checkpoints.SetStageSpawns(3, new[] { new Vector3(-1.2f, 0.3f, 54f), new Vector3(1.2f, 0.3f, 54f) }, new Vector3(0f, 0.5f, 54f));
 
-            CreateObjective(root.transform, "Obj1_Enchufar", 0, "Enchufar", new Vector3(5.9f, 1.1f, 10f), new Vector3(1.5f, 1.8f, 1.8f), new Vector3(2.2f, 1.4f, 1.4f), 0.45f, package: true, player: false, hold: false, new Color(0.2f, 0.85f, 0.55f));
-            CreateObjective(root.transform, "Obj2_Entregar", 1, "Entregar", new Vector3(0f, 0.22f, 40.5f), new Vector3(2.6f, 0.12f, 2.6f), new Vector3(1f, 28f, 1f), 0.5f, package: true, player: false, hold: false, new Color(0.3f, 0.6f, 1f));
-            CreateObjective(root.transform, "Obj3_Sellar", 2, "Sellar", new Vector3(0f, 0.22f, 54.2f), new Vector3(2.8f, 0.12f, 2.4f), new Vector3(1f, 32f, 1f), 1.0f, package: true, player: true, hold: true, new Color(0.95f, 0.75f, 0.2f));
+            CreateObjective(root.transform, "Obj1_Enchufar", 0, "AQUÍ", new Vector3(5.9f, 1.1f, 10f), new Vector3(1.5f, 1.8f, 1.8f), new Vector3(2.2f, 1.4f, 1.4f), 0.45f, package: true, player: false, hold: false, new Color(0.2f, 0.85f, 0.55f));
+            CreateObjective(root.transform, "Obj2_Entregar", 1, "AQUÍ", new Vector3(0f, 0.22f, 40.5f), new Vector3(2.6f, 0.12f, 2.6f), new Vector3(1f, 28f, 1f), 0.5f, package: true, player: false, hold: false, new Color(0.3f, 0.6f, 1f));
+            CreateObjective(root.transform, "Obj3_Sellar", 2, "MANTÉN E", new Vector3(0f, 0.22f, 54.2f), new Vector3(2.8f, 0.12f, 2.4f), new Vector3(1f, 32f, 1f), 1.0f, package: true, player: true, hold: true, new Color(0.95f, 0.75f, 0.2f));
 
             CreateSign(root.transform, "TutorialSign", new Vector3(0f, 3.88f, 3.82f), new Vector3(6.2f, 0.5f, 0.12f),
-                "LA GRAVEDAD SIGUE LO MÁS CARO", new Vector3(0f, 3.88f, 3.65f), Quaternion.Euler(0f, 180f, 0f), new Color(0.08f, 0.1f, 0.12f), new Color(1f, 0.92f, 0.35f));
-            CreateSign(root.transform, "Sign_HintPared", new Vector3(-4.72f, 1.7f, 0f), new Vector3(0.1f, 1.1f, 3.6f),
-                "SIN $ NO TIRA · CAJA $80 SÍ", new Vector3(-4.45f, 1.7f, 0f), Quaternion.Euler(0f, 90f, 0f), new Color(0.12f, 0.1f, 0.04f), new Color(1f, 0.85f, 0.35f));
+                "EL $ MÁS CARO VOLTEA LA SALA", new Vector3(0f, 3.88f, 3.65f), Quaternion.Euler(0f, 180f, 0f), new Color(0.08f, 0.1f, 0.12f), new Color(1f, 0.92f, 0.35f));
             CreateSign(root.transform, "Sign_Pasillo", new Vector3(0f, 3.72f, 16.15f), new Vector3(3.2f, 0.4f, 0.1f),
                 "CUIDADO: VACÍO", new Vector3(0f, 3.72f, 16.0f), Quaternion.Euler(0f, 180f, 0f), new Color(0.18f, 0.06f, 0.06f), new Color(1f, 0.5f, 0.45f));
-            CreateSign(root.transform, "Sign_Socket", new Vector3(6.72f, 2.35f, 10f), new Vector3(0.1f, 0.55f, 2.6f),
-                "ENCHUFA EL PAQUETE", new Vector3(6.4f, 2.35f, 10f), Quaternion.Euler(0f, -90f, 0f), new Color(0.08f, 0.2f, 0.14f), new Color(0.55f, 1f, 0.75f));
-            CreateSign(root.transform, "Sign_ArchivePared", new Vector3(-6.72f, 2.2f, 10f), new Vector3(0.1f, 0.7f, 3.4f),
-                "SUELTA LA CAJA $80 EN UNA PARED", new Vector3(-6.4f, 2.2f, 10f), Quaternion.Euler(0f, 90f, 0f), new Color(0.12f, 0.08f, 0.04f), new Color(1f, 0.88f, 0.4f));
-            CreateSign(root.transform, "Sign_Entregar", new Vector3(7.72f, 1.8f, 40.5f), new Vector3(0.1f, 0.7f, 3.2f),
-                "SUELTA EL PAQUETE EN LA LOSA AZUL", new Vector3(7.4f, 1.8f, 40.5f), Quaternion.Euler(0f, -90f, 0f), new Color(0.06f, 0.12f, 0.22f), new Color(0.65f, 0.85f, 1f));
-            CreateSign(root.transform, "Sign_Sellar", new Vector3(-5.72f, 1.8f, 54.2f), new Vector3(0.1f, 0.7f, 3.0f),
-                "PAQUETE + MANTÉN E PARA SELLAR", new Vector3(-5.4f, 1.8f, 54.2f), Quaternion.Euler(0f, 90f, 0f), new Color(0.18f, 0.12f, 0.04f), new Color(1f, 0.85f, 0.4f));
             CreateSign(root.transform, "Door_Archive", new Vector3(0f, 3.62f, 4.05f), new Vector3(2.4f, 0.28f, 0.08f),
                 "→ ARCHIVE", new Vector3(0f, 3.62f, 3.92f), Quaternion.Euler(0f, 180f, 0f), new Color(0.08f, 0.08f, 0.1f), new Color(1f, 0.9f, 0.45f));
             CreateSign(root.transform, "Door_Pasillo", new Vector3(0f, 3.62f, 16.05f), new Vector3(2.4f, 0.28f, 0.08f),
@@ -699,6 +689,7 @@ namespace GravityReceipt.World
             billboard.Configure(host.transform, Vector3.zero);
             var upFollow = host.AddComponent<GravityUpFollow>();
             upFollow.Configure(go.transform, 1.15f);
+            trigger.BindWorldLabel(host);
         }
 
         private static void CreateSign(

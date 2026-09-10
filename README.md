@@ -1,6 +1,12 @@
 # Gravity Receipt
 
-Prototipo coop PC: la gravedad sigue al objeto más caro de **la sala**.
+Coop caótico de oficina: **llevas un paquete naranja a 3 zonas** antes de que se destruya o se acabe el tiempo. El twist es que **el objeto con más `$` de cada sala voltea la gravedad** hacia donde lo dejes.
+
+La gracia no es leer carteles. Es que un compañero lleva el paquete por el pasillo y el otro pone la caja `$80` en una pared: la sala se cae de lado, el paquete vuela, y sale el clip.
+
+## Cómo se gana (una frase)
+
+Paquete naranja → zona **VERDE** → losa **AZUL** → losa **DORADA** (mantén E). El `$` más caro es la herramienta (y el caos), no el objetivo.
 
 ## Requisitos
 
@@ -43,14 +49,13 @@ Cheat de iteración (no sale en el HUD): **F3** desatasca · **F4** teleporta al
 
 ### Qué probar (loop corto)
 
-1. Cartel del Hub: **LA GRAVEDAD SIGUE LO MÁS CARO**. Cubos grises **no** tienen `$` (no tiran de g; el primer agarre tostea “Sin $”). Taza `$15` sí (orbe dorado encima). La flecha a los pies apunta a la taza mientras estás en el Hub. El paquete lleva un orbe naranja y **tampoco** tira de g (toast “enchúfalo”). Tras un flip, un cuadrado cian con **ABAJO** marca la cara que ahora es “abajo”. Si el objetivo queda fuera de cámara, el HUD muestra una flecha (→ TAZA / PAQUETE / ENCHUFAR).
-2. Agarra la taza o el paquete **naranja**. Tras el primer `$`, un toast dice “Llévalo a una PARED”. En Archive, llévalo a la zona verde **ENCHUFA EL PAQUETE** (pared este).
-3. Caja fuerte **dorada $80**: llévala a una **pared** (puedes **mantenerla en las manos**). El prompt dice “acércala a una PARED”; la pared se pinta naranja con **GIRA**; oirás 4 ticks. Tras ~1 s la gravedad de Archive tira hacia esa pared (flash + chispas). El pad cian dice **ABAJO**.
-4. Cruza el pasillo (vacío a los lados; bordillos rojos). Si caes, respawneas en el último checkpoint.
-5. Open Office: deja el paquete en la losa azul **ENTREGAR** (también cuenta si lo llevas en las manos sobre la losa).
-6. Executive: paquete + jugador en la losa dorada. Mantén **E** **o** quédate encima con el paquete agarrado = **SELLAR**.
-7. Timer 10:00 (no baja durante el splash de 9 s; **P** también pausa el splash). 3 destrucciones del paquete (impactos fuertes) = derrota. **R** recarga la escena.
-8. **Gravedad por sala:** Archive puede estar “de lado” mientras Office sigue normal. Si llevas un `$` al pasillo, **deja de tirar** de la sala que abandonaste. Tras un flip, Enchufar/Entregar/Sellar cuentan en el nuevo “arriba”.
+1. Play. Splash corto: **paquete a 3 zonas** + **el $ voltea la sala**. La barra de arriba dice `PAQUETE → zona VERDE`. La flecha apunta al paquete naranja (orbe).
+2. Agarra el paquete (**E**). Llévalo a Archive, pared este, cubo **verde** que pulsa (`AQUÍ`).
+3. (Opcional, el caos) Caja **`$80`**: llévala a una **pared**. Espera ~1 s → la sala voltea. Pad cian = nueva ABAJO. El paquete sigue siendo la misión.
+4. Pasillo (vacío a los lados) → losa **azul** → losa **dorada** (mantén E).
+5. **P** pausa (ahí están los controles). **F10** si marea. **R** rematch.
+
+Cubos **grises** no tienen `$` y no voltean nada. Cada sala tiene su propio `$` máximo.
 
 ### Si algo falla
 - **No hay split / mapa viejo:** menú Setup Office Floor A y guarda la escena.

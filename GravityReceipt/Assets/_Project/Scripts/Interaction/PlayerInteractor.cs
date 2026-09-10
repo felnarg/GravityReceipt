@@ -93,9 +93,21 @@ namespace GravityReceipt.Interaction
 
             if (_heldValuable == null)
             {
-                return _held.GetComponent<MissionPackage>() != null
-                    ? "soltar · enchúfalo (no tira de g)"
-                    : "soltar · sin $ · no tira de g";
+                if (_held.GetComponent<MissionPackage>() == null)
+                {
+                    return "soltar";
+                }
+
+                var job = MatchDirector.Instance != null
+                    ? MatchDirector.Instance.CurrentObjectiveIndex
+                    : 0;
+                return job switch
+                {
+                    0 => "soltar · zona VERDE",
+                    1 => "soltar · losa AZUL",
+                    2 => "soltar · losa DORADA",
+                    _ => "soltar"
+                };
             }
 
             var g = _heldValuable.Manager;
@@ -109,7 +121,7 @@ namespace GravityReceipt.Interaction
                 return "soltar · ¡FLIP en camino!";
             }
 
-            return "soltar · acércala a una PARED";
+            return "soltar · a la PARED";
         }
 
         private void TickIdle()

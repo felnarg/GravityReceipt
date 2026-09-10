@@ -28,6 +28,7 @@ namespace GravityReceipt.Mission
         private Transform _progressBar;
         private Transform _beacon;
         private Renderer _beaconRenderer;
+        private GameObject _worldLabel;
 
         public int Index => objectiveIndex;
         public string Label => objectiveLabel;
@@ -42,6 +43,11 @@ namespace GravityReceipt.Mission
             requirePackage = package;
             requirePlayer = player;
             requireHoldInteract = holdInteract;
+        }
+
+        public void BindWorldLabel(GameObject host)
+        {
+            _worldLabel = host;
         }
 
         private void Awake()
@@ -105,11 +111,20 @@ namespace GravityReceipt.Mission
                 MarkCompleteVisual();
                 SetProgressBar(0f);
                 SetBeacon(false);
+                if (_worldLabel != null)
+                {
+                    _worldLabel.SetActive(false);
+                }
                 return;
             }
 
             var current = MatchDirector.Instance != null
                           && MatchDirector.Instance.CurrentObjectiveIndex == objectiveIndex;
+            if (_worldLabel != null)
+            {
+                _worldLabel.SetActive(current);
+            }
+
             if (current)
             {
                 var pulse = 0.5f + 0.5f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 3.2f));

@@ -123,19 +123,6 @@ namespace GravityReceipt.Player
 
             var gDir = gravity != null ? gravity.CurrentDirection : Vector3.down;
 
-            if (match.ObjectivesDone == 0)
-            {
-                var mug = FindTutorialMug();
-                var holdingMug = held != null && held == mug;
-                if (mug != null && !holdingMug && from.z < 8f)
-                {
-                    worldPos = mug.transform.position;
-                    color = new Color(1f, 0.82f, 0.2f);
-                    label = "TAZA $15";
-                    return true;
-                }
-            }
-
             var pkg = FindAnyObjectByType<MissionPackage>();
             var holdingPkg = interactor != null && interactor.IsHoldingPackage;
             if (!holdingPkg && pkg != null)
@@ -171,9 +158,9 @@ namespace GravityReceipt.Player
             };
             label = match.CurrentObjectiveIndex switch
             {
-                0 => "ENCHUFAR",
-                1 => "ENTREGAR",
-                _ => "SELLAR"
+                0 => "VERDE",
+                1 => "AZUL",
+                _ => "DORADA"
             };
             return true;
         }
@@ -201,31 +188,6 @@ namespace GravityReceipt.Player
                 }
             }
 
-            return null;
-        }
-
-        private static ValuableItem _cachedMug;
-        private static float _mugCacheUntil;
-
-        private static ValuableItem FindTutorialMug()
-        {
-            if (_cachedMug != null && Time.unscaledTime < _mugCacheUntil)
-            {
-                return _cachedMug;
-            }
-
-            _mugCacheUntil = Time.unscaledTime + 0.5f;
-            var items = FindObjectsByType<ValuableItem>(FindObjectsSortMode.None);
-            foreach (var item in items)
-            {
-                if (item != null && item.Price == 15)
-                {
-                    _cachedMug = item;
-                    return item;
-                }
-            }
-
-            _cachedMug = null;
             return null;
         }
 
