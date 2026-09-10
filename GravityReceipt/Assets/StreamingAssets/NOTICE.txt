@@ -1,6 +1,9 @@
 Third-party art (all CC0, public domain — credit appreciated):
 
 - Furniture 3D (OBJ/MTL): Kenney Furniture Pack 1.0 — https://kenney.nl/assets/furniture-kit
+- Food / trophy mug (OBJ+atlas): Kenney Food Kit 2.0 — https://kenney.nl/assets/food-kit
+- Briefcase-like gift (OBJ+atlas): Kenney Holiday Kit 2.0 — https://kenney.nl/assets/holiday-kit
+- Safe chest (OBJ+atlas): Kenney Mini Dungeon 2.0 — https://kenney.nl/assets/mini-dungeon
 - Floor/wall photos: ambientCG WoodFloor051, Carpet008, Plaster001 — https://ambientcg.com
 
 These files live in StreamingAssets so Unity Play Mode can load them without an Editor import step.

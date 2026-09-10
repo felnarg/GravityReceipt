@@ -25,6 +25,11 @@ namespace GravityReceipt.World
             return Make(color, smooth, metal, null, Vector2.one);
         }
 
+        public static Material Atlas(Texture2D tex, Color tint)
+        {
+            return Make(tint, 0.22f, 0.04f, tex, Vector2.one);
+        }
+
         public static void Paint(GameObject go, Color color, SurfaceKind kind = SurfaceKind.Paint, float tile = 1f)
         {
             if (go == null)

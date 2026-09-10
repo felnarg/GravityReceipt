@@ -1,22 +1,11 @@
-	
+Kenney 3D packs (CC0 1.0 Universal) — https://kenney.nl
+You can use this content for personal, educational, and commercial purposes.
+Credit "Kenney" or "www.kenney.nl" is appreciated, not required.
 
-	Furniture Pack (1.0) Exclusive
+Included models (subset):
+- Furniture Kit 1.0 — desks, chairs, bookcases, sofa, plants, screens, boxes, fridge
+- Food Kit 2.0 — mug, glass-wine, pot
+- Holiday Kit 2.0 — present-a-rectangle
+- Mini Dungeon 2.0 — chest
 
-	Created/distributed by Kenney (www.kenney.nl)
-
-			------------------------------
-
-	License: (Creative Commons Zero, CC0)
-	http://creativecommons.org/publicdomain/zero/1.0/
-
-	This content is free to use in personal, educational and commercial projects.
-	Support us by crediting (Kenney or www.kenney.nl), this is not mandatory.
-
-			------------------------------
-
-	Donate:   http://support.kenney.nl
-	Request:  http://request.kenney.nl
-	Patreon:  http://patreon.com/kenney/
-
-	Follow on Twitter for updates:
-	@KenneyNL
+Donate: https://kenney.nl/donate

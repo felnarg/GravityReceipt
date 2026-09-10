@@ -27,10 +27,10 @@ Documento vivo del prototipo.
 |-------|--------|
 | **Fase** | 1–2 proto + 3–6 mapa + UX + **pass arte CC0** |
 | **Semana del plan** | 3–6 (código listo; falta playtest humano) |
-| **Última actualización** | 2026-09-09 17:15 COT — Kenney + ambientCG (menos alfa) |
-| **En curso ahora** | Playtest humano 2p con HUD limpio + oficinas con muebles de verdad |
-| **Hecho relevante** | Misión en una línea; muebles Kenney (CC0); suelos madera/alfombra; paredes yeso |
-| **Siguiente acción concreta** | Unity: Setup Office Floor A → Play. Archive = madera + librería. Hub = alfombra + escritorio/silla. Executive = sofá. |
+| **Última actualización** | 2026-09-09 — `$` con mesh Kenney (taza/cofre/monitor/paquete) |
+| **En curso ahora** | Playtest humano 2p: ¿se leen taza, cofre, paquete naranja a 10 m? |
+| **Hecho relevante** | Misión en una línea; muebles + **valuables** Kenney (CC0); suelos madera/alfombra |
+| **Siguiente acción concreta** | Unity: Setup Office Floor A → Play. Taza = mug. `$80` = cofre. Paquete = caja naranja. |
 | **Build jugable** | Sí (Editor Play Mode). **Regenerar escena con Setup.** |
 | **Online 4p** | No |
 | **Bloqueadores** | Sin Unity Editor en este entorno |
@@ -162,6 +162,7 @@ Documento vivo del prototipo.
 - Si agarrás `$` y gris/paquete durante el splash, gana el toast de pared (la regla).
 - **Pass UX (post playtest del autor):** se recortó el muro de texto. Misión = una línea. Splash 5 s. Help/controles **solo en pausa (P)**. Flecha al **paquete**, no a la taza. Labels 3D solo en el objetivo actual. Beacon dominante = `$ MÁX`.
 - **Pass arte CC0:** Kenney Furniture (sillas, escritorios, librerías, sofá) + texturas ambientCG en suelos/paredes. Jugadores con cabeza. Ya no es un piso de cubos planos.
+- **`$` Kenney:** taza=mug, archivador=bookcaseClosed, caja=$cofre, monitor, planta, cafetera, maletín=regalo, trofeo=copa, server=nevera, paquete/grises=caja. Collider primitivo; mesh hijo.
 
 ### A MEDIAS
 - Escena `Office_Floor_A.unity` **commiteada sigue siendo la Archive v1**. En Play, si no hay `MatchDirector`, el factory reconstruye el piso 2p automáticamente. Para guardarla: menú Setup.
@@ -334,7 +335,7 @@ Documento vivo del prototipo.
 | 5.3 | Medir mareo % | [ ] | Meta < 10% |
 | 5.4 | Medir comprensión de la regla | [ ] | Meta ≥ 80% en 1ª partida |
 | 5.5 | Ajustar telegráfo / FOV / velocidad de flip | [~] | FOV punch + shake + roll + linger + hit-stop + viñeta + 4 ticks + flash + chispas + land dip + toast ABAJO + **F10 comfort**; falta mareo real |
-| 5.6 | Pass siluetas/colores valuables | [~] | Siluetas propias + caja con puerta; ambiente Kenney. Falta arte final de los `$` |
+| 5.6 | Pass siluetas/colores valuables | [~] | Mesh Kenney en cada `$` (mug, cofre, monitor, planta, cafetera, maletín, copa, nevera). Falta playtest de lectura a distancia |
 | 5.7 | Emotes (4) + whoosh final | [x] | Whoosh en cada flip; emotes billboard OK/NO/?/¡AQUÍ! (sin animación de avatar) |
 | 5.8 | Decisión go / no-go | [ ] | Ver métricas abajo |
 
@@ -349,7 +350,7 @@ Documento vivo del prototipo.
 
 | ID | Tarea | Estado | Notas |
 |----|--------|--------|-------|
-| 6.1 | Pass de arte (no final, salir de gris total) | [~] | Kenney Furniture (CC0) + texturas ambientCG en suelos/paredes. Sigue siendo low-poly, ya no blockout gris |
+| 6.1 | Pass de arte (no final, salir de gris total) | [~] | Kenney Furniture + Food/Holiday/Mini Dungeon en `$`/paquete. Low-poly, ya no blockout gris |
 | 6.2 | Pulido UI mínima | [~] | Pass UX 2026-09-09: una línea de misión, splash 5 s, help solo en pausa, menos carteles. Falta playtest |
 | 6.3 | Build Steam o itch privada | [ ] | |
 | 6.4 | Trailer 15–20 s del mejor clip | [ ] | |
@@ -681,15 +682,21 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - Jugadores: cabeza + visor (ya no solo cápsula).
 - Asset Store / URP packs de pago: no. Sem 7–8 online: no.
 
+### 2026-09-09 — `$` con mesh Kenney
+- Food Kit (mug, copa, olla), Holiday (regalo plano = maletín), Mini Dungeon (cofre = caja fuerte) + fridge/bookcase del Furniture.
+- `KenneyProp.Attach`: hijo visual, collider de la primitiva intacto. Atlas PNG (UV + `map_Kd`) para kits 2.0.
+- Si falta el OBJ, se queda la silueta primitiva de antes.
+- Paquete = caja de cartón naranja. Grises = caja. Jarrón = olla.
+
 ---
 
 ## Checklist del día (copiar al empezar una sesión)
 
 ```
 Fecha: 2026-09-09
-Enfoque de hoy: pass UX (misión visible, menos texto)
-Hecho: splash 5s, HUD 1 línea, help en pausa, flecha al paquete
-Pendiente al cerrar: playtest Unity local
+Enfoque de hoy: mesh Kenney en `$` / paquete
+Hecho: mug, cofre, monitor, planta, cafetera, maletín, copa, nevera, cajas
+Pendiente al cerrar: playtest Unity local (Setup → Play)
 Bloqueadores: Unity Editor ausente en el cloud
 Actualicé "Estado actual": sí
 ```

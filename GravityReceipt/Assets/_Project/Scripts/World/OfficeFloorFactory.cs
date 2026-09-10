@@ -79,50 +79,94 @@ namespace GravityReceipt.World
             CreateRoomVolume(root.transform, "Executive", ExeC, ExeS, exeG, inherit: false);
 
             var taza = CreateValuable(root.transform, "Valuable_Taza_15", new Vector3(-2.2f, 0.52f, 1.1f), new Vector3(0.36f, 0.28f, 0.36f), 15, hubG, new Color(0.75f, 0.45f, 0.28f), PrimitiveType.Cylinder);
-            AddLocalVisual(taza.transform, PrimitiveType.Cube, new Vector3(0.72f, 0f, 0f), new Vector3(0.28f, 0.85f, 0.18f), new Color(0.7f, 0.42f, 0.25f));
-            AddLocalVisual(taza.transform, PrimitiveType.Cylinder, new Vector3(0f, 0.55f, 0f), new Vector3(1.05f, 0.08f, 1.05f), new Color(0.7f, 0.4f, 0.22f));
+            if (!DressKenney(taza, "mug"))
+            {
+                AddLocalVisual(taza.transform, PrimitiveType.Cube, new Vector3(0.72f, 0f, 0f), new Vector3(0.28f, 0.85f, 0.18f), new Color(0.7f, 0.42f, 0.25f));
+                AddLocalVisual(taza.transform, PrimitiveType.Cylinder, new Vector3(0f, 0.55f, 0f), new Vector3(1.05f, 0.08f, 1.05f), new Color(0.7f, 0.4f, 0.22f));
+            }
+
             taza.AddComponent<TutorialItemBeacon>();
             var arch = CreateValuable(root.transform, "Valuable_Archivador_40", new Vector3(-3.6f, 1.0f, 8.5f), new Vector3(0.8f, 1.6f, 0.5f), 40, arcG, new Color(0.55f, 0.38f, 0.22f), PrimitiveType.Cube);
-            AddLocalVisual(arch.transform, PrimitiveType.Cube, new Vector3(0f, 0.18f, 0.52f), new Vector3(0.85f, 0.28f, 0.08f), new Color(0.4f, 0.28f, 0.16f));
-            AddLocalVisual(arch.transform, PrimitiveType.Cube, new Vector3(0f, -0.18f, 0.52f), new Vector3(0.85f, 0.28f, 0.08f), new Color(0.4f, 0.28f, 0.16f));
-            AddLocalVisual(arch.transform, PrimitiveType.Cube, new Vector3(0f, -0.48f, 0.52f), new Vector3(0.85f, 0.22f, 0.08f), new Color(0.35f, 0.24f, 0.14f));
+            if (!DressKenney(arch, "bookcaseClosed"))
+            {
+                AddLocalVisual(arch.transform, PrimitiveType.Cube, new Vector3(0f, 0.18f, 0.52f), new Vector3(0.85f, 0.28f, 0.08f), new Color(0.4f, 0.28f, 0.16f));
+                AddLocalVisual(arch.transform, PrimitiveType.Cube, new Vector3(0f, -0.18f, 0.52f), new Vector3(0.85f, 0.28f, 0.08f), new Color(0.4f, 0.28f, 0.16f));
+                AddLocalVisual(arch.transform, PrimitiveType.Cube, new Vector3(0f, -0.48f, 0.52f), new Vector3(0.85f, 0.22f, 0.08f), new Color(0.35f, 0.24f, 0.14f));
+            }
+
             var caja = CreateValuable(root.transform, "Valuable_CajaFuerte_80", new Vector3(3.4f, 0.75f, 12.2f), new Vector3(1.1f, 1.1f, 1.1f), 80, arcG, new Color(0.9f, 0.72f, 0.18f), PrimitiveType.Cube);
-            AddLocalVisual(caja.transform, PrimitiveType.Cylinder, new Vector3(0f, 0f, 0.56f), new Vector3(0.22f, 0.08f, 0.22f), new Color(0.35f, 0.32f, 0.28f));
-            AddLocalVisual(caja.transform, PrimitiveType.Cube, new Vector3(0f, 0.02f, 0.52f), new Vector3(0.72f, 0.72f, 0.06f), new Color(0.72f, 0.58f, 0.16f));
-            AddLocalVisual(caja.transform, PrimitiveType.Cube, new Vector3(0.38f, 0.08f, 0.52f), new Vector3(0.08f, 0.18f, 0.08f), new Color(0.2f, 0.18f, 0.16f));
+            if (!DressKenney(caja, "chest"))
+            {
+                AddLocalVisual(caja.transform, PrimitiveType.Cylinder, new Vector3(0f, 0f, 0.56f), new Vector3(0.22f, 0.08f, 0.22f), new Color(0.35f, 0.32f, 0.28f));
+                AddLocalVisual(caja.transform, PrimitiveType.Cube, new Vector3(0f, 0.02f, 0.52f), new Vector3(0.72f, 0.72f, 0.06f), new Color(0.72f, 0.58f, 0.16f));
+                AddLocalVisual(caja.transform, PrimitiveType.Cube, new Vector3(0.38f, 0.08f, 0.52f), new Vector3(0.08f, 0.18f, 0.08f), new Color(0.2f, 0.18f, 0.16f));
+            }
+
             var monitor = CreateValuable(root.transform, "Valuable_Monitor_120", new Vector3(4.5f, 0.55f, 32f), new Vector3(1.4f, 0.85f, 0.12f), 120, offG, new Color(0.15f, 0.45f, 0.95f), PrimitiveType.Cube);
-            AddLocalVisual(monitor.transform, PrimitiveType.Cube, new Vector3(0f, -0.7f, 0.8f), new Vector3(0.18f, 0.55f, 0.7f), new Color(0.12f, 0.12f, 0.16f));
+            if (!DressKenney(monitor, "computerScreen", 180f))
+            {
+                AddLocalVisual(monitor.transform, PrimitiveType.Cube, new Vector3(0f, -0.7f, 0.8f), new Vector3(0.18f, 0.55f, 0.7f), new Color(0.12f, 0.12f, 0.16f));
+            }
+
             var monitorScreen = AddLocalVisual(monitor.transform, PrimitiveType.Cube, new Vector3(0f, 0.02f, 0.08f), new Vector3(0.82f, 0.72f, 0.2f), new Color(0.35f, 0.75f, 1f));
             monitorScreen.AddComponent<PulseColor>().Configure(new Color(0.35f, 0.75f, 1f), new Color(0.12f, 0.28f, 0.55f), 2.8f);
             var planta = CreateValuable(root.transform, "Valuable_Planta_60", new Vector3(-5.5f, 0.85f, 38f), new Vector3(0.55f, 0.85f, 0.55f), 60, offG, new Color(0.2f, 0.72f, 0.28f), PrimitiveType.Capsule);
-            AddLocalVisual(planta.transform, PrimitiveType.Cylinder, new Vector3(0f, -0.55f, 0f), new Vector3(1.15f, 0.28f, 1.15f), new Color(0.45f, 0.28f, 0.16f));
-            AddLocalVisual(planta.transform, PrimitiveType.Sphere, new Vector3(0.35f, 0.42f, 0.1f), new Vector3(0.7f, 0.45f, 0.7f), new Color(0.16f, 0.62f, 0.22f));
+            if (!DressKenney(planta, "pottedPlant"))
+            {
+                AddLocalVisual(planta.transform, PrimitiveType.Cylinder, new Vector3(0f, -0.55f, 0f), new Vector3(1.15f, 0.28f, 1.15f), new Color(0.45f, 0.28f, 0.16f));
+                AddLocalVisual(planta.transform, PrimitiveType.Sphere, new Vector3(0.35f, 0.42f, 0.1f), new Vector3(0.7f, 0.45f, 0.7f), new Color(0.16f, 0.62f, 0.22f));
+            }
+
             var cafe = CreateValuable(root.transform, "Valuable_Cafetera_90", new Vector3(6f, 0.55f, 37.5f), new Vector3(0.55f, 0.55f, 0.55f), 90, offG, new Color(0.82f, 0.18f, 0.14f), PrimitiveType.Cylinder);
-            AddLocalVisual(cafe.transform, PrimitiveType.Cube, new Vector3(0.7f, 0.15f, 0f), new Vector3(0.45f, 0.18f, 0.18f), new Color(0.2f, 0.2f, 0.22f));
-            AddLocalVisual(cafe.transform, PrimitiveType.Sphere, new Vector3(0f, 0.62f, 0f), new Vector3(0.55f, 0.22f, 0.55f), new Color(0.2f, 0.2f, 0.22f));
+            if (!DressKenney(cafe, "kitchenCoffeeMachine"))
+            {
+                AddLocalVisual(cafe.transform, PrimitiveType.Cube, new Vector3(0.7f, 0.15f, 0f), new Vector3(0.45f, 0.18f, 0.18f), new Color(0.2f, 0.2f, 0.22f));
+                AddLocalVisual(cafe.transform, PrimitiveType.Sphere, new Vector3(0f, 0.62f, 0f), new Vector3(0.55f, 0.22f, 0.55f), new Color(0.2f, 0.2f, 0.22f));
+            }
+
             var maletin = CreateValuable(root.transform, "Valuable_Maletin_200", new Vector3(2.2f, 0.32f, 47.5f), new Vector3(1.05f, 0.28f, 0.7f), 200, exeG, new Color(0.12f, 0.08f, 0.06f), PrimitiveType.Cube);
-            AddLocalVisual(maletin.transform, PrimitiveType.Cube, new Vector3(0f, 0.7f, 0f), new Vector3(0.28f, 0.55f, 0.16f), new Color(0.78f, 0.64f, 0.18f));
-            AddLocalVisual(maletin.transform, PrimitiveType.Cube, new Vector3(0.32f, 0.05f, 0.52f), new Vector3(0.18f, 0.22f, 0.12f), new Color(0.78f, 0.64f, 0.18f));
-            AddLocalVisual(maletin.transform, PrimitiveType.Cube, new Vector3(-0.32f, 0.05f, 0.52f), new Vector3(0.18f, 0.22f, 0.12f), new Color(0.78f, 0.64f, 0.18f));
+            if (!DressKenney(maletin, "present-a-rectangle"))
+            {
+                AddLocalVisual(maletin.transform, PrimitiveType.Cube, new Vector3(0f, 0.7f, 0f), new Vector3(0.28f, 0.55f, 0.16f), new Color(0.78f, 0.64f, 0.18f));
+                AddLocalVisual(maletin.transform, PrimitiveType.Cube, new Vector3(0.32f, 0.05f, 0.52f), new Vector3(0.18f, 0.22f, 0.12f), new Color(0.78f, 0.64f, 0.18f));
+                AddLocalVisual(maletin.transform, PrimitiveType.Cube, new Vector3(-0.32f, 0.05f, 0.52f), new Vector3(0.18f, 0.22f, 0.12f), new Color(0.78f, 0.64f, 0.18f));
+            }
+
             var trophy = CreateValuable(root.transform, "Valuable_Trofeo_150", new Vector3(-3.2f, 0.85f, 52.5f), new Vector3(0.35f, 0.85f, 0.35f), 150, exeG, new Color(0.98f, 0.82f, 0.18f), PrimitiveType.Capsule);
-            AddLocalVisual(trophy.transform, PrimitiveType.Sphere, new Vector3(0f, 0.55f, 0f), new Vector3(1.15f, 0.42f, 1.15f), new Color(1f, 0.9f, 0.28f));
-            AddLocalVisual(trophy.transform, PrimitiveType.Cube, new Vector3(-0.7f, 0.15f, 0f), new Vector3(0.18f, 0.7f, 0.18f), new Color(0.95f, 0.78f, 0.2f));
-            AddLocalVisual(trophy.transform, PrimitiveType.Cube, new Vector3(0.7f, 0.15f, 0f), new Vector3(0.18f, 0.7f, 0.18f), new Color(0.95f, 0.78f, 0.2f));
+            if (!DressKenney(trophy, "glass-wine", 0f, new Color(1f, 0.86f, 0.22f)))
+            {
+                AddLocalVisual(trophy.transform, PrimitiveType.Sphere, new Vector3(0f, 0.55f, 0f), new Vector3(1.15f, 0.42f, 1.15f), new Color(1f, 0.9f, 0.28f));
+                AddLocalVisual(trophy.transform, PrimitiveType.Cube, new Vector3(-0.7f, 0.15f, 0f), new Vector3(0.18f, 0.7f, 0.18f), new Color(0.95f, 0.78f, 0.2f));
+                AddLocalVisual(trophy.transform, PrimitiveType.Cube, new Vector3(0.7f, 0.15f, 0f), new Vector3(0.18f, 0.7f, 0.18f), new Color(0.95f, 0.78f, 0.2f));
+            }
+
             var server = CreateValuable(root.transform, "Valuable_Server_110", new Vector3(4.2f, 0.95f, 54f), new Vector3(0.7f, 1.7f, 0.55f), 110, exeG, new Color(0.28f, 0.32f, 0.42f), PrimitiveType.Cube);
+            DressKenney(server, "kitchenFridge");
             var ledOk = AddLocalVisual(server.transform, PrimitiveType.Cube, new Vector3(0.52f, 0.25f, 0f), new Vector3(0.08f, 0.12f, 0.7f), new Color(0.2f, 0.95f, 0.35f));
             ledOk.AddComponent<PulseColor>().Configure(new Color(0.15f, 0.95f, 0.3f), new Color(0.04f, 0.25f, 0.08f), 5.5f);
             var ledErr = AddLocalVisual(server.transform, PrimitiveType.Cube, new Vector3(0.52f, 0.05f, 0f), new Vector3(0.08f, 0.12f, 0.7f), new Color(0.95f, 0.25f, 0.15f));
             ledErr.AddComponent<PulseColor>().Configure(new Color(0.95f, 0.2f, 0.12f), new Color(0.25f, 0.05f, 0.04f), 3.2f);
             var plantaOro = CreateValuable(root.transform, "Valuable_PlantaOro_95", new Vector3(-4.4f, 0.85f, 46.5f), new Vector3(0.6f, 0.9f, 0.6f), 95, exeG, new Color(0.88f, 0.72f, 0.12f), PrimitiveType.Capsule);
-            AddLocalVisual(plantaOro.transform, PrimitiveType.Cylinder, new Vector3(0f, -0.55f, 0f), new Vector3(1.15f, 0.28f, 1.15f), new Color(0.55f, 0.42f, 0.12f));
-            AddLocalVisual(plantaOro.transform, PrimitiveType.Sphere, new Vector3(-0.32f, 0.4f, 0.12f), new Vector3(0.65f, 0.42f, 0.65f), new Color(0.95f, 0.78f, 0.18f));
+            if (!DressKenney(plantaOro, "pottedPlant", 20f, new Color(0.95f, 0.78f, 0.16f)))
+            {
+                AddLocalVisual(plantaOro.transform, PrimitiveType.Cylinder, new Vector3(0f, -0.55f, 0f), new Vector3(1.15f, 0.28f, 1.15f), new Color(0.55f, 0.42f, 0.12f));
+                AddLocalVisual(plantaOro.transform, PrimitiveType.Sphere, new Vector3(-0.32f, 0.4f, 0.12f), new Vector3(0.65f, 0.42f, 0.65f), new Color(0.95f, 0.78f, 0.18f));
+            }
 
             var pkg = CreatePackage(root.transform, new Vector3(0f, 0.45f, 0.6f), hubG);
+            if (DressKenney(pkg, "cardboardBoxClosed", 18f, new Color(0.95f, 0.55f, 0.12f)))
+            {
+                HideChildRenderer(pkg.transform, "PackageStripe");
+            }
+
             pkg.AddComponent<PackageBeacon>();
             AttachPriceTag(pkg.transform, 0, 0.45f, "PAQUETE");
-            CreateProp(root.transform, "Prop_CajaGris", new Vector3(2.4f, 0.4f, -1.4f), new Vector3(0.7f, 0.7f, 0.7f), new Color(0.42f, 0.44f, 0.46f), hubG);
-            CreateProp(root.transform, "Prop_CajaArchive", new Vector3(-5.2f, 0.4f, 11.5f), new Vector3(0.65f, 0.65f, 0.65f), new Color(0.4f, 0.4f, 0.42f), arcG);
-            CreateProp(root.transform, "Prop_Jarron", new Vector3(3.4f, 0.4f, 47.2f), new Vector3(0.28f, 0.55f, 0.28f), new Color(0.38f, 0.36f, 0.4f), exeG);
+            var gris = CreateProp(root.transform, "Prop_CajaGris", new Vector3(2.4f, 0.4f, -1.4f), new Vector3(0.7f, 0.7f, 0.7f), new Color(0.42f, 0.44f, 0.46f), hubG);
+            DressKenney(gris, "cardboardBoxClosed", -12f, new Color(0.45f, 0.46f, 0.48f));
+            var grisArc = CreateProp(root.transform, "Prop_CajaArchive", new Vector3(-5.2f, 0.4f, 11.5f), new Vector3(0.65f, 0.65f, 0.65f), new Color(0.4f, 0.4f, 0.42f), arcG);
+            DressKenney(grisArc, "cardboardBoxClosed", 25f, new Color(0.42f, 0.41f, 0.4f));
+            var jarron = CreateProp(root.transform, "Prop_Jarron", new Vector3(3.4f, 0.4f, 47.2f), new Vector3(0.28f, 0.55f, 0.28f), new Color(0.38f, 0.36f, 0.4f), exeG);
+            DressKenney(jarron, "kitchenPot", 0f, new Color(0.42f, 0.4f, 0.44f));
             DressKenneyFurniture(root.transform);
             var hubCounter = CreateStaticCube(root.transform, "Furn_HubCounter", new Vector3(0f, 0.42f, -3.45f), new Vector3(3.4f, 0.14f, 0.55f), new Color(0.55f, 0.42f, 0.28f));
             SurfaceLook.Paint(hubCounter, new Color(0.72f, 0.55f, 0.34f), SurfaceKind.Wood, 1.4f);
@@ -554,6 +598,52 @@ namespace GravityReceipt.World
             return go;
         }
 
+        private static bool DressKenney(GameObject go, string model, float yaw = 0f, Color? tint = null)
+        {
+            if (go == null || model is not { Length: > 0 })
+            {
+                return false;
+            }
+
+            return KenneyProp.Attach(go.transform, model, ColliderHeight(go), yaw, tint) != null;
+        }
+
+        private static float ColliderHeight(GameObject go)
+        {
+            if (go == null)
+            {
+                return 0.4f;
+            }
+
+            var col = go.GetComponent<Collider>();
+            if (col == null)
+            {
+                return Mathf.Max(0.2f, go.transform.localScale.y);
+            }
+
+            return Mathf.Max(0.12f, col.bounds.size.y);
+        }
+
+        private static void HideChildRenderer(Transform parent, string childName)
+        {
+            if (parent == null || childName is not { Length: > 0 })
+            {
+                return;
+            }
+
+            var child = parent.Find(childName);
+            if (child == null)
+            {
+                return;
+            }
+
+            var rend = child.GetComponent<Renderer>();
+            if (rend != null)
+            {
+                rend.enabled = false;
+            }
+        }
+
         private static GameObject AddLocalVisual(Transform parent, PrimitiveType type, Vector3 localPos, Vector3 localScale, Color color)
         {
             var go = GameObject.CreatePrimitive(type);
@@ -845,7 +935,7 @@ namespace GravityReceipt.World
             KenneyProp.Place(parent, "bookcaseOpen", new Vector3(-6.15f, 0f, 7.4f), 90f, 2.35f);
             KenneyProp.Place(parent, "bookcaseOpenLow", new Vector3(6.15f, 0f, 12.4f), -90f, 1.25f);
             KenneyProp.Place(parent, "books", new Vector3(5.5f, 1.28f, 12.4f), -90f, 0.18f, false);
-            KenneyProp.Place(parent, "cardboardBoxClosed", new Vector3(-5.1f, 0f, 11.6f), 15f, 0.55f);
+            KenneyProp.Place(parent, "cardboardBoxClosed", new Vector3(5.8f, 0f, 8.2f), 15f, 0.55f);
             KenneyProp.Place(parent, "desk", new Vector3(-6.0f, 0f, 34.3f), 90f, 0.76f);
             KenneyProp.Place(parent, "chairDesk", new Vector3(-4.4f, 0f, 33.6f), -70f, 0.95f);
             KenneyProp.Place(parent, "computerScreen", new Vector3(-6.15f, 0.76f, 34.15f), 90f, 0.42f, false);
@@ -858,9 +948,9 @@ namespace GravityReceipt.World
             KenneyProp.Place(parent, "tableCoffee", new Vector3(0f, 0f, 50.2f), 0f, 0.42f);
             KenneyProp.Place(parent, "sideTable", new Vector3(3.2f, 0f, 47.4f), 0f, 0.55f);
             KenneyProp.Place(parent, "lampRoundTable", new Vector3(3.2f, 0.55f, 47.4f), 0f, 0.4f, false);
-            KenneyProp.Place(parent, "cabinetTelevision", new Vector3(4.6f, 0f, 54.4f), 180f, 0.85f);
+            KenneyProp.Place(parent, "cabinetTelevision", new Vector3(5.8f, 0f, 52.6f), 180f, 0.85f);
             KenneyProp.Place(parent, "radio", new Vector3(0.6f, 0.42f, 50.35f), 0f, 0.14f, false);
-            KenneyProp.Place(parent, "pottedPlant", new Vector3(-4.6f, 0f, 46.2f), 40f, 0.9f);
+            KenneyProp.Place(parent, "pottedPlant", new Vector3(5.5f, 0f, 46.0f), 40f, 0.9f);
             KenneyProp.Place(parent, "lampSquareCeiling", new Vector3(0f, 4.72f, 50f), 0f, 0.16f, false);
         }
 
