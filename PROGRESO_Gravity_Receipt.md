@@ -687,6 +687,7 @@ Formato: cada vez que el agente trabaje en el repo, añadir una entrada breve.
 - `KenneyProp.Attach`: hijo visual, collider de la primitiva intacto. Atlas PNG (UV + `map_Kd`) para kits 2.0.
 - Si falta el OBJ, se queda la silueta primitiva de antes.
 - Paquete = caja de cartón naranja. Grises = caja. Jarrón = olla.
+- Fix Play: `GetComponent() ?? AddComponent` no funciona en Unity (fake-null). El factory moría en la taza y el Game view quedaba negro (“No cameras rendering”).
 
 ---
 
